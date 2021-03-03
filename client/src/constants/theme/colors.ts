@@ -1,3 +1,11 @@
+const waitrose_brand_core = {
+  primary: '#598d00',
+  highlight: '#BED800',
+  bgDark: '#004A32',
+  shade: '#2F6B38',
+  bgLight: '#FFFFFF'
+}
+
 const colors = {
   transparent: "transparent",
   current: "currentColor",
@@ -236,6 +244,39 @@ const colors = {
     700: "#006BA1",
     800: "#005885",
     900: "#003F5E",
+  },
+
+  waitrose: {
+    ...waitrose_brand_core
+  },
+
+  theme_light: {
+    text: {
+      clickable: waitrose_brand_core.bgDark,
+      contrastGreen: '#FFFFFF',
+      darker: '#515151',
+      standard: '#787878',
+      lighter: '#C4C4C4',
+      invisable: '#E1E1E2', // #D5D6D8 30% alpha
+      menuActive: '#FFFFFF',
+      title: waitrose_brand_core.bgDark,
+      button: '#F3F3F3',
+      buttonActive: waitrose_brand_core.primary,
+    },
+    background: {
+      primary: waitrose_brand_core.primary,
+      secondary: '#7EC507',
+      button: '#FFFFFF',
+    },
+    ui: {
+      line: '#CACACA',
+      container: '#CACACA',
+      danger: '#CA6D6D',
+      divider: '#ECF0F1',
+      bgInsetLight: '#F8F8F8',
+      bgInsetShaded: '#E2E2E2',
+      bgInsetDark: '#DEDEDE',
+    }
   },
 }
 
