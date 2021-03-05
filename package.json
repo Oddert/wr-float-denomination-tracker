@@ -8,7 +8,7 @@
     "build": "tsc",
     "prestart": "npm run build",
     "server": "cd client && npm run start",
-    "development": "concurrently \"npm tsc -w\" \"npm run server\"",
+    "development": "concurrently \"tsc -w\" \"npm run server\"",
     "server_dev": "concurrently \"tsc -w\" \"nodemon dist/js/index.js\"",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -9,6 +9,20 @@ import sizes from './sizes'
 import radii from './radii'
 import zIndices from './zIndices'
 
+import styles from './styles'
+import components from './components'
+
+import '../../fonts/Lato/Lato-Black.ttf'
+import '../../fonts/Lato/Lato-BlackItalic.ttf'
+import '../../fonts/Lato/Lato-Bold.ttf'
+import '../../fonts/Lato/Lato-BoldItalic.ttf'
+import '../../fonts/Lato/Lato-Italic.ttf'
+import '../../fonts/Lato/Lato-Light.ttf'
+import '../../fonts/Lato/Lato-LightItalic.ttf'
+import '../../fonts/Lato/Lato-Regular.ttf'
+import '../../fonts/Lato/Lato-Thin.ttf'
+import '../../fonts/Lato/Lato-ThinItalic.ttf'
+
 const customTheme = {
   // ========== Typography ==========
   colors,
@@ -25,6 +39,8 @@ const customTheme = {
   radii,
   // ========== Z-Index Values ==========
   zIndices,
+  styles,
+  components,
 }
 
 export default customTheme

@@ -1,10 +1,4 @@
-const waitrose_brand_core = {
-  primary: '#598d00',
-  highlight: '#BED800',
-  bgDark: '#004A32',
-  shade: '#2F6B38',
-  bgLight: '#FFFFFF'
-}
+import waitroseBrandColors from '../waitroseBrandColors'
 
 const colors = {
   transparent: "transparent",
@@ -247,24 +241,24 @@ const colors = {
   },
 
   waitrose: {
-    ...waitrose_brand_core
+    ...waitroseBrandColors
   },
 
   theme_light: {
     text: {
-      clickable: waitrose_brand_core.bgDark,
+      clickable: waitroseBrandColors.bgDark,
       contrastGreen: '#FFFFFF',
       darker: '#515151',
       standard: '#787878',
       lighter: '#C4C4C4',
       invisable: '#E1E1E2', // #D5D6D8 30% alpha
       menuActive: '#FFFFFF',
-      title: waitrose_brand_core.bgDark,
+      title: waitroseBrandColors.bgDark,
       button: '#F3F3F3',
-      buttonActive: waitrose_brand_core.primary,
+      buttonActive: waitroseBrandColors.primary,
     },
     background: {
-      primary: waitrose_brand_core.primary,
+      primary: waitroseBrandColors.primary,
       secondary: '#7EC507',
       button: '#FFFFFF',
     },
