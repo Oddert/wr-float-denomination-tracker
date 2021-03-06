@@ -14,6 +14,10 @@ import {
   Heading,
   useStyleConfig, 
   FormLabel,
+  Link,
+  Accordion,
+  AccordionButton,
+  AccordionPanel,
 } from '@chakra-ui/react'
 
 import Nav from './Nav/'
@@ -101,7 +105,19 @@ const Dashboard: React.FC = () => {
           <Radio value='radio-two'>Radio Option Two</Radio>
           <Radio value='radio-three'>Radio Option Three</Radio>
         </RadioGroup>
+        <Link>Navigation Primary</Link>
+        <Link>Navigation Secondary</Link>
+        <Link>Navigation Current</Link>
         <Divider orientation='horizontal' />
+        <Divider orientation='horizontal' />
+        <Accordion>
+          <AccordionButton>
+
+          </AccordionButton>
+          <AccordionPanel>
+            
+          </AccordionPanel>
+        </Accordion>
       </GridItem>
     </Grid>
   )
