@@ -1,11 +1,11 @@
-import waitroseBrandColors from '../waitroseBrandColors'
+// import waitroseBrandColors from '../waitroseBrandColors'
 
-const fontFamily = ['sans-serif', 'lato', 'roboto']
+const fontFamily = ['lato', 'roboto', 'sans-serif']
 
 const styles = {
   global: {
-    h1: {
-      color: waitroseBrandColors.bgDark,
+    body: {
+      color: 'theme_light.text.standard',
       fontFamily,
 
     }

@@ -12,10 +12,13 @@ import {
   Radio,
   // Stack,
   Heading,
-  useStyleConfig, 
+  // useStyleConfig, 
   FormLabel,
   Link,
+  Box,
   Accordion,
+  AccordionItem,
+  AccordionIcon,
   AccordionButton,
   AccordionPanel,
 } from '@chakra-ui/react'
@@ -24,8 +27,8 @@ import Nav from './Nav/'
 import Header from './Header/'
 
 const Dashboard: React.FC = () => {
-  const btnVarOne = useStyleConfig('Button', { variant: 'solid' })
-  const btnVarTwo = useStyleConfig('Button', { variant: 'outline', size: 'sm' })
+  // const btnVarOne = useStyleConfig('Button', { variant: 'solid' })
+  // const btnVarTwo = useStyleConfig('Button', { variant: 'outline', size: 'sm' })
 
   return (
     <Grid 
@@ -42,7 +45,9 @@ const Dashboard: React.FC = () => {
         <Nav />
       </GridItem>
       <GridItem 
-        w='50%' 
+        w='100%' 
+        p='20px 50px'
+        textAlign='left'
         bg='waitrose.bgLight'
         colStart={2}
         colEnd={2}
@@ -83,13 +88,13 @@ const Dashboard: React.FC = () => {
         <Heading as='h5' size='md'>Kings Cross Station h5</Heading>
         <Heading as='h6' size='sm'>Kings Cross Station h6</Heading> */}
         <Heading as='h1' size='2xl'>Page Title</Heading>
-        <Heading as='h2' size='lg'>Section Heading</Heading>
+        <Heading as='h2' size='lg' color='theme_light.text.standard'>Section Heading</Heading>
         <Heading as='h3' size='md'>Standard Text</Heading>
         <Heading as='h4' size='sm'>Info Text</Heading>
         <Text>Bulk text will appear like so</Text>
         <FormLabel>Bulk text will appear like so</FormLabel>
-        <Text>Faded unreadable text</Text>
-        <Input plceholder='User Input' />
+        <Text variant='faded'>Faded unreadable text - £52</Text>
+        <Input placeholder='A Standard Text Input' />
         <Textarea placeholder='description of the repository' />
         <Button>UI Button</Button>
         <div>Search Bar...</div>
@@ -111,13 +116,54 @@ const Dashboard: React.FC = () => {
         <Divider orientation='horizontal' />
         <Divider orientation='horizontal' />
         <Accordion>
-          <AccordionButton>
-
-          </AccordionButton>
-          <AccordionPanel>
-            
-          </AccordionPanel>
+          <AccordionItem>
+            <AccordionButton>
+              Button
+            </AccordionButton>
+            <AccordionPanel>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Et eius temporibus accusamus atque eveniet delectus, ut necessitatibus sit reprehenderit facilis iste tenetur cupiditate, quaerat sequi odit? Doloremque, quasi quisquam? Consectetur.
+            </AccordionPanel>
+          </AccordionItem>
         </Accordion>
+        
+        <Text>Break the thing</Text>
+
+        <Accordion defaultIndex={[0]} allowMultiple>
+          <AccordionItem>
+            <h2>
+              <AccordionButton>
+                <Box flex="1" textAlign="left">
+                  Section 1 title
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+            </h2>
+            <AccordionPanel pb={4}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+              veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+              commodo consequat.
+            </AccordionPanel>
+          </AccordionItem>
+
+          <AccordionItem>
+            <h2>
+              <AccordionButton>
+                <Box flex="1" textAlign="left">
+                  Section 2 title
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+            </h2>
+            <AccordionPanel pb={4}>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+              veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+              commodo consequat.
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+
       </GridItem>
     </Grid>
   )

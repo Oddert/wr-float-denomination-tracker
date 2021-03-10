@@ -249,9 +249,9 @@ const colors = {
       clickable: waitroseBrandColors.bgDark,
       contrastGreen: '#FFFFFF',
       darker: '#515151',
-      standard: '#787878',
+      standard: '#717171',
       lighter: '#C4C4C4',
-      invisable: '#E1E1E2', // #D5D6D8 30% alpha
+      invisable: '#DADADB', // #D5D6D8 30% alpha
       menuActive: '#FFFFFF',
       title: waitroseBrandColors.bgDark,
       button: '#F3F3F3',
