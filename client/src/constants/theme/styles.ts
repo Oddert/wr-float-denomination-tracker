@@ -8,7 +8,10 @@ const styles = {
       color: 'theme_light.text.standard',
       fontFamily,
 
-    }
+    },
+		button: {
+			h: 'auto'
+		}
   }
 }
 

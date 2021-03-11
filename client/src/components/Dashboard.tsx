@@ -2,9 +2,9 @@ import React from 'react'
 import { 
   GridItem, 
   Grid,
-  Input,
-  Textarea,
-  Select,
+  // Input,
+  // Textarea,
+  // Select,
   Button,
   Divider,
   Text,
@@ -15,16 +15,26 @@ import {
   // useStyleConfig, 
   FormLabel,
   Link,
-  Box,
-  Accordion,
-  AccordionItem,
-  AccordionIcon,
-  AccordionButton,
-  AccordionPanel,
+  // Box,
+  // Accordion,
+  // AccordionItem,
+  // AccordionIcon,
+  // AccordionButton,
+  // AccordionPanel,
 } from '@chakra-ui/react'
+
+import {
+	AddIcon
+} from '@chakra-ui/icons'
+
+import Input from './base/Input'
+import Textarea from './base/Textarea'
+import Select from './base/Select'
+import TimeInput from './base/TimeInput'
 
 import Nav from './Nav/'
 import Header from './Header/'
+import DateInput from './base/DateInput'
 
 const Dashboard: React.FC = () => {
   // const btnVarOne = useStyleConfig('Button', { variant: 'solid' })
@@ -96,15 +106,15 @@ const Dashboard: React.FC = () => {
         <Text variant='faded'>Faded unreadable text - £52</Text>
         <Input placeholder='A Standard Text Input' />
         <Textarea placeholder='description of the repository' />
-        <Button>UI Button</Button>
-        <div>Search Bar...</div>
-        <Select placeholder='a dropdown'>
+        <Button variant='ui' h='auto'>UI Button</Button>
+        <Button variant='ui' display='flex'>Search Bar...</Button>
+        <Select placeholder='a dropdown' variant='outline'>
           <option value='opt1'>Option One</option>
           <option value='opt2'>Option Two</option>
           <option value='opt3'>Option Three</option>
         </Select>
-        <input type="date"/>
-        <input type="time"/>
+				<DateInput />
+        <TimeInput />
         <RadioGroup defaultValue='readio-one'>
           <Radio value='radio-one'>Radio Option One</Radio>
           <Radio value='radio-two'>Radio Option Two</Radio>
@@ -114,8 +124,19 @@ const Dashboard: React.FC = () => {
         <Link>Navigation Secondary</Link>
         <Link>Navigation Current</Link>
         <Divider orientation='horizontal' />
-        <Divider orientation='horizontal' />
-        <Accordion>
+        <Divider orientation='horizontal' variant='thin' />
+        <Divider orientation='horizontal' variant='thick' />
+				<div>Content Divider???</div>
+				<Button variant='link'>Button Link</Button>
+				<Button variant='transparent'>Button Transparent</Button>
+				<Button variant='standard'>Button Base</Button>
+				<Button variant='standard' size='sm'>Button Basic SM</Button>
+				<Button variant='primary'><AddIcon mr='8px' /> Button Primary</Button>
+				<Button variant='warning'>Button Warning</Button>
+				<Button variant='danger'>Button Danger</Button>
+				<Button variant='dangerOutline'>Danger Outline</Button>
+				<Button variant='dangerLink'>Danger Link</Button>
+        {/* <Accordion>
           <AccordionItem>
             <AccordionButton>
               Button
@@ -162,7 +183,7 @@ const Dashboard: React.FC = () => {
               commodo consequat.
             </AccordionPanel>
           </AccordionItem>
-        </Accordion>
+        </Accordion> */}
 
       </GridItem>
     </Grid>

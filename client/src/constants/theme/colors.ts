@@ -250,6 +250,7 @@ const colors = {
       contrastGreen: '#FFFFFF',
       darker: '#515151',
       standard: '#717171',
+			light: '#9a9a9a',
       lighter: '#C4C4C4',
       invisable: '#DADADB', // #D5D6D8 30% alpha
       menuActive: '#FFFFFF',
@@ -266,6 +267,8 @@ const colors = {
       line: '#CACACA',
       container: '#CACACA',
       danger: '#CA6D6D',
+      dangerLight: '#E75858',
+      dangerDark: '#AF1C1C',
       divider: '#ECF0F1',
       bgInsetLight: '#F8F8F8',
       bgInsetShaded: '#E2E2E2',
