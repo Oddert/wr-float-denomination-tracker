@@ -5,8 +5,11 @@ const Text = {
   },
   sizes: {},
   variants: {
+		danger: {
+			color: 'theme_light.ui.danger',
+		},
     faded: {
-      color: 'theme_light.text.invisable'
+      color: 'theme_light.text.invisable',
     }
   },
   defaultProps: {},

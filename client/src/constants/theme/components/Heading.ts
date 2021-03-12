@@ -17,6 +17,9 @@ const Heading = {
     // }
   },
   variants: {
+		primary: {
+			color: 'theme_light.text.title'
+		}
   },
   defaultProps: {}
 }

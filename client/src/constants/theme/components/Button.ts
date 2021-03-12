@@ -74,9 +74,9 @@ const Button = {
 		ui: {
 			border: '2px solid',
 			marginY: '2px',
-			borderColor: '#f3f3f3',
+			borderColor: '#EEEEEE',
 			h: 'auto',
-			bgColor: '#f3f3f3',
+			bgColor: '#EEEEEE', // formally #f3f3f3
 			color: 'theme_light.text.standard',
 			_hover: {
 				borderColor: '#e3e3e3',

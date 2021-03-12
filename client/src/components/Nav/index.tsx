@@ -1,10 +1,11 @@
 import React from 'react'
 import {
-  Box,
+  Flex,
   Divider,
-  Button
+	UnorderedList,
 } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+// import { NavLink } from 'react-router-dom'
+import NavLink from './NavLink'
 
 interface Props {
   colStart?: any
@@ -15,40 +16,39 @@ interface Props {
 
 const Nav: React.FC<Props> = () => {
   return (
-    <Box>
+    <Flex
+			direction='column'
+			bgColor='waitrose.primary'
+			h='100%'
+			textAlign='left'
+		>
       <nav>
-        <ul>
-          <li>
-            <Button>
-              Exit
-            </Button>
-          </li>
+        <UnorderedList
+					styleType='none'
+					m='0px'
+				>
           <Divider />
-          <li>
-            <Link to='/'>
-              Cash Repositories
-            </Link>
-          </li>
-          <li>
-            <Link to='/'>
-              Counts
-            </Link>
-          </li>
+					<NavLink to='/counts' primary>
+						Counts
+					</NavLink>
+					<NavLink to='/add-count'>
+						Add Count
+					</NavLink>
+					<NavLink to='/incomplete-counts'>
+						Incomplete Counts
+					</NavLink>
           <Divider />
-          <li>
-            <Link to='/'>
-              Incomplete Counts
-            </Link>
-          </li>
-          <li>
-            <Link to='/'>
-              Repository Manager
-            </Link>
-          </li>
+					<NavLink to='/repositories' primary current>
+						Repositories
+					</NavLink>
+					<Divider />
+					<NavLink to='/users' primary>
+						Users
+					</NavLink>
           <Divider />
-        </ul>
+        </UnorderedList>
       </nav>
-    </Box>
+    </Flex>
   )
 }
 

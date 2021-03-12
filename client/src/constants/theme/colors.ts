@@ -259,7 +259,7 @@ const colors = {
       buttonActive: waitroseBrandColors.primary,
     },
     background: {
-      primary: waitroseBrandColors.primary,
+      primary: '#f3f3f3',
       secondary: '#7EC507',
       button: '#FFFFFF',
     },
@@ -273,7 +273,13 @@ const colors = {
       bgInsetLight: '#F8F8F8',
       bgInsetShaded: '#E2E2E2',
       bgInsetDark: '#DEDEDE',
-    }
+    },
+		info: {
+			unfinished: '#ca6d6d',
+			partial: '#bed800',
+			complete: '#598d00',
+			unverified: '#3db8b5',
+		}
   },
 }
 
