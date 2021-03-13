@@ -7,6 +7,7 @@ import PageWrapper from './PageWrapper'
 import Login from './Login'
 import Dashboard from './Dashboard'
 import Counts from './Counts'
+import Count from './Count/'
 
 const App: React.FC = () => {  
   return (
@@ -23,6 +24,16 @@ const App: React.FC = () => {
           <Route path='/counts'>
             <PageWrapper title='Counts'>
 							<Counts />
+						</PageWrapper>
+          </Route>
+          <Route path='/count/new'>
+            <PageWrapper title='Add Count'>
+							<Count />
+						</PageWrapper>
+          </Route>
+          <Route path='/count/:id'>
+            <PageWrapper title='Count'>
+							<Count />
 						</PageWrapper>
           </Route>
           <Route path='/'>

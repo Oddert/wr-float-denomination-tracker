@@ -28,21 +28,21 @@ const Nav: React.FC<Props> = () => {
 					m='0px'
 				>
           <Divider />
-					<NavLink to='/counts' primary>
+					<NavLink to='/counts' primary='true'>
 						Counts
 					</NavLink>
-					<NavLink to='/add-count'>
+					<NavLink to='/count/new'>
 						Add Count
 					</NavLink>
 					<NavLink to='/incomplete-counts'>
 						Incomplete Counts
 					</NavLink>
           <Divider />
-					<NavLink to='/repositories' primary current>
+					<NavLink to='/repositories' primary='true' current='true'>
 						Repositories
 					</NavLink>
 					<Divider />
-					<NavLink to='/users' primary>
+					<NavLink to='/users' primary='true'>
 						Users
 					</NavLink>
           <Divider />

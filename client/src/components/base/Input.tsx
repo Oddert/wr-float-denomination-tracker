@@ -9,10 +9,13 @@ interface Props extends ChakraInputType {
 }
 
 const Input: React.FC<any> = (props: Props) => <ChakraInput
-	{...props}
 	color='theme_light.text.light'
 	borderRadius='0'
-	border='2px solid'
+	bgColor='#f8f8f8'
+	borderTop='none'
+	borderLeft='none'
+	borderRight='none'
+	borderBottom='2px solid'
 	borderColor='theme_light.text.lighter'
 	m='10px 0'
 	_hover={{
@@ -22,6 +25,7 @@ const Input: React.FC<any> = (props: Props) => <ChakraInput
 		color: 'theme_light.text.darker',
 		boxShadow: '0 0 0 2px #5EAFFB',
 	}}
+	{...props}
 />
 
 export default Input

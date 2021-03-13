@@ -23,6 +23,7 @@ const Dashboard: React.FC<any> = ({
       templateColumns={`${navWidth} 1fr`}
       templateRows='auto 1fr'
       h='100vh'
+			bgColor='theme_light.background.primary'
     >
 			<GridItem
 				colStart={1}
@@ -43,7 +44,7 @@ const Dashboard: React.FC<any> = ({
         w='100%' 
         p='20px 50px'
         textAlign='left'
-        bg='waitrose.bgLight'
+        bg='theme_light.background.primary'
         colStart={2}
         colEnd={2}
         rowStart={2}

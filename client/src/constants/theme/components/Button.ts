@@ -74,18 +74,18 @@ const Button = {
 		ui: {
 			border: '2px solid',
 			marginY: '2px',
-			borderColor: '#EEEEEE',
+			borderColor: '#EAEAEA',
 			h: 'auto',
-			bgColor: '#EEEEEE', // formally #f3f3f3
+			bgColor: '#EAEAEA', // formally #f3f3f3
 			color: 'theme_light.text.standard',
 			_hover: {
-				borderColor: '#e3e3e3',
-				bgColor: '#e3e3e3',
+				borderColor: '#D3D3D3',
+				bgColor: '#D3D3D3',
 				color: 'theme_light.text.darker'
 			},
 			_active: {
-				borderColor: '#d3d3d3',
-				bgColor: '#d3d3d3',
+				borderColor: '#C4C4C4',
+				bgColor: '#C4C4C4',
 			},
 			_focus: {
 				boxShadow: '0 0 0 2px #5EAFFB',//'0 0 0 2px rgba(22, 129, 191, .6)',
