@@ -1,6 +1,7 @@
 import React from 'react'
 import { Box } from '@chakra-ui/react'
 import { TimeIcon } from '@chakra-ui/icons'
+import DatePicker from 'react-datepicker'
 
 const TimeInput: React.FC<any> = (props: any) => (
 	<Box
@@ -19,9 +20,8 @@ const TimeInput: React.FC<any> = (props: any) => (
 			borderColor: 'theme_light.text.light',
 		}}
 	>
-		<input 
+		<DatePicker 
 			{...props}
-			type='time' 
 		/>
 		<TimeIcon />
 	</Box>

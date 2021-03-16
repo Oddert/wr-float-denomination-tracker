@@ -1,49 +1,90 @@
-import React, { useState, SetStateAction, Dispatch, useEffect } from 'react'
-import {
+import React, { 
+	useState, 
+	SetStateAction, 
+	Dispatch, 
+	useContext 
+} from 'react'
+import { 
 	Grid,
 	GridItem,
 	FormLabel,
 	NumberInput,
 	NumberInputField,
 } from '@chakra-ui/react'
+import { CountActions } from './API'
+import AddCountContext from './AddCountContext'
 
 interface Props {
 	label: string
 	step: number
-	startValue?: number
+	denomination: string
 }
 
 const NoteInput: React.FC<Props> = ({
 	label,
 	step,
-	startValue,
+	denomination,
 }) => {
 	const [error, setError]: [null | string, Dispatch<SetStateAction<any>>] = useState(null)
-	const [value, setValue]: [number, Dispatch<SetStateAction<number>>] = useState(2)
+	// const [value, setValue]: [number, Dispatch<SetStateAction<number>>] = useState(2)
+	const { state, dispatch } = useContext(AddCountContext)
+	const value = state.data.notes[denomination]
 
-	useEffect(() => {
-		if (startValue) setValue(startValue)
-	}, [startValue])
-
-	const handleNumberChange = (v: number | string): void => {
-		const val = Number(v)
-		if (!val) {
-			setError(':(')
+	const handleNumberChange = (v: any): void => {
+		const val = Number(v) * step
+		const nanCheck = isNaN(val)
+		const zeroCheck = val < 0
+		const stepCheck = (val > 0 && val % step)
+		if (nanCheck) {
+			setError(`Error in [handleNumberChange] at nanCheck: value is not a number: ${val}`)
+			return
+		}
+		if (zeroCheck) {
+			setError(`Error in [handleNumberChange] at zeroCheck: value is bellow zero: ${val}`)
+			return
+		}
+		if (stepCheck) {
+			setError(`Error in [handleNumberChange] at stepCheck: value is an incompatible ammount: ${val}`)
 			return
 		}
 		setError(null)
-		setValue(val)
+		const payload = {
+			[denomination]: val
+		}
+		dispatch({
+			type: CountActions.UPDATE_NOTES,
+			payload,
+		})
 	}
 
-	const handleValueChange = (v: number | string): void => {
+	const handleValueChange = (v: any): void => {
 		const val = Number(v) / (step / 100)
-		if (!val) {
-			setError(':(')
+		const nanCheck = isNaN(val)
+		const zeroCheck = val < 0
+		const stepCheck = (val > 0 && val % step)
+		if (nanCheck) {
+			setError(`Error in [handleValueChange] at nanCheck: value is not a number: ${val}`)
+			return
+		}
+		if (zeroCheck) {
+			setError(`Error in [handleValueChange] at zeroCheck: value is bellow zero: ${val}`)
+			return
+		}
+		if (stepCheck) {
+			setError(`Error in [handleValueChange] at stepCheck: value is an incompatible ammount: ${val}`)
 			return
 		}
 		setError(null)
-		setValue(val)
+		const payload = {
+			[denomination]: val
+		}
+		dispatch({
+			type: CountActions.UPDATE_NOTES,
+			payload,
+		})
 	}
+
+	const numPad='2em'
 
 	return (
 		<GridItem
@@ -52,7 +93,7 @@ const NoteInput: React.FC<Props> = ({
 			<Grid
 				alignItems='center'
 				justifyContent='space-around'
-				title={error ? error : ''}
+				title={error ? error : 'no err'}
 				width='100%'
 				templateColumns='100px 1fr 1fr'
 				justifyItems='center'
@@ -63,7 +104,8 @@ const NoteInput: React.FC<Props> = ({
 					{label}
 				</FormLabel>
 				<NumberInput
-					value={value}
+					px={numPad}
+					value={value === 0 ? undefined : value / step}
 					onChange={handleNumberChange}
 				>
 					<NumberInputField 
@@ -73,10 +115,12 @@ const NoteInput: React.FC<Props> = ({
 						borderBottom='2px solid'
 						borderBottomColor='theme_light.text.lighter'
 						boxShadow={error ? '0 0 0 2px #E75858' : 'none'}
+						title={`Number of individual ${label} notes`}
 					/>
 				</NumberInput>
 				<NumberInput
-					value={value * (step / 100)}
+					px={numPad}
+					value={value === 0 ? '' : value / 100}
 					onChange={handleValueChange}
 				>
 					<NumberInputField 
@@ -86,6 +130,7 @@ const NoteInput: React.FC<Props> = ({
 						borderBottom='2px solid'
 						borderBottomColor='theme_light.text.lighter'
 						boxShadow={error ? '0 0 0 2px #E75858' : 'none'}
+						title={`£ value of all ${label} notes`}
 					/>
 				</NumberInput>
 			</Grid>

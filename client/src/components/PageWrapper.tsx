@@ -42,7 +42,7 @@ const Dashboard: React.FC<any> = ({
       </GridItem>
 			<GridItem 
         w='100%' 
-        p='20px 50px'
+        p='2em 5em'
         textAlign='left'
         bg='theme_light.background.primary'
         colStart={2}

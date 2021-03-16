@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import {
 	FormLabel,
 	GridItem,
@@ -6,27 +6,43 @@ import {
 	NumberInputField,
 	Grid,
 } from '@chakra-ui/react'
+import AddCountContext from './AddCountContext'
+import { CountActions } from './API'
 
 interface Props {
 	label: string
+	denomination: string
+	step: number
 	display?: 'pound' | 'pence'
 }
 
 const Denomination: React.FC<Props> = ({
 	label,
+	denomination,
+	step,
 }) => {
-	const [value, setValue]: [number, any] = useState(0)
+	const { state, dispatch } = useContext(AddCountContext)
+	const value = state.data.loose[denomination]
 	const [error, setError]: [null | string, any] = useState(null)
 
 	function handleChange (e: any): void {
-		const val = e.target.value
-		if (val % 1 || val === String) {
-			setError('Bagged coins cannot be decimal')
+		const val = Number(e.target.value) * 100
+		if (val % 1 || isNaN(val) || val % step) {
+			setError('Invalid input, please check')
 			return
-		} 
+		}
+		const payload = {
+			[denomination]: val
+		}
 		setError(null)
-		setValue(val)
+		dispatch({
+			type: CountActions.UPDATE_LOOSE,
+			payload,
+		})
 	}
+	
+	const sideColumns = '3fr'
+	const inputColumn = '4fr'
 
 	return (
 		<GridItem
@@ -37,7 +53,7 @@ const Denomination: React.FC<Props> = ({
 				justifyContent='space-around'
 				title={error ? error : ''}
 				width='100%'
-				templateColumns='100px 1fr 100px'
+				templateColumns={`${sideColumns} ${inputColumn} ${sideColumns}`}
 				justifyItems='center'
 			>
 				<FormLabel
@@ -55,6 +71,7 @@ const Denomination: React.FC<Props> = ({
 						borderBottom='2px solid'
 						borderBottomColor='theme_light.text.lighter'
 						boxShadow={error ? '0 0 0 2px #E75858' : 'none'}
+						title={`Amount of ${label.toLowerCase()} in format £0.00`}
 					/>
 				</NumberInput>
 			</Grid>

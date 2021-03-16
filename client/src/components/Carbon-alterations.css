@@ -1,0 +1,32 @@
+.bx--date-picker__input {
+	background-color: rgba(0,0,0,0);
+	padding: 2px 16px;
+	border: 2px solid #5e5b5b;
+	font-size: 18px;
+	color: #9a9a9a;
+	border-color: #C4C4C4;
+	cursor: pointer;
+}
+
+.bx--date-picker__icon {
+	fill: #9a9a9a;
+	cursor: pointer;
+}
+
+.bx--date-picker__input:hover {
+	border-color: #9a9a9a;
+	color: #717171;
+}
+
+.bx--date-picker__icon:hover {
+	fill: #717171;
+	border-color: #c4c4c4;
+}
+/* .bx--date-picker__icon:hover + .bx--date-picker__input {
+	border-color: #9a9a9a;
+	color: #717171;
+} */
+
+.bx--date-picker__month .numInputWrapper span:not([class]) {
+	display: none !important;
+}

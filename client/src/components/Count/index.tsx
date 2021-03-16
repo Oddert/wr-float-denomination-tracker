@@ -2,12 +2,10 @@ import React, { Dispatch, useReducer } from 'react'
 import {
 	Flex,
 	FormLabel,
-	InputGroup,
 	Divider,
 	Text,
 } from '@chakra-ui/react'
 
-import Input from '../base/Input'
 import Repository from './Repository'
 import BaggedCoin from './BaggedCoin'
 import LooseCoin from './LooseCoin'
@@ -17,11 +15,54 @@ import Time from './Time'
 
 import AddCountContext from './AddCountContext'
 import { repositories, CountActions } from './API'
+import Supervisor from './Supervisor'
+
+interface BaggedType {
+	pence_one: number
+	pence_two: number
+	pence_five: number
+	pence_ten: number
+	pence_twenty: number
+	pence_fifty: number
+	pound_one: number
+	pound_two: number
+	note_five: number
+	total: number
+}
+
+interface LooseType {
+	pence_one: number
+	pence_two: number
+	pence_five: number
+	pence_ten: number
+	pence_twenty: number
+	pence_fifty: number
+	pound_one: number
+	pound_two: number
+	other: number
+	total: number
+}
+
+interface NotesType {
+	note_one: number
+	note_five: number
+	note_ten: number
+	note_twenty: number
+	note_fifty: number
+}
+
+interface DataType {
+	bagged: BaggedType
+	loose: LooseType
+	notes: NotesType
+	total: number
+}
 
 interface State {
 	repository: typeof repositories
 	counter: string
 	supervisor: string
+	data: DataType
 }
 
 interface Action {
@@ -32,6 +73,7 @@ interface Action {
 const Count: React.FC = () => {
 
 	const countReducer = (state: State, action: Action) => {
+		console.log(action)
 		switch(action.type) {
 			case CountActions.UPDATE_REPO:
 				return {
@@ -53,7 +95,76 @@ const Count: React.FC = () => {
 					...state,
 					timestamp: action.payload
 				}
+			case CountActions.UPDATE_BAG:
+				return updateBag(state, action)
+			case CountActions.UPDATE_LOOSE:
+				return updateLoose(state, action)
+			case CountActions.UPDATE_NOTES:
+				return updateNotes(state, action)
 			default: return state
+		}
+	}
+
+	function updateBag (state: State, action: Action): State {
+		const bagged = {
+			...state.data.bagged,
+			...action.payload,
+		}
+		const total: number = Object.keys(bagged)
+			.filter(e => e !== 'total')
+			.reduce((acc, each) => acc + bagged[each], 0)
+
+		return {
+			...state,
+			data: {
+				...state.data,
+				bagged: {
+					...bagged,
+					total,
+				}
+			}
+		}
+	}
+
+	function updateLoose (state: State, action: Action): State {
+		const loose = {
+			...state.data.loose,
+			...action.payload,
+		}
+		const total: number = Object.keys(loose)
+			.filter(e => e !== 'total')
+			.reduce((acc, each) => acc + loose[each], 0)
+
+		return {
+			...state,
+			data: {
+				...state.data,
+				loose: {
+					...loose,
+					total,
+				}
+			}
+		}
+	}
+
+	function updateNotes (state: State, action: Action): State {
+		const notes = {
+			...state.data.notes,
+			...action.payload,
+		}
+		const total: number = Object.keys(notes)
+			.filter(e => e !== 'total')
+			.reduce((acc, each) => acc + notes[each], 0)
+
+		return {
+			...state,
+			data: {
+				...state.data,
+				notes: {
+					...notes,
+					total,
+				}
+			}
 		}
 	}
 	
@@ -61,6 +172,40 @@ const Count: React.FC = () => {
 		repository: repositories[0],
 		counter: '',
 		supervisor: '',
+		data: {
+			bagged: {
+				pence_one: 0,
+				pence_two: 0,
+				pence_five: 0,
+				pence_ten: 0,
+				pence_twenty: 0,
+				pence_fifty: 0,
+				pound_one: 0,
+				pound_two: 0,
+				note_five: 0,
+				total: 0,
+			},
+			loose: {
+				pence_one: 0,
+				pence_two: 0,
+				pence_five: 0,
+				pence_ten: 0,
+				pence_twenty: 0,
+				pence_fifty: 0,
+				pound_one: 0,
+				pound_two: 0,
+				other: 0,
+				total: 0,
+			},
+			notes: {
+				note_one: 0,
+				note_five: 0,
+				note_ten: 0,
+				note_twenty: 0,
+				note_fifty: 0,
+			},
+			total: 0,
+		},
 		timestamp: Date.now(),
 	})
 
@@ -68,7 +213,11 @@ const Count: React.FC = () => {
 		<AddCountContext.Provider value={{
 			state, dispatch
 		}}>
-			<Text>{JSON.stringify(state)}</Text>
+			<Text
+				wordBreak='break-all'
+			>
+				{ JSON.stringify(state) }
+			</Text>
 			<Flex
 				flexDirection='column'
 			>
@@ -76,9 +225,8 @@ const Count: React.FC = () => {
 				<Flex
 					flexDirection='column'
 					bgColor='#fff'
-					p='25px'
+					p='3em'
 				>
-					<FormLabel>Date</FormLabel>
 					<Time />
 					<Flex
 						w='100%'
@@ -86,21 +234,13 @@ const Count: React.FC = () => {
 						m='30px 0'
 					>
 						<Counter />
-						<InputGroup
-							display='flex'
-							flexDirection='column'
-							p='0 10px'
-						>
-							<FormLabel>Supervisor</FormLabel>
-							<Input />
-						</InputGroup>
+						<Supervisor />
 					</Flex>
 					<Divider />
 					<FormLabel>Bagged Coin</FormLabel>
 					<BaggedCoin />
 					<FormLabel>Loose Coin</FormLabel>
 					<LooseCoin />
-					<FormLabel>Notes / Uncounted Pickups</FormLabel>
 					<Notes />
 				</Flex>
 			</Flex>

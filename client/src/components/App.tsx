@@ -1,6 +1,9 @@
 import React from 'react'
 import { HashRouter, Switch, Route } from 'react-router-dom'
 
+import './Carbon.css'
+import './Carbon-alterations.css'
+import './ReactDatetime.css'
 import './App.scss'
 
 import PageWrapper from './PageWrapper'
@@ -8,6 +11,8 @@ import Login from './Login'
 import Dashboard from './Dashboard'
 import Counts from './Counts'
 import Count from './Count/'
+
+import 'react-datepicker/dist/react-datepicker.css'
 
 const App: React.FC = () => {  
   return (
