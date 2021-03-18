@@ -37,6 +37,10 @@ const Button = {
       fontSize: "16px",
       p: "8px 16px",
     },
+    lg: {
+      fontSize: "20px",
+      p: "12px 20px",
+    },
   },
   // Two variants: outline and solid
   variants: {
@@ -59,13 +63,25 @@ const Button = {
 			},
 		},
     outline: {
-			color: 'theme_light.text.contrastGreen',
-      border: "2px solid",
+			color: 'waitrose.primary',
+			border: "2px solid",
       borderColor: "waitrose.primary",
-      bgColor: "waitrose.primary",
+      bgColor: "rgba(0,0,0,0)",
 			fontWeight: 'normal',
 			padding: '16px 24px',
 			margin: '0 4px',
+			_hover: {
+				borderColor: "waitrose.primary",
+				bgColor: 'waitrose.primary',
+				background: 'waitrose.primary',
+				color: 'theme_light.text.contrastGreen',
+			},
+			_active: {
+				borderColor: "waitrose.bgDark",
+				bgColor: 'waitrose.bgDark',
+				background: 'waitrose.bgDark',
+				color: '#FFFFFF',
+			},
     },
     solid: {
       bg: "green.500",

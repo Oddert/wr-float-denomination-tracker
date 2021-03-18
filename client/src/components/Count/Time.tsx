@@ -17,14 +17,14 @@ import gb from 'date-fns/locale/en-GB'
 
 import DateInput from '../base/DateInput'
 import TimeInput from '../base/TimeInput'
-import AddCountContext from './AddCountContext'
-import { CountActions } from './API'
+import CountContext from './utils/CountContext'
+import { CountActions } from './utils/API'
 
 registerLocale('gb', gb)
 setDefaultLocale('gb')
 
 const Time: React.FC = () => {
-	const { state: { timestamp }, dispatch } = useContext(AddCountContext)
+	const { state: { timestamp }, dispatch } = useContext(CountContext)
 
 	const handleChange = (date: Date): void => {
 		dispatch({

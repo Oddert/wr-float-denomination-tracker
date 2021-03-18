@@ -8,7 +8,7 @@ import {
 	Divider,
 } from '@chakra-ui/react'
 
-import NoteInput from './NoteInput'
+import NoteInputWrapper from './NoteInputWrapper'
 
 const BaggedCoin: React.FC = () => {
 	return (
@@ -37,27 +37,27 @@ const BaggedCoin: React.FC = () => {
 						<FormLabel>Number</FormLabel>
 						<FormLabel>Value</FormLabel>
 					</Grid>
-					<NoteInput 
+					<NoteInputWrapper 
 						label='£50'
 						step={5000}
 						denomination='note_fifty'
 					/>
-					<NoteInput 
+					<NoteInputWrapper 
 						label='£20'
 						step={2000}
 						denomination='note_twenty'
 					/>
-					<NoteInput 
+					<NoteInputWrapper 
 						label='£10'
 						step={1000}
 						denomination='note_ten'
 					/>
-					<NoteInput 
+					<NoteInputWrapper 
 						label='£5'
 						step={500}
 						denomination='note_five'
 					/>
-					<NoteInput 
+					<NoteInputWrapper 
 						label='£1 (Scottish)'
 						step={100}
 						denomination='note_one'

@@ -1,5 +1,9 @@
 const initialState = {
-  main: {}
+  main: {},
+	counts: {
+		data: [],
+		updated: null,
+	},
 }
 
 export default initialState

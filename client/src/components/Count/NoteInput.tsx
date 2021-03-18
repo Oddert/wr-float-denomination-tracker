@@ -11,8 +11,8 @@ import {
 	NumberInput,
 	NumberInputField,
 } from '@chakra-ui/react'
-import { CountActions } from './API'
-import AddCountContext from './AddCountContext'
+import { CountActions } from './utils/API'
+import CountContext from './utils/CountContext'
 
 interface Props {
 	label: string
@@ -27,7 +27,7 @@ const NoteInput: React.FC<Props> = ({
 }) => {
 	const [error, setError]: [null | string, Dispatch<SetStateAction<any>>] = useState(null)
 	// const [value, setValue]: [number, Dispatch<SetStateAction<number>>] = useState(2)
-	const { state, dispatch } = useContext(AddCountContext)
+	const { state, dispatch } = useContext(CountContext)
 	const value = state.data.notes[denomination]
 
 	const handleNumberChange = (v: any): void => {
@@ -58,10 +58,14 @@ const NoteInput: React.FC<Props> = ({
 	}
 
 	const handleValueChange = (v: any): void => {
-		const val = Number(v) / (step / 100)
+		const poundValue = Number(v)
+		const penceValue = poundValue * 100
+		const stepAsPound = (step / 100)
+		const val = poundValue / stepAsPound
+
 		const nanCheck = isNaN(val)
 		const zeroCheck = val < 0
-		const stepCheck = (val > 0 && val % step)
+		const stepCheck = (val > 0 && poundValue % stepAsPound)
 		if (nanCheck) {
 			setError(`Error in [handleValueChange] at nanCheck: value is not a number: ${val}`)
 			return
@@ -76,7 +80,7 @@ const NoteInput: React.FC<Props> = ({
 		}
 		setError(null)
 		const payload = {
-			[denomination]: val
+			[denomination]: penceValue
 		}
 		dispatch({
 			type: CountActions.UPDATE_NOTES,
@@ -93,7 +97,7 @@ const NoteInput: React.FC<Props> = ({
 			<Grid
 				alignItems='center'
 				justifyContent='space-around'
-				title={error ? error : 'no err'}
+				title={error ? error : ''}
 				width='100%'
 				templateColumns='100px 1fr 1fr'
 				justifyItems='center'

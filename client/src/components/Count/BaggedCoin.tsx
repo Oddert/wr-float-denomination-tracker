@@ -7,10 +7,10 @@ import {
 } from '@chakra-ui/react'
 
 import BaggedCoinInput from './BaggedCoinInput'
-import AddCountContext from './AddCountContext'
+import CountContext from './utils/CountContext'
 
 const BaggedCoin: React.FC = () => {
-	const { state: { data: { bagged: { total } } }} = useContext(AddCountContext)
+	const { state: { data: { bagged: { total } } }} = useContext(CountContext)
 	return (
 		<>
 			<Grid

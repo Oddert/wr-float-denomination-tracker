@@ -5,11 +5,11 @@ import {
 
 import Select from '../base/Select'
 
-import AddCountContext from './AddCountContext'
-import { repositories, CountActions } from './API'
+import CountContext from './utils/CountContext'
+import { repositories, CountActions } from './utils/API'
 
 const Repository = () => {
-	const { state, dispatch } = useContext(AddCountContext)
+	const { state, dispatch } = useContext(CountContext)
 	return (
 		<Box
 			p='10px 0 20px'

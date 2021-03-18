@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { SetStateAction, useContext, useState } from 'react'
 import {
 	FormLabel,
 	GridItem,
@@ -7,8 +7,10 @@ import {
 	Text,
 	Grid,
 } from '@chakra-ui/react'
-import AddCountContext from './AddCountContext'
-import { CountActions } from './API'
+import CountContext from './utils/CountContext'
+import { CountActions, sanitiseNumberInputVal } from './utils/API'
+import { useEffect } from 'react'
+import { Dispatch } from 'react'
 
 interface Props {
 	label: string
@@ -35,14 +37,19 @@ const Denomination: React.FC<Props> = ({
 	step,
 	denomination,
 }) => {
-	const { state, dispatch } = useContext(AddCountContext)
-	const value = state.data.bagged[denomination]
+	const { state, dispatch } = useContext(CountContext)
+	const inVal = state.data.bagged[denomination]
 	const [error, setError]: [null | string, any] = useState(null)
+	const [value, setValue]: [null | undefined | string | number, Dispatch<SetStateAction<any>>] = useState(null)
 
-	function handleChange (e: any): void {
-		console.log(Number(e.target.value))
-		const val = Number(e.target.value) * step
-		console.log(Number(e.target.value) * step)
+	useEffect(() => {
+		setValue(inVal)
+	}, [inVal])
+
+	function handleChange (v: any): void {
+		const val = Number(v) * step
+		if (v === '' || v === undefined || v === null) setValue('')
+		else setValue(val)
 		if (val % 1 || isNaN(val)) {
 			setError('Invalid input, please check')
 			return
@@ -81,10 +88,11 @@ const Denomination: React.FC<Props> = ({
 				>
 					{label}
 				</FormLabel>
-				<NumberInput>
+				<NumberInput
+					value={sanitiseNumberInputVal(value, step)}
+					onChange={handleChange}
+				>
 					<NumberInputField 
-						value={value}
-						onChange={handleChange}
 						bgColor='#f8f8f8'
 						borderColor='rgba(0,0,0,0)'
 						borderRadius='none'
@@ -99,7 +107,7 @@ const Denomination: React.FC<Props> = ({
 					color='theme_light.text.invisable'
 				>
 					{
-						convertToDisplay(value)
+						convertToDisplay(typeof value === 'number' ? value : 0)
 					}
 				</Text>
 			</Grid>

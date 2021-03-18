@@ -7,11 +7,11 @@ import {
 
 import Input from '../base/Input'
 
-import AddCountContext from './AddCountContext'
-import { CountActions } from './API'
+import CountContext from './utils/CountContext'
+import { CountActions } from './utils/API'
 
 const Supervisor: React.FC = () => {
-	const { state, dispatch } = useContext(AddCountContext)
+	const { state, dispatch } = useContext(CountContext)
 	const onChange = (e: any) => dispatch({ 
 		type: CountActions.UPDATE_SUPERVISOR, 
 		payload: e.target.value 

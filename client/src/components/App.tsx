@@ -1,5 +1,5 @@
 import React from 'react'
-import { HashRouter, Switch, Route } from 'react-router-dom'
+import { HashRouter, Switch, Route, Redirect } from 'react-router-dom'
 
 import './Carbon.css'
 import './Carbon-alterations.css'
@@ -38,13 +38,16 @@ const App: React.FC = () => {
           </Route>
           <Route path='/count/:id'>
             <PageWrapper title='Count'>
-							<Count />
+							<Count edit={true} />
 						</PageWrapper>
           </Route>
-          <Route path='/'>
+          <Route path='/repositories'>
             <PageWrapper>
 							<Dashboard />
 						</PageWrapper>
+          </Route>
+          <Route path='/'>
+            <Redirect to='/repositories' />
           </Route>
         </Switch>
       </HashRouter>
