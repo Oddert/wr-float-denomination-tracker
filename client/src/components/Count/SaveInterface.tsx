@@ -4,11 +4,23 @@ import {
 	Button,
 	Flex,
 } from '@chakra-ui/react'
+
 import {
 	ChevronRightIcon,
 } from '@chakra-ui/icons'
 
-const SaveInterface: React.FC = () => {
+// import { StateType } from './utils/types'
+
+interface Props {
+	edit: boolean | undefined
+}
+
+const SaveInterface: React.FC<Props> = ({
+	edit
+}) => {
+
+	
+
 	return (
 		<Flex
 			w='100%'

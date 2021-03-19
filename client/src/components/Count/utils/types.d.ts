@@ -41,14 +41,19 @@ export interface DataType {
 
 export interface StateType {
 	repository: string
+	timestamp: number | Date
+	data: DataType
 	counter: string
 	supervisor: string
-	data: DataType
-	timestamp: number | Date
 	ready: boolean
 }
 
 export interface ActionType {
 	type: CountActions
 	payload: any
+}
+
+export interface Validation {
+	code: 'complete' | 'incomplete' | 'partial' | 'unverified' | 'invalid'
+	message: string
 }

@@ -17,7 +17,7 @@ import Supervisor from './Supervisor'
 import Time from './Time'
 
 import CountContext from './utils/CountContext'
-import { CountActions } from './utils/API'
+import { CountActions, validateCount } from './utils/API'
 
 import {
 	StateType,
@@ -49,7 +49,14 @@ const Count: React.FC<Props> = ({ edit }) => {
 		}
 		fetch(ext, opts)
 			.then(res => res.json())
-			.then(res => dispatch({ type: CountActions.WRITE_ALL, payload: res.count }))
+			.then(res => {
+				const validation = validateCount(res.count)
+				if (validation.code === 'invalid') {
+					console.log('invalid response from the server')
+				} else {
+					dispatch({ type: CountActions.WRITE_ALL, payload: res.count })
+				}
+			})
 			.catch(err => console.error(err))
 	}, [edit, params.id, dispatch])
 
@@ -97,7 +104,9 @@ const Count: React.FC<Props> = ({ edit }) => {
 					<FormLabel>Loose Coin</FormLabel>
 					<LooseCoin />
 					<Notes />
-					<SaveInterface />
+					<SaveInterface 
+						edit={edit}
+					/>
 				</Flex>
 			</Flex>
 		</CountContext.Provider>
