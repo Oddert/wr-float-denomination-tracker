@@ -43,6 +43,7 @@ const initialState: StateType = {
 	},
 	timestamp: Date.now(),
 	ready: false,
+	verified: false,
 }
 
 export default initialState

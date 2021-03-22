@@ -6,8 +6,8 @@ import {
 	NumberInputField,
 	Grid,
 } from '@chakra-ui/react'
-import CountContext from './utils/CountContext'
-import { CountActions } from './utils/API'
+import CountContext from '../utils/CountContext'
+import { CountActions } from '../utils/API'
 
 interface Props {
 	label: string

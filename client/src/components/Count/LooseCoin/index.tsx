@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react'
 
 import LooseCoinInput from './LooseCoinInput'
-import CountContext from './utils/CountContext'
+import CountContext from '../utils/CountContext'
 
 const LooseCoin: React.FC = () => {
 	const { state: { data: { loose: { total } } } } = useContext(CountContext)

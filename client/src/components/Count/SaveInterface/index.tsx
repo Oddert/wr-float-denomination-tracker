@@ -8,6 +8,7 @@ import {
 import {
 	ChevronRightIcon,
 } from '@chakra-ui/icons'
+import Temp from './Temp'
 
 // import { StateType } from './utils/types'
 
@@ -29,6 +30,7 @@ const SaveInterface: React.FC<Props> = ({
 			justifyContent='center'
 			py='3em'
 		>
+			<Temp />
 			<Button
 				variant='link'
 				size='lg'

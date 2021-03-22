@@ -7,8 +7,8 @@ import {
 	Text,
 	Grid,
 } from '@chakra-ui/react'
-import CountContext from './utils/CountContext'
-import { CountActions, sanitiseNumberInputVal } from './utils/API'
+import CountContext from '../utils/CountContext'
+import { CountActions, sanitiseNumberInputVal } from '../utils/API'
 import { useEffect } from 'react'
 import { Dispatch } from 'react'
 

@@ -11,8 +11,8 @@ import {
 	NumberInput,
 	NumberInputField,
 } from '@chakra-ui/react'
-import { CountActions } from './utils/API'
-import CountContext from './utils/CountContext'
+import { CountActions } from '../utils/API'
+import CountContext from '../utils/CountContext'
 
 interface Props {
 	label: string

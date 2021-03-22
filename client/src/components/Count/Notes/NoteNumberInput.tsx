@@ -9,8 +9,8 @@ import {
 	NumberInputField, 
 } from '@chakra-ui/number-input'
 
-import CountContext from './utils/CountContext'
-import { CountActions } from './utils/API'
+import CountContext from '../utils/CountContext'
+import { CountActions } from '../utils/API'
 import { useEffect } from 'react'
 
 interface Props {

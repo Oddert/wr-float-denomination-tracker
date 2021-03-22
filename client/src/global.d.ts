@@ -1,4 +1,12 @@
-export interface BaggedType {
+
+declare global {
+	interface TestInterface {
+		data: string
+	}
+}
+
+
+interface BaggedType {
 	pence_one: number
 	pence_two: number
 	pence_five: number
@@ -11,7 +19,7 @@ export interface BaggedType {
 	total: number
 }
 
-export interface LooseType {
+interface LooseType {
 	pence_one: number
 	pence_two: number
 	pence_five: number
@@ -24,7 +32,7 @@ export interface LooseType {
 	total: number
 }
 
-export interface NotesType {
+interface NotesType {
 	note_one: number
 	note_five: number
 	note_ten: number
@@ -32,30 +40,28 @@ export interface NotesType {
 	note_fifty: number
 }
 
-export interface DataType {
+interface DataType {
 	bagged: BaggedType
 	loose: LooseType
 	notes: NotesType
 	total: number
 }
 
-export interface StateType {
+interface StateType {
 	repository: string
 	timestamp: number | Date
 	data: DataType
 	counter: string
 	supervisor: string
 	ready: boolean
-	verified: boolean
 }
 
-export interface ActionType {
+interface ActionType {
 	type: CountActions
 	payload: any
 }
 
-export interface Validation {
+interface Validation {
 	code: 'complete' | 'incomplete' | 'partial' | 'unverified' | 'invalid'
 	message: string
-	verified: boolean
 }
