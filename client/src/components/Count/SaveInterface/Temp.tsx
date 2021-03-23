@@ -32,6 +32,7 @@ const Temp: React.FC = () => {
 		<Popover>
 			<PopoverTrigger>
 				<Button
+					variant='ui'
 					onClick={handleClick}
 				>
 					Rate my count

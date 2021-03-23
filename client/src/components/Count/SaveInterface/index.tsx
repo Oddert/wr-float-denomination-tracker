@@ -10,6 +10,9 @@ import {
 } from '@chakra-ui/icons'
 import Temp from './Temp'
 
+import Save from './Save'
+import Close from './Close'
+import Next from './Next'
 // import { StateType } from './utils/types'
 
 interface Props {
@@ -19,8 +22,6 @@ interface Props {
 const SaveInterface: React.FC<Props> = ({
 	edit
 }) => {
-
-	
 
 	return (
 		<Flex
@@ -35,27 +36,9 @@ const SaveInterface: React.FC<Props> = ({
 			bottom='0px'
 		>
 			<Temp />
-			<Button
-				variant='link'
-				size='lg'
-				my='16px'
-			>
-				Save
-			</Button>
-			<Button
-				variant='outline'
-				bgColor='#fff'
-				size='lg'
-				mx='3em'
-			>
-				Save and Close
-			</Button>
-			<Button
-				size='lg'
-				py='12px'
-			>
-				Next Count <ChevronRightIcon />
-			</Button>
+			<Save edit={edit} />
+			<Close edit={edit} />
+			<Next edit={edit} />			
 		</Flex>
 	)
 }

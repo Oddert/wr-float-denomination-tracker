@@ -79,8 +79,6 @@ const NoteNumberInput: React.FC<Props> = ({
 			title={`Number of individual ${label} notes ${error ? '\n' + error : ''}`}
 			value={sanitiseNumberInputVal(value, step)}
 		>
-			{String(value)} | 
-			{String(sanitiseNumberInputVal(value, step))}
 			<NumberInputField 
 				onChange={(e: any) => handleValueChange(e.target.value)}
 				value={sanitiseNumberInputVal(value, step)}
