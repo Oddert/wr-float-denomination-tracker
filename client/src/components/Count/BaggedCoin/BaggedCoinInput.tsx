@@ -44,13 +44,16 @@ const Denomination: React.FC<Props> = ({
 
 	useEffect(() => {
 		setValue(inVal)
+		// console.log('set value to:', inVal)
 	}, [inVal])
 
 	function handleChange (v: any): void {
-		const val = Number(v) * step
-		if (v === '' || v === undefined || v === null) setValue('')
-		else setValue(val)
-		if (val % 1 || isNaN(val)) {
+		// console.log(v)
+		const valueAsumber = Number(v) * step
+		const val = (v === '' || v === undefined || v === null) ? null : valueAsumber
+		// setValue(val)
+
+		if (valueAsumber % 1 || isNaN(valueAsumber)) {
 			setError('Invalid input, please check')
 			return
 		}
@@ -62,6 +65,47 @@ const Denomination: React.FC<Props> = ({
 			type: CountActions.UPDATE_BAG,
 			payload,
 		})
+	}
+
+	function handleKeyDown (e: any) {
+		const { keyCode } = e
+		if (keyCode < 38 || keyCode > 40) return
+		// console.log(keyCode)
+		if (keyCode === 38) {
+			const changeVal = Number(value) + step
+			if (changeVal < 0) return
+			dispatch({
+				type: CountActions.UPDATE_BAG,
+				payload: {
+					[denomination]: changeVal
+				}
+			})
+		}
+		if (keyCode === 40) {
+			const changeVal = Number(value) - step
+			if (changeVal < 0) return
+			dispatch({
+				type: CountActions.UPDATE_BAG,
+				payload: {
+					[denomination]: changeVal
+				}
+			})
+		}
+		// L 65
+		if (keyCode === 68) {
+			// FUTURE: could be used to tab with arrow keys
+			// dissregarded for now due to clash concerns with select and navigation
+			// const els = document.querySelectorAll('.tab_jump')
+			// let us: number = 0
+			// els.forEach((each, idx) => {
+			// 	if (each.className.includes(`bag_${denomination}`)) us = idx
+			// })
+			// const target = us + 1
+			// console.log(target, els.length)
+			// if (target >= els.length) return
+			// console.log(els, us, els[target])
+			// els[target].focus()
+		}
 	}
 
 	function convertToDisplay (val: number): string {
@@ -86,13 +130,15 @@ const Denomination: React.FC<Props> = ({
 				<FormLabel
 					margin='0'
 				>
-					{label}
+					{label} {
+					// String(sanitiseNumberInputVal(value, step))
+					}
 				</FormLabel>
-				<NumberInput
-					value={sanitiseNumberInputVal(value, step)}
-					onChange={handleChange}
-				>
+				<NumberInput>
 					<NumberInputField 
+						value={sanitiseNumberInputVal(value, step)}
+						onKeyDown={handleKeyDown}
+						onChange={(e: any) => handleChange(e.target.value)}
 						bgColor='#f8f8f8'
 						borderColor='rgba(0,0,0,0)'
 						borderRadius='none'
@@ -100,6 +146,7 @@ const Denomination: React.FC<Props> = ({
 						borderBottomColor='theme_light.text.lighter'
 						boxShadow={error ? '0 0 0 3px #E75858' : 'none'}
 						title={`The number of ${label} bags. Each bag is £${(step / 100).toFixed(2)}`}
+						className={`tab_jump bag_${denomination}`}
 					/>
 				</NumberInput>
 				<Text

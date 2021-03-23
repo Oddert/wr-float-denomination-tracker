@@ -1,35 +1,36 @@
 export interface BaggedType {
-	pence_one: number
-	pence_two: number
-	pence_five: number
-	pence_ten: number
-	pence_twenty: number
-	pence_fifty: number
-	pound_one: number
-	pound_two: number
-	note_five: number
-	total: number
+	pence_one: number | null
+	pence_two: number | null
+	pence_five: number | null
+	pence_ten: number | null
+	pence_twenty: number | null
+	pence_fifty: number | null
+	pound_one: number | null
+	pound_two: number | null
+	note_five: number | null
+	total: number | null
 }
 
 export interface LooseType {
-	pence_one: number
-	pence_two: number
-	pence_five: number
-	pence_ten: number
-	pence_twenty: number
-	pence_fifty: number
-	pound_one: number
-	pound_two: number
-	other: number
-	total: number
+	pence_one: number | null
+	pence_two: number | null
+	pence_five: number | null
+	pence_ten: number | null
+	pence_twenty: number | null
+	pence_fifty: number | null
+	pound_one: number | null
+	pound_two: number | null
+	other: number | null
+	total: number | null
 }
 
 export interface NotesType {
-	note_one: number
-	note_five: number
-	note_ten: number
-	note_twenty: number
-	note_fifty: number
+	note_one: number | null
+	note_five: number | null
+	note_ten: number | null
+	note_twenty: number | null
+	note_fifty: number | null
+	total: number | null
 }
 
 export interface DataType {

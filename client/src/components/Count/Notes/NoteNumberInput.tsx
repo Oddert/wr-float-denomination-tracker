@@ -30,13 +30,16 @@ const NoteNumberInput: React.FC<Props> = ({
 	const [value, setValue]: [null | undefined | string | number, Dispatch<SetStateAction<any>>] = useState(null)
 
 	useEffect(() => {
-		setValue(inVal / step)
+		if (inVal === null) setValue('')
+		else setValue(inVal / step)
 	}, [inVal, step])
 
 	const handleNumberChange = (v: any): void => {
 		const noteNumber = Number(v)
+
 		if (v === '' || v === undefined || v === null) setValue('')
 		else setValue(noteNumber)
+
 		const val = noteNumber * step
 		const nanCheck = isNaN(val)
 		const zeroCheck = val < 0
@@ -55,7 +58,7 @@ const NoteNumberInput: React.FC<Props> = ({
 		}
 		setError(null)
 		const payload = {
-			[denomination]: val
+			[denomination]: (v === undefined || v === null || v === '') ? null : val
 		}
 		dispatch({
 			type: CountActions.UPDATE_NOTES,
@@ -66,10 +69,11 @@ const NoteNumberInput: React.FC<Props> = ({
 	return (
 		<NumberInput
 			px='2em'
-			onChange={handleNumberChange}
-			value={value || undefined}
+			value={value === null ? undefined : value}
 		>
 			<NumberInputField 
+				onChange={(e: any) => handleNumberChange(e.target.value)}
+				value={value === null ? undefined : value}
 				bgColor='#f8f8f8'
 				borderColor='rgba(0,0,0,0)'
 				borderRadius='none'
@@ -77,6 +81,7 @@ const NoteNumberInput: React.FC<Props> = ({
 				borderBottomColor='theme_light.text.lighter'
 				boxShadow={error ? '0 0 0 2px #E75858' : ''}
 				title={`Number of individual ${label} notes`}
+				className='tab_jump'
 			/>
 		</NumberInput>
 	)

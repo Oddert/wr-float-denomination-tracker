@@ -5,7 +5,7 @@ import {
 } from './types'
 
 const countReducer = (state: StateType, action: ActionType) => {
-	// console.log(action)
+	console.log(action)
 	switch(action.type) {
 		case CountActions.WRITE_ALL:
 			console.log(action.payload)

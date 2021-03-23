@@ -19,6 +19,7 @@ const NavLink: React.FC<any> = (props: any) => {
 				{...props}
 				href={`#${props.to}`}
 				color='waitrose.bgLight'
+				fontSize='1.2em'
 			/>
 		</ListItem>
 	)

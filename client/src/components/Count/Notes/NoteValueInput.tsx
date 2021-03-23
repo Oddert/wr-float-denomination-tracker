@@ -30,10 +30,13 @@ const NoteNumberInput: React.FC<Props> = ({
 	const [value, setValue]: [null | undefined | string | number, Dispatch<SetStateAction<any>>] = useState(null)
 
 	useEffect(() => {
-		setValue((inVal * step) / 100)
+		// console.log('### updating from inVal', inVal, (inVal * step) / 100)
+		if (typeof inVal === 'number') setValue(inVal / 100)
+		else setValue('')
 	}, [inVal, step])
 
 	const handleValueChange = (v: any): void => {
+		// console.log(v)
 		const poundValue = Number(v)
 		const penceValue = poundValue * 100
 		
@@ -62,7 +65,7 @@ const NoteNumberInput: React.FC<Props> = ({
 		}
 		setError(null)
 		const payload = {
-			[denomination]: penceValue
+			[denomination]: (v === '' || v === null || v === undefined) ? null : penceValue
 		}
 		dispatch({
 			type: CountActions.UPDATE_NOTES,
@@ -73,17 +76,21 @@ const NoteNumberInput: React.FC<Props> = ({
 	return (
 		<NumberInput
 			px='2em'
-			onChange={handleValueChange}
-			value={sanitiseNumberInputVal(value, step)}
 			title={`Number of individual ${label} notes ${error ? '\n' + error : ''}`}
+			value={sanitiseNumberInputVal(value, step)}
 		>
+			{String(value)} | 
+			{String(sanitiseNumberInputVal(value, step))}
 			<NumberInputField 
+				onChange={(e: any) => handleValueChange(e.target.value)}
+				value={sanitiseNumberInputVal(value, step)}
 				bgColor='#f8f8f8'
 				borderColor='rgba(0,0,0,0)'
 				borderRadius='none'
 				borderBottom='2px solid'
 				borderBottomColor='theme_light.text.lighter'
 				boxShadow={error ? '0 0 0 2px #E75858' : ''}
+				className='tab_jump'
 			/>
 		</NumberInput>
 	)

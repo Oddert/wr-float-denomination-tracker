@@ -27,18 +27,19 @@ const Denomination: React.FC<Props> = ({
 	const [value, setValue]: [string | number | undefined, Dispatch<SetStateAction<any>>] = useState(undefined)
 
 	useEffect(() => {
-		setValue(inVal / 100)
+		if (typeof inVal === 'number') setValue(inVal / 100)
+		else setValue(undefined)
 	}, [inVal])
 
 	function handleChange (v: any): void {
-		const value = Number(v)
-		const val = Math.floor(value * 100)
+		const valueAsNumber = Math.floor(Number(v) * 100)
+		const val = (v === '' || v === null || v === undefined) ? null : valueAsNumber
 
-		setValue(v)
+		// setValue(v)
 
-		const minimumValueTest = (val * 100) % 1
-		const nanTest = isNaN(val)
-		const outOfStepTest = val % step
+		const minimumValueTest = valueAsNumber % 1
+		const nanTest = isNaN(valueAsNumber)
+		const outOfStepTest = valueAsNumber % step
 
 		if (minimumValueTest) {
 			setError(`Error [LooseCoinInput] at minimumValueTest: value entered is bellow the value of this denomination: value: ${v}, denomination: ${step / 100}`)
@@ -63,9 +64,9 @@ const Denomination: React.FC<Props> = ({
 	}
 
 	const handleFocusLeave = (value: any) => {
-		const val: number = Number(value)
-		if (isNaN(val)) return
-		else if (!error) setValue(val.toFixed(2))
+		// const val: number = Number(value)
+		// if (isNaN(val)) return
+		// else if (!error) setValue(val.toFixed(2))
 	}
 	
 	const sideColumns = '3fr'
@@ -89,11 +90,11 @@ const Denomination: React.FC<Props> = ({
 					{label}
 				</FormLabel>
 				<NumberInput
-					onChange={handleChange}
-					value={value}
-					onBlur={handleFocusLeave}
 				>
 					<NumberInputField 
+						onChange={(e: any) => handleChange(e.target.value)}
+						value={value === null ? undefined : value}
+						onBlur={handleFocusLeave}
 						bgColor='#f8f8f8'
 						borderColor='rgba(0,0,0,0)'
 						borderRadius='none'
@@ -101,6 +102,7 @@ const Denomination: React.FC<Props> = ({
 						borderBottomColor='theme_light.text.lighter'
 						boxShadow={error ? '0 0 0 2px #E75858' : 'none'}
 						title={`Amount of ${label.toLowerCase()} in format £0.00${error ? '\n' + error : ''}`}
+						className='tab_jump'
 					/>
 				</NumberInput>
 			</Grid>

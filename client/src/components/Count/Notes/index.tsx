@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
 	Flex,
 	Grid,
@@ -6,11 +6,14 @@ import {
 	FormLabel,
 	Box,
 	Divider,
+	Text,
 } from '@chakra-ui/react'
 
 import NoteInputWrapper from './NoteInputWrapper'
+import CountContext from '../utils/CountContext'
 
 const BaggedCoin: React.FC = () => {
+	const { state: { data: { notes: { total } } } } = useContext(CountContext)
 	return (
 		<>
 			<FormLabel
@@ -63,6 +66,12 @@ const BaggedCoin: React.FC = () => {
 						denomination='note_one'
 					/>
 				</Flex>
+				<Text
+					textAlign='right'
+					title='total bagged value (£)'
+				>
+					Total: { (total / 100).toFixed(2) }
+				</Text>
 				<Divider />
 			</GridItem>
 		</>

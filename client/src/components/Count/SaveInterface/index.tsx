@@ -25,10 +25,14 @@ const SaveInterface: React.FC<Props> = ({
 	return (
 		<Flex
 			w='100%'
-			border='1px soid red'
+			border='1px dashed'
+			borderColor='rgba(0,0,0,0)'
 			alignItems='center'
 			justifyContent='center'
-			py='3em'
+			py='2em'
+			my='3em'
+			position='sticky'
+			bottom='0px'
 		>
 			<Temp />
 			<Button
@@ -40,6 +44,7 @@ const SaveInterface: React.FC<Props> = ({
 			</Button>
 			<Button
 				variant='outline'
+				bgColor='#fff'
 				size='lg'
 				mx='3em'
 			>

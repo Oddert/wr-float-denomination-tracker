@@ -21,9 +21,9 @@ export enum CountActions {
 export const sanitiseNumberInputVal = (
 	n: number | string | undefined | null, 
 	step: number
-): number | undefined => {
-	if (typeof n === 'number') return n / step
-	else return undefined
+): number | string => {
+	if (n === '' || n === undefined || n === null) return ''
+	else return n
 }
 
 // const why: TestInterface = {
@@ -70,6 +70,7 @@ export const validateCount = (count: any): Validation => {
 				note_ten: 0,
 				note_twenty: 0,
 				note_fifty: 0,
+				total: 0,
 			},
 			total: 0,
 		},

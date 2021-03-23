@@ -36,7 +36,7 @@ const Nav: React.FC<Props> = () => {
 						Counts
 					</NavLink>
 					<NavLink to='/count/new'>
-						Add Count
+						New Count
 					</NavLink>
 					<NavLink to='/incomplete-counts'>
 						Incomplete Counts
