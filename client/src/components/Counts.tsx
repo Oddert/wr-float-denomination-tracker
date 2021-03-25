@@ -90,7 +90,7 @@ const Counts: React.FC = () => {
 					counts
 						.filter((each: any) => each.repository === repo || repo === 'all')
 						.map((each: any) => {
-							const date = new Date(each.date)
+							const date = new Date(each.timestamp)
 							const py='10px'
 							const px='40px'
 							return (

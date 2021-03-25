@@ -64,3 +64,21 @@ export const countsDataUpdateSingle = (count: any) => async (dispatch: ThunkDisp
 }
 
 // deleteCount
+
+
+
+
+export const uiFlashWriteOne = (title: string, description: string, catt?: string, duration?: string | number) => ({
+	type: ActionTypes.UI_FLASH_WRITE_ONE,
+	payload: {
+		title,
+		description,
+		catt,
+		duration: duration || null
+	}
+})
+
+export const uiFlashRemoveOne = (id: string) => ({
+	type: ActionTypes.UI_FLASH_REMOVE_ONE,
+	payload: id
+})

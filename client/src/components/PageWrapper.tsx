@@ -6,6 +6,7 @@ import {
 
 import Header from './Header/'
 import Nav from './Nav/'
+import Flash from './Flash'
 
 interface Props {
 	title: string
@@ -53,6 +54,7 @@ const Dashboard: React.FC<any> = ({
       >
 				{ children }
 			</GridItem>
+			<Flash />
 		</Grid>
 	)
 }

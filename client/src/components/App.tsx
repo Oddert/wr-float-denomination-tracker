@@ -14,7 +14,7 @@ import Count from './Count/'
 
 import 'react-datepicker/dist/react-datepicker.css'
 
-const App: React.FC = () => {  
+const App: React.FC = () => {
   return (
     <div className="App">
       <HashRouter>

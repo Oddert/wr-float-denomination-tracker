@@ -1,13 +1,9 @@
 import React from 'react'
 
 import {
-	Button,
 	Flex,
 } from '@chakra-ui/react'
 
-import {
-	ChevronRightIcon,
-} from '@chakra-ui/icons'
 import Temp from './Temp'
 
 import Save from './Save'

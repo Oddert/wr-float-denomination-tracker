@@ -5,6 +5,16 @@ declare global {
 	}
 }
 
+declare global {
+	interface Flash {
+		createdAt: number
+		duration: number
+		title?: string
+		description?: string
+		catt?: string
+	}
+}
+
 
 interface BaggedType {
 	pence_one: number

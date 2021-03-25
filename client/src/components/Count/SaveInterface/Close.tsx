@@ -13,8 +13,8 @@ const Close: React.FC<Props> = ({
 }) => {
 
 	const handleClick = () => {
-		if (edit) console.log('Send ajax, show flash')
-		else console.log('Perform Validation, Show confirmation, send ajax, show flash')
+		if (edit) console.log('Send ajax to PUT, show flash')
+		else console.log('Perform Validation, Show confirmation, send ajax to POST, show flash')
 	}
 
 	return (

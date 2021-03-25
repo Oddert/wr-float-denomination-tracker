@@ -16,8 +16,8 @@ const Next: React.FC<Props> = ({
 }) => {
 
 	const handleClick = () => {
-		if (edit) console.log('Send ajax, redirect to /count/new')
-		else console.log('Perform Validation, Show confirmation, send ajax, redirect to /count/new')
+		if (edit) console.log('Send ajax to PUT, redirect to /count/new')
+		else console.log('Perform Validation, Show confirmation, send ajax to POST, redirect to /count/new')
 	}
 
 	return (
