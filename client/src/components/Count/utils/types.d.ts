@@ -48,6 +48,8 @@ export interface StateType {
 	supervisor: string
 	ready: boolean
 	verified: boolean
+	counterId: string
+	supervisorId: string
 }
 
 export interface ActionType {

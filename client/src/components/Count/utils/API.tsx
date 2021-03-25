@@ -38,7 +38,9 @@ export const validateCount = (count: any): Validation => {
 	const sampleState: StateType = {
 		repository: repositories[0],
 		counter: '',
+		counterId: '',
 		supervisor: '',
+		supervisorId: '',
 		data: {
 			bagged: {
 				pence_one: 0,
@@ -99,8 +101,31 @@ export const validateCount = (count: any): Validation => {
 	}
 
 	function isVerifiedCheck () {
-		if (count.verified && count.verified === true) verified = true
-		else verified = false
+		if (count.hasOwnProperty('counterId') && /\w+/gi.test(count.counterId)) {
+			const EXT = `/api/v1/user/${count.counterId}`
+			const OPTS = {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}
+			fetch(EXT, OPTS)
+			.then(res => res.json())
+			.then(data => {
+				console.log({ data })
+				if (data.user) {
+					verified = true
+				} else {
+					verified = false
+				}
+			})
+			.catch(() => {
+				verified = false
+			})
+		} else {
+			if (count.verified && count.verified === true) verified = true
+			else verified = false
+		}
 	}
 
 	function missingDataCheck () {

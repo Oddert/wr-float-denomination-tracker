@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom'
 
 import './Carbon.css'
@@ -13,8 +13,20 @@ import Counts from './Counts'
 import Count from './Count/'
 
 import 'react-datepicker/dist/react-datepicker.css'
+import { useDispatch } from 'react-redux'
+import { authUsersWriteAll } from '../actions'
 
 const App: React.FC = () => {
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		function initialiseApp () {
+			dispatch(authUsersWriteAll())
+		}
+		initialiseApp()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
   return (
     <div className="App">
       <HashRouter>

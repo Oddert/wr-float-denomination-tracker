@@ -9,11 +9,10 @@ import {
 import { useParams } from 'react-router-dom'
 
 import BaggedCoin from './BaggedCoin/'
-import Counter from './Counter'
+import Counter from './Counter/'
 import LooseCoin from './LooseCoin/'
 import Notes from './Notes/'
 import Repository from './Repository'
-import Supervisor from './Supervisor'
 import Time from './Time'
 
 import CountContext from './utils/CountContext'
@@ -103,6 +102,7 @@ const Count: React.FC<Props> = ({ edit }) => {
 					flexDirection='column'
 					bgColor='#fff'
 					p='3em'
+					m='0 0 6em'
 				>
 					<Time />
 					<Flex
@@ -110,8 +110,16 @@ const Count: React.FC<Props> = ({ edit }) => {
 						justifyContent='space-around'
 						m='30px 0'
 					>
-						<Counter />
-						<Supervisor />
+						<Counter 
+							label='Counter'
+							dispatchType={CountActions.UPDATE_COUTNER}
+							stateAssignment='counter'
+						/>
+						<Counter 
+							label='Supervisor'
+							dispatchType={CountActions.UPDATE_SUPERVISOR}
+							stateAssignment='supervisor'
+						/>
 					</Flex>
 					<Divider />
 					<FormLabel>Bagged Coin</FormLabel>

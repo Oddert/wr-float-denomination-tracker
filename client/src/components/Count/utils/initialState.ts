@@ -6,7 +6,9 @@ import {
 const initialState: StateType = {
 	repository: repositories[0],
 	counter: '',
+	counterId: '',
 	supervisor: '',
+	supervisorId: '',
 	data: {
 		bagged: {
 			pence_one: null,

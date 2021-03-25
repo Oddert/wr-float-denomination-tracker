@@ -27,14 +27,11 @@ const SingleFlash: React.FC<any> = ({
 	const [translate, setTranslate] = useState('translate(-100%, -50%)')
 
 	useEffect(() => {
-		const el = (duration: any, removeFlash: any) => {
-			setTranslate('translate(0%, 0%)')
-			if (duration) {
-				setTimer(setTimeout(removeFlash, duration))
-			}
+		setTranslate('translate(0%, 0%)')
+		if (duration) {
+			setTimer(setTimeout(removeFlash, duration))
 		}
-		el(duration, removeFlash)
-		//@ts-ignore
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	function suspendTimer () {

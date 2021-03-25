@@ -17,7 +17,7 @@ interface Props {
 
 const SaveInterface: React.FC<Props> = ({
 	edit
-}) => {
+}) => {  
 
 	return (
 		<Flex
@@ -26,7 +26,7 @@ const SaveInterface: React.FC<Props> = ({
 			borderColor='rgba(0,0,0,0)'
 			alignItems='center'
 			justifyContent='center'
-			py='2em'
+			py='1em'
 			my='3em'
 			position='sticky'
 			bottom='0px'

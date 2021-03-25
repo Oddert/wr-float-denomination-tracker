@@ -50,6 +50,9 @@ export const addCount = (req: Request, res: Response): void => {
 	const { repository, status, date, data } = req.body
 	const count: any = { repository, status, date, data, _id }
 	counts.push(count)
+	res.json({
+		counts,
+	})
 }
 
 // Redux : n/a

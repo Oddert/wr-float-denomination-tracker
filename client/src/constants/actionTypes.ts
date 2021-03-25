@@ -5,6 +5,8 @@ enum ActionTypes {
 
 	UI_FLASH_WRITE_ONE = 'UI_FLASH_WRITE_ONE',
 	UI_FLASH_REMOVE_ONE = 'UI_FLASH_REMOVE_ONE',
+
+	AUTH_USERS_WRITE_ALL = 'AUTH_USERS_WRITE_ALL'
 }
 
 export default ActionTypes

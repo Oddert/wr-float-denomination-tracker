@@ -5,7 +5,7 @@ import {
 } from './types'
 
 const countReducer = (state: StateType, action: ActionType) => {
-	console.log(action)
+	// console.log(action)
 	switch(action.type) {
 		case CountActions.WRITE_ALL:
 			console.log(action.payload)
@@ -26,12 +26,14 @@ const countReducer = (state: StateType, action: ActionType) => {
 		case CountActions.UPDATE_COUTNER:
 			return {
 				...state,
-				counter: action.payload
+				counter: action.payload.counter,
+				counterId: action.payload.counterId || state.counterId,
 			}
 		case CountActions.UPDATE_SUPERVISOR:
 			return {
 				...state,
-				supervisor: action.payload
+				supervisor: action.payload.supervisor,
+				supervisorId: action.payload.supervisorId,
 			}
 		case CountActions.UPDATE_TIME:
 			return {

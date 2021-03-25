@@ -16,6 +16,10 @@ const initialState = {
 			}
 		],
 	},
+	auth: {
+		userList: [],
+		userListUpdated: null,
+	},
 }
 
 export default initialState

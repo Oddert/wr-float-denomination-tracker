@@ -48,6 +48,9 @@ var addCount = function (req, res) {
     var _a = req.body, repository = _a.repository, status = _a.status, date = _a.date, data = _a.data;
     var count = { repository: repository, status: status, date: date, data: data, _id: _id };
     counts.push(count);
+    res.json({
+        counts: counts,
+    });
 };
 exports.addCount = addCount;
 // Redux : n/a
