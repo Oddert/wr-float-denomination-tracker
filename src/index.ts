@@ -1,9 +1,13 @@
-import express, { Express } from 'express'
+import express, { Express, json, urlencoded } from 'express'
 import path from 'path'
-import { json, urlencoded } from 'body-parser'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import morgan from 'morgan'
+import Knex from 'knex'
+import { Model } from 'objection'
+import * as knex from 'knex'
+
+import config from './knexfile'
 
 import coreRoutes from './routes/coreRoutes'
 import authRoutes from './routes/authRoutes'
@@ -16,6 +20,10 @@ dotenv.config()
 const app: Express = express()
 
 const PORT: number | string = process.env.PORT || 5000
+
+const knexConfig = Knex(config.development)
+
+Model.knex(knexConfig)
 
 app.use(express.static(path.join(__dirname, '../build')))
 app.use(json())

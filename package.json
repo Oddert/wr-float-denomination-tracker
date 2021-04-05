@@ -18,15 +18,20 @@
   "author": "Robyn Felicity Heather Veitch <robynfhveitch@gmail.com> (https://robynveitch.com/)",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^8.2.0",
+		"dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "morgan": "^1.10.0"
+    "knex": "^0.95.3",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "objection": "^2.2.15",
+    "sqlite3": "^5.0.2"
   },
   "devDependencies": {
-    "@types/carbon-components-react": "^7.29.0",
+		"@types/carbon-components-react": "^7.29.0",
     "@types/cors": "^2.8.10",
     "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.11",
+		"@types/knex": "^0.16.1",
     "@types/morgan": "^1.9.2",
     "concurrently": "^6.0.0",
     "cors": "^2.8.5",
