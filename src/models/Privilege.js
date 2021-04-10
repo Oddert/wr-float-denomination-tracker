@@ -64,7 +64,7 @@ class Privilege extends Model {
 	}
 
 	static get relationMappings () {
-		const User = requrie('./User')
+		const User = __dirname + './User' //requrie('./User')
 		return {
 
 			// user: {

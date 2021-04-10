@@ -56,10 +56,10 @@ var Count = /** @class */ (function (_super) {
     });
     Object.defineProperty(Count, "relationMappings", {
         get: function () {
-            var Float = require('./Float');
-            var Repository = require('./Repository');
-            var Partner = require('./Partner');
-            var User = require('./User');
+            var Float = __dirname + '/Float.js'; //require('./Float')
+            var Repository = __dirname + '/Repository.js'; //require('./Repository')
+            var Partner = __dirname + '/Partner.js'; //require('./Partner')
+            var User = __dirname + '/User.js'; //require('./User')
             return {
                 float: {
                     relation: Model.BelongsToOneRelation,

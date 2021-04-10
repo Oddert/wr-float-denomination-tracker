@@ -30,8 +30,8 @@ class Partner extends Model {
 	}
 	
 	static get relationMappings () {
-		const Repository = require('./Repository')
-		const Count = require('./Count')
+		const Repository = __dirname + './Repository' //require('./Repository')
+		const Count = __dirname + './Count' //require('./Count')
 
 		return {
 

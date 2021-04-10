@@ -52,8 +52,8 @@ var Repository = /** @class */ (function (_super) {
     });
     Object.defineProperty(Repository, "relationMappings", {
         get: function () {
-            var Count = require('./Count');
-            var Partner = require('./Partner');
+            var Count = __dirname + './Count'; //require('./Count')
+            var Partner = __dirname + './Partner'; //require('./Partner')
             return {
                 counts: {
                     relation: Model.HasManyRelation,

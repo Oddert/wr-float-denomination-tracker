@@ -52,8 +52,8 @@ var User = /** @class */ (function (_super) {
     });
     Object.defineProperty(User, "relationMappings", {
         get: function () {
-            var Privilege = require('./Privilege');
-            var Count = require('./Count');
+            var Privilege = __dirname + './Privilege'; //require('./Privilege')
+            var Count = __dirname + './Count'; //require('./Count')
             return {
                 privileges: {
                     relation: Model.BelongsToOneRelation,

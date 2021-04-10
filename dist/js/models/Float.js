@@ -87,7 +87,7 @@ var Float = /** @class */ (function (_super) {
     });
     Object.defineProperty(Float, "relationMappings", {
         get: function () {
-            var Count = require('./Count');
+            var Count = __dirname + './Count'; //require('./Count') 
             return {
                 count: {
                     relation: Model.HasOneRelation,

@@ -67,7 +67,7 @@ class Float extends Model {
 	}
 	
 	static get relationMappings () {
-		const Count = require('./Count') 
+		const Count = __dirname + './Count' //require('./Count') 
 		
 		return {
 			

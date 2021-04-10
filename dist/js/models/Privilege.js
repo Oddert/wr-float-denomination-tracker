@@ -89,7 +89,7 @@ var Privilege = /** @class */ (function (_super) {
     });
     Object.defineProperty(Privilege, "relationMappings", {
         get: function () {
-            var User = requrie('./User');
+            var User = __dirname + './User'; //requrie('./User')
             return {
                 // user: {
                 // 	relation: Model.BelongsToOneRelation,

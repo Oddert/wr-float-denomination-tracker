@@ -42,7 +42,7 @@ const createId = () => {
 // Logic : /Counts
 export const getCounts = async (req: Request, res: Response) => {
 	const c = await Count.query()
-		// .withGraphFetched('float')
+		.withGraphJoined('float')
 	console.log(c)
   res.json({ counts: c })
 }

@@ -28,8 +28,8 @@ class User extends Model {
 	}
 
 	static get relationMappings () {
-		const Privilege = require('./Privilege')
-		const Count = require('./Count')
+		const Privilege = __dirname + './Privilege' //require('./Privilege')
+		const Count = __dirname + './Count' //require('./Count')
 
 		return {
 

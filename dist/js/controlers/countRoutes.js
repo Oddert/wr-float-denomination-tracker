@@ -81,11 +81,9 @@ var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, f
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, Count_1.default.query()
-                // .withGraphFetched('float')
-            ];
+                    .withGraphJoined('float')];
             case 1:
                 c = _a.sent();
-                // .withGraphFetched('float')
                 console.log(c);
                 res.json({ counts: c });
                 return [2 /*return*/];

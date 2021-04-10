@@ -31,10 +31,10 @@ class Count extends Model {
 	}
 	
 	static get relationMappings () {
-		const Float = require('./Float')
-		const Repository = require('./Repository')
-		const Partner = require('./Partner')
-		const User = require('./User')
+		const Float = __dirname + '/Float.js' //require('./Float')
+		const Repository = __dirname + '/Repository.js' //require('./Repository')
+		const Partner = __dirname + '/Partner.js' //require('./Partner')
+		const User = __dirname + '/User.js' //require('./User')
 
 		return {
 
