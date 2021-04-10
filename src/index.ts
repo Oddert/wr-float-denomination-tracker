@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 import morgan from 'morgan'
 import Knex from 'knex'
 import { Model } from 'objection'
-import * as knex from 'knex'
+// import * as knex from 'knex'
 
 import config from './knexfile'
 

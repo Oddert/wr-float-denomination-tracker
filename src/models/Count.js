@@ -1,0 +1,99 @@
+const { Model } = require('objection')
+const knex = require('../db/knex')
+
+Model.knex(knex)
+
+class Count extends Model {
+	static get tableName () {
+		return 'counts'
+	}
+
+	static get jsonSchema () {
+		return {
+			type: 'object',
+			required: ['floatId', 'repositoryId', 'verified', 'completionStatus'],
+			properties: {
+				id: { type: 'integer' },
+				floatId: { type: 'integer' },
+				repositoryId: { type: ['integer', 'null'] },
+				deletedById: { type: ['integer', 'null'] },
+				counterId: { type: ['integer', 'null'] },
+				supervisorId: { type: ['integer', 'null'] },
+				authenticatorId: { type: ['integer', 'null'] },
+				completionStatus: { type: 'string' },
+				createdOn: { type: 'date' },
+				verified: { type: 'boolean' },
+				deleted: { type: 'boolean' },
+				deletedOn: { type: 'date' },
+				updatedOn: { type: 'date' },
+			}
+		}
+	}
+	
+	static get relationMappings () {
+		const Float = require('./Float')
+		const Repository = require('./Repository')
+		const Partner = require('./Partner')
+		const User = require('./User')
+
+		return {
+
+			float: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: Float,
+				join: {
+					from: 'counts.floatId',
+					to: 'floats.id'
+				}
+			},
+
+			repository: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: Repository,
+				join: {
+					from: 'counts.repositoryId',
+					to: 'repositories.id'
+				}
+			},
+
+			deletedBy: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: Partner,
+				join: {
+					from: 'counts.deletedById',
+					to: 'partners.id'
+				}
+			},
+
+			counter: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: Partner,
+				join: {
+					from: 'counts.counterId',
+					to: 'partners.id'
+				}
+			},
+
+			checker: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: Partner,
+				join: {
+					from: 'counts.checkerId',
+					to: 'partners.id'
+				}
+			},
+
+			authenticator: {
+				relation: Model.BelongsToOneRelation,
+				modelClass: User,
+				join: {
+					from: 'counts.authenticatorId',
+					to: 'users.id'
+				}
+			},
+
+		}
+	}
+}
+
+module.exports = Count

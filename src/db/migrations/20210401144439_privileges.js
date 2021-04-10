@@ -1,7 +1,9 @@
+// 2021-04-01 14:44:39
 
 exports.up = function(knex) {
   return knex.schema.createTable('privileges', t => {
 		t.increments('id')
+		
 		t.string('description')
 		t.date('createdOn')
 		t.boolean('countReadList')
@@ -25,12 +27,9 @@ exports.up = function(knex) {
 		t.boolean('partnerUpdatePrivileges')
 		t.boolean('partnerDelete')
 		t.boolean('partnerDeletePermanent')
-		t.integer('userId')
-			.references('id')
-			.inTable('users')
 	})
-};
+}
 
 exports.down = function(knex) {
   return knex.schema.dropTableIfExists('privileges')
-};
+}

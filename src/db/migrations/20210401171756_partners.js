@@ -1,7 +1,9 @@
+// 2021-04-01 17:17:56
 
 exports.up = function(knex) {
 	return knex.schema.createTable('partners', t => {
 		t.increments('id')
+
 		t.string('preferredName')
 		t.string('firstName')
 		t.string('middleNames')

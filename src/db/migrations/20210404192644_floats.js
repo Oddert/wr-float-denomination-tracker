@@ -1,3 +1,4 @@
+// 2021-04-04 19:26:44
 
 exports.up = function(knex) {
   return knex.schema.createTable('floats', t => {
@@ -8,7 +9,7 @@ exports.up = function(knex) {
 		t.integer('note10')
 		t.integer('note5')
 		t.integer('note1')
-		t.integer('noteTotal')
+		t.integer('noteTotal') 
 
 		t.integer('bagNote5')
 		t.integer('bagPound2')
