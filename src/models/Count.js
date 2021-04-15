@@ -4,6 +4,7 @@ const knex = require('../db/knex')
 Model.knex(knex)
 
 class Count extends Model {
+	
 	static get tableName () {
 		return 'counts'
 	}

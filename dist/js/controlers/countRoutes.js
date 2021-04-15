@@ -51,6 +51,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCount = exports.updateCount = exports.getCount = exports.addCount = exports.getCounts = void 0;
+// import { PartialModelObject } from 'objection'
 var Repository_1 = __importDefault(require("../models/Repository"));
 var Count_1 = __importDefault(require("../models/Count"));
 var Partner_1 = __importDefault(require("../models/Partner"));
@@ -110,7 +111,7 @@ var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                         .limit(pagelength)];
             case 1:
                 counts = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, null, null, 'noice', { counts: counts })];
+                return [2 /*return*/, utils_1.respondWell(res, null, null, 'List of all counts.', { counts: counts })];
             case 2:
                 fromdate = sanitiseNumberQuery(req.query.fromdate, 0);
                 todate = sanitiseNumberQuery(req.query.todate, Date.now());
@@ -341,7 +342,7 @@ var getCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 count = _a.sent();
                 return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id including float amount.', { count: count })];
             case 2:
-                if (!/,/gi.test(multiCount)) return [3 /*break*/, 4];
+                if (!(/,/gi.test(multiCount) || /[0-9]/gi.test(multiCount))) return [3 /*break*/, 4];
                 splitMultiCount = multiCount.split(',');
                 return [4 /*yield*/, Count_1.default.query()
                         .withGraphJoined('float')

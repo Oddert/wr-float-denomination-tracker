@@ -1,6 +1,6 @@
 
 import { Request, Response } from 'express'
-import { PartialModelObject } from 'objection'
+// import { PartialModelObject } from 'objection'
 
 import Repository from '../models/Repository'
 import Count from '../models/Count'
@@ -82,7 +82,7 @@ export const getCounts = async (req: Request, res: Response) => {
 				.offset(page * pagelength)
 				.limit(pagelength)
 	
-			return respondWell(res, null, null, 'noice', { counts })
+			return respondWell(res, null, null, 'List of all counts.', { counts })
 	
 		} else {
 			let fromdate: number = sanitiseNumberQuery(req.query.fromdate, 0)
@@ -329,7 +329,7 @@ export const getCount = async (req: Request, res: Response) => {
 				.whereIn('counts.id', multiCount)
 			return respondWell(res, 200, null, 'Details for provided id including float amount.', { count })
 
-		} else if (/,/gi.test(multiCount)) {
+		} else if (/,/gi.test(multiCount) || /[0-9]/gi.test(multiCount)) {
 
 			const splitMultiCount = multiCount.split(',')
 			const count = await Count.query()

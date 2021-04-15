@@ -42,40 +42,175 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePartner = exports.updatePartner = exports.getPartner = exports.addPartner = exports.getPartners = void 0;
 var Partner_1 = __importDefault(require("../models/Partner"));
 var utils_1 = require("./utils");
+function sanitiseNumberQuery(param, fallback) {
+    var paramCoerced = Number(param);
+    if (typeof paramCoerced !== 'number' || isNaN(paramCoerced))
+        return fallback;
+    else
+        return paramCoerced;
+}
 var getPartners = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var partners, error_1;
+    var fromdate, todate, limit, offset, partners, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Partner_1.default.query().limit(10)];
+                fromdate = sanitiseNumberQuery(req.query.fromdate, 0);
+                todate = sanitiseNumberQuery(req.query.todate, Date.now());
+                limit = sanitiseNumberQuery(req.query.limit, 500);
+                offset = sanitiseNumberQuery(req.query.offset, 0);
+                return [4 /*yield*/, Partner_1.default.query()
+                        // .withGraphJoined('float')
+                        .where('createdOn', '>=', fromdate)
+                        .andWhere('createdOn', '<=', todate)
+                        .limit(limit)
+                        .offset(offset)];
             case 1:
                 partners = _a.sent();
                 return [2 /*return*/, utils_1.respondWell(res, 200, null, 'List of all partners.', { partners: partners })];
             case 2:
                 error_1 = _a.sent();
-                return [2 /*return*/, utils_1.respondErr(res, 500, 'Something went wrong.', null, { error: error_1 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_1 })];
             case 3: return [2 /*return*/];
         }
     });
 }); };
 exports.getPartners = getPartners;
-var addPartner = function (req, res) {
-    res.json('addPartner route not implamented yet');
-};
-exports.addPartner = addPartner;
-var getPartner = function (req, res) {
-    res.json({
-        message: 'not implamented yet'
+var addPartner = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var b, now, createPartner, partner, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                b = req.body;
+                now = Date.now();
+                createPartner = {
+                    preferredName: b.preferredName || null,
+                    firstName: b.firstName || 'Unknown Partner',
+                    middleNames: b.middleNames || null,
+                    lastName: b.lastName || null,
+                    pending: b.hasOwnProperty('pending') ? b.pending : true,
+                    createdOn: now,
+                    updatedOn: now,
+                    tillNumber: b.tillNumber || null,
+                };
+                if (!b.firstName)
+                    createPartner.pending = true;
+                return [4 /*yield*/, Partner_1.default.query().insert(createPartner)];
+            case 1:
+                partner = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Partner created successfully.', { partner: partner })];
+            case 2:
+                error_2 = _a.sent();
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_2 })];
+            case 3: return [2 /*return*/];
+        }
     });
-};
+}); };
+exports.addPartner = addPartner;
+var getPartner = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, multiPartner, partner, splitMultiPartner, partner, partner, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 9, , 10]);
+                id = req.params.id;
+                multiPartner = req.query.partner;
+                console.log({ id: id, multiPartner: multiPartner });
+                if (!id)
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)];
+                if (!(id === 'details' && multiPartner)) return [3 /*break*/, 6];
+                if (!multiPartner || typeof multiPartner === undefined) {
+                    console.log('1');
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
+                }
+                console.log('2');
+                if (!Array.isArray(multiPartner)) return [3 /*break*/, 2];
+                console.log('3');
+                return [4 /*yield*/, Partner_1.default.query()
+                        // .withGraphJoined('float')
+                        .whereIn('partners.id', multiPartner)];
+            case 1:
+                partner = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id including float amount.', { partner: partner })];
+            case 2:
+                if (!(/,/gi.test(multiPartner) || /[0-9]/gi.test(multiPartner))) return [3 /*break*/, 4];
+                console.log('4');
+                splitMultiPartner = multiPartner.split(',');
+                return [4 /*yield*/, Partner_1.default.query()
+                        // .withGraphJoined('float')
+                        .whereIn('partners.id', splitMultiPartner)];
+            case 3:
+                partner = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id including float amount.', { partner: partner })];
+            case 4:
+                console.log('5');
+                return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
+            case 5: return [3 /*break*/, 8];
+            case 6: return [4 /*yield*/, Partner_1.default.query()
+                    // .withGraphJoined('float')
+                    .where('partners.id', Number(id))];
+            case 7:
+                partner = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id including float amount.', { partner: partner })];
+            case 8: return [3 /*break*/, 10];
+            case 9:
+                error_3 = _a.sent();
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_3 })];
+            case 10: return [2 /*return*/];
+        }
+    });
+}); };
 exports.getPartner = getPartner;
-var updatePartner = function (req, res) {
-    res.json('updatePartner route not implamented yet');
-};
+var updatePartner = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var oldPartner, b, updateDetails, partner, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, Partner_1.default.query().findById(req.params.id)];
+            case 1:
+                oldPartner = _a.sent();
+                if (!oldPartner)
+                    return [2 /*return*/, utils_1.respondBadRequest(res, null, 'No Partner was found for the ID provided.', null, { id: req.params.id })];
+                b = req.body;
+                updateDetails = {
+                    preferredName: b.preferredName || oldPartner.preferredName || null,
+                    firstName: b.firstName || oldPartner.firstName || 'Unknown Partner',
+                    middleNames: b.middleNames || oldPartner.middleNames || null,
+                    lastName: b.lastName || oldPartner.lastName || null,
+                    pending: b.hasOwnProperty('pending') ? b.pending : oldPartner.pending,
+                    updatedOn: Date.now(),
+                    tillNumber: b.tillNumber || oldPartner.tillNumber || 'No Till Number'
+                };
+                return [4 /*yield*/, Partner_1.default
+                        // @ts-ignore
+                        .patchAndFetchById(req.body.id, updateDetails)];
+            case 2:
+                partner = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Partner updated successfully.', { partner: partner })];
+            case 3:
+                error_4 = _a.sent();
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_4 })];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
 exports.updatePartner = updatePartner;
 var deletePartner = function (req, res) {
-    res.json('deletePartner route not implamented yet');
+    try {
+        var partner = Partner_1.default
+            // @ts-ignore
+            .patchAndFetchById(req.body.id, {
+            deleted: true,
+            deletedById: 1,
+            updated: Date.now()
+        });
+        return utils_1.respondWell(res, 200, null, 'Partner deleted successfully.', { partner: partner });
+    }
+    catch (error) {
+        return utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error });
+    }
 };
 exports.deletePartner = deletePartner;
 //# sourceMappingURL=partnerRoutes.js.map
