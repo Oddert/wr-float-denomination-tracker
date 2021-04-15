@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -40,7 +51,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCount = exports.updateCount = exports.getCount = exports.addCount = exports.getCounts = void 0;
+var Repository_1 = __importDefault(require("../models/Repository"));
 var Count_1 = __importDefault(require("../models/Count"));
+var Partner_1 = __importDefault(require("../models/Partner"));
+var Float_1 = __importDefault(require("../models/Float"));
 var utils_1 = require("./utils");
 // const completeCount = {"bagged":{"pence_one":500,"pence_two":300,"pence_five":2000,"pence_ten":1000,"pence_twenty":7000,"pence_fifty":3000,"pound_one":18000,"pound_two":10000,"note_five":1000,"total":42800},"loose":{"pence_one":164,"pence_two":200,"pence_five":1425,"pence_ten":1370,"pence_twenty":600,"pence_fifty":2450,"pound_one":6100,"pound_two":400,"other":0,"total":12709},"notes":{"note_one":0,"note_five":7500,"note_ten":24000,"note_twenty":12000,"note_fifty":5000,"total":48500},"total":0}
 // const partialCount = {"bagged":{"pence_one":800,"pence_two":300,"pence_five":3500,"pence_ten":4500,"pence_twenty":1000,"pence_fifty":1000,"pound_one":12000,"pound_two":4000,"note_five":0,"total":27100},"loose":{"pence_one":0,"pence_two":0,"pence_five":0,"pence_ten":0,"pence_twenty":0,"pence_fifty":0,"pound_one":0,"pound_two":0,"other":0,"total":0},"notes":{"note_one":0,"note_five":0,"note_ten":0,"note_twenty":0,"note_fifty":5000,"total":5000},"total":0}
@@ -123,15 +137,184 @@ exports.getCounts = getCounts;
 // Redux : false
 // Action : countsDataWriteSingle
 // Logic : false
-var addCount = function (req, res) {
-    // const _id = createId()
-    // const { repository, status, date, data } = req.body
-    // const count: any = { repository, status, date, data, _id }
-    // counts.push(count)
-    // res.json({
-    // 	counts,
-    // })
-};
+var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var repositoryId, repository, validation, counterId, counter, counterQuery, now_1, preferredName, createCounter, createdCounter, supervisorId, supervisor, supervisorQuery, now_2, preferredName, createSupervisor, createdSupervisor, d, flattenCountData, bagTotal, looseTotal, noteTotal, createFloat, floatId, now, createCount, count, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 10, , 11]);
+                if (!req.body || !req.body.count)
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Error: no count provided?? What were you expecting? ??', null, { requestBody: req.body })];
+                if (!req.body.count.repositoryId)
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Error: Invalid repository ID provided', null, { repositoryId: req.body.count.repositoryId })];
+                repositoryId = Number(req.body.count.repositoryId);
+                if (typeof repositoryId !== 'number' || isNaN(repositoryId)) {
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repositoryId: repositoryId })];
+                }
+                return [4 /*yield*/, Repository_1.default.query()
+                        .select('id')
+                        .skipUndefined()
+                        .where('id', req.body.count.repositoryId)];
+            case 1:
+                repository = _a.sent();
+                if (repository === null || repository === undefined || repository.length === 0) {
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repository: repository, repositoryId: repositoryId })];
+                }
+                validation = utils_1.validateCount(req.body.count);
+                if (validation.code === 'invalid') {
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid.', null, { validation: validation })];
+                }
+                counterId = req.body.count.counterId;
+                counter = req.body.count.counter;
+                return [4 /*yield*/, Partner_1.default.query()
+                        .select('id')
+                        .skipUndefined()
+                        .where('id', counterId)];
+            case 2:
+                counterQuery = _a.sent();
+                if (!(!counterId || isNaN(Number(counterId)) || !counterQuery || counterQuery.length === 0)) return [3 /*break*/, 4];
+                res.json('joing to make a new user');
+                now_1 = Date.now();
+                preferredName = (/[a-zA-Z]+/gi.test(counter) && counter !== undefined) ? counter : 'Unknown Partner';
+                createCounter = {
+                    preferredName: preferredName,
+                    firstName: '',
+                    middleNames: '',
+                    lastName: '',
+                    pending: true,
+                    createdOn: now_1,
+                    updatedOn: now_1,
+                    tillNumber: ''
+                };
+                return [4 /*yield*/, Partner_1.default.query().insert(createCounter)
+                    // @ts-ignore
+                ];
+            case 3:
+                createdCounter = _a.sent();
+                // @ts-ignore
+                console.log({ createdCounter: createdCounter }, createdCounter.id);
+                // @ts-ignore
+                if (createdCounter && createdCounter.id) {
+                    // @ts-ignore			
+                    counterId = createdCounter.id;
+                }
+                _a.label = 4;
+            case 4:
+                supervisorId = req.body.count.supervisorId;
+                supervisor = req.body.count.supervisor;
+                return [4 /*yield*/, Partner_1.default.query()
+                        .select('id')
+                        .skipUndefined()
+                        .where('id', supervisorId)];
+            case 5:
+                supervisorQuery = _a.sent();
+                if (!(!supervisorId || isNaN(Number(supervisorId)) || !supervisorQuery || supervisorQuery.length === 0)) return [3 /*break*/, 8];
+                if (!(supervisor && /[a-zA-Z]+/gi.test(supervisor) && supervisor !== undefined)) return [3 /*break*/, 7];
+                res.json('joing to make a new user');
+                now_2 = Date.now();
+                preferredName = supervisor;
+                createSupervisor = {
+                    preferredName: preferredName,
+                    firstName: '',
+                    middleNames: '',
+                    lastName: '',
+                    pending: true,
+                    createdOn: now_2,
+                    updatedOn: now_2,
+                    tillNumber: ''
+                };
+                return [4 /*yield*/, Partner_1.default.query().insert(createSupervisor)
+                    // @ts-ignore
+                ];
+            case 6:
+                createdSupervisor = _a.sent();
+                // @ts-ignore
+                console.log({ createdSupervisor: createdSupervisor }, createdSupervisor.id);
+                // @ts-ignore
+                if (createdSupervisor && createdSupervisor.id) {
+                    // @ts-ignore			
+                    supervisorId = createdSupervisor.id;
+                }
+                return [3 /*break*/, 8];
+            case 7:
+                supervisorId = null;
+                _a.label = 8;
+            case 8:
+                if (counterId === supervisorId)
+                    supervisorId = null;
+                d = req.body.count.data;
+                flattenCountData = function (division) {
+                    var keys = Object.keys(division);
+                    var total = keys.reduce(function (acc, each) {
+                        return acc + division[each];
+                    }, 0);
+                    return total;
+                };
+                bagTotal = flattenCountData(d.bagged);
+                looseTotal = flattenCountData(d.loose);
+                noteTotal = flattenCountData(d.notes);
+                createFloat = {
+                    bagPence1: d.bagged.pence_one,
+                    bagPence2: d.bagged.pence_two,
+                    bagPence5: d.bagged.pence_five,
+                    bagPence10: d.bagged.pence_ten,
+                    bagPence20: d.bagged.pence_twenty,
+                    bagPence50: d.bagged.pence_fifty,
+                    bagPound1: d.bagged.pound_one,
+                    bagPound2: d.bagged.pound_two,
+                    bagNote5: d.bagged.note_five,
+                    bagTotal: bagTotal,
+                    loosePence1: d.loose.pence_one,
+                    loosePence2: d.loose.pence_two,
+                    loosePence5: d.loose.pence_five,
+                    loosePence10: d.loose.pence_ten,
+                    loosePence20: d.loose.pence_twenty,
+                    loosePence50: d.loose.pence_fifty,
+                    loosePound1: d.loose.pound_one,
+                    loosePound2: d.loose.pound_two,
+                    looseOther: d.loose.other,
+                    looseTotal: looseTotal,
+                    note1: d.notes.note_one,
+                    note5: d.notes.note_five,
+                    note10: d.notes.note_ten,
+                    note20: d.notes.note_twenty,
+                    note50: d.notes.note_fifty,
+                    noteTotal: noteTotal,
+                    floatTotal: bagTotal + looseTotal + noteTotal
+                };
+                console.log({ d: d, createFloat: createFloat });
+                return [4 /*yield*/, Float_1.default.query().insert(createFloat)];
+            case 9:
+                floatId = _a.sent();
+                now = Date.now();
+                createCount = {
+                    floatId: floatId,
+                    repositoryId: repositoryId,
+                    completionStatus: validation.code,
+                    createdOn: now,
+                    updatedOn: now,
+                    verified: true,
+                    authenticatorId: 0,
+                    counterId: counterId,
+                    supervisorId: supervisorId,
+                };
+                count = Count_1.default.query().insert(createCount);
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Count successfully created, see response for validation status.', { validation: validation, count: count })
+                    // -lookup the counter and return its id is valid /
+                    // -lookup the supervisor and return its id is valid /
+                    // -check supervisor and counter are diffirent /
+                    // -validate the count /
+                    // -create a float, return id
+                    // insert count
+                ];
+            case 10:
+                error_2 = _a.sent();
+                // console.error(error)
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'Something went wrong, please try again.', null, { error: error_2 })];
+            case 11: return [2 /*return*/];
+        }
+    });
+}); };
 exports.addCount = addCount;
 // Redux : n/a
 // Action : n/a
@@ -182,17 +365,282 @@ exports.getCount = getCount;
 // Redux : false
 // Action : countsDataUpdateSingle
 // Logic : false
-var updateCount = function (req, res) {
-    console.log("[updateCount]: Pretend that i'm updating: " + req.body._id);
-    // res.json({ counts })
-};
+var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var repositoryId, repository, oldCount, oldFloat, float, counterId, supervisorId, counter, counterQuery, now_3, preferredName, createCounter, createdCounter, supervisor, supervisorQuery, now_4, preferredName, createSupervisor, createdSupervisor, data, d, createFloat, bagged_1, loose_1, notes_1, flattenCountData, bagTotal, looseTotal, noteTotal, now, floatId, updatedCount, dataUpdateCount, validation, count, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                console.log('### Welcome to the cool zone ###');
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 16, , 17]);
+                if (!req.body || !req.body.count)
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Error: no count provided?? What were you expecting? ??', null, { requestBody: req.body })];
+                if (!req.body.count.repositoryId) return [3 /*break*/, 3];
+                repositoryId = Number(req.body.count.repositoryId);
+                if (typeof repositoryId !== 'number' || isNaN(repositoryId)) {
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repositoryId: repositoryId })];
+                }
+                return [4 /*yield*/, Repository_1.default.query()
+                        .select('id')
+                        .skipUndefined()
+                        .where('id', req.body.count.repositoryId)];
+            case 2:
+                repository = _a.sent();
+                if (repository === null || repository === undefined || repository.length === 0) {
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repository: repository, repositoryId: repositoryId })];
+                }
+                _a.label = 3;
+            case 3: return [4 /*yield*/, Count_1.default.query().findById(req.params.id)];
+            case 4:
+                oldCount = _a.sent();
+                return [4 /*yield*/, Float_1.default.query().findById(oldCount.floatId)];
+            case 5:
+                oldFloat = _a.sent();
+                float = __assign({}, oldFloat);
+                counterId = oldCount.counterId;
+                supervisorId = oldCount.supervisorId;
+                if (!(req.body.counterId || req.body.counter)) return [3 /*break*/, 8];
+                counterId = req.body.count.counterId;
+                counter = req.body.count.counter;
+                return [4 /*yield*/, Partner_1.default.query()
+                        .select('id')
+                        .skipUndefined()
+                        .where('id', counterId)];
+            case 6:
+                counterQuery = _a.sent();
+                if (!(!counterId || isNaN(Number(counterId)) || !counterQuery || counterQuery.length === 0)) return [3 /*break*/, 8];
+                res.json('joing to make a new user');
+                now_3 = Date.now();
+                preferredName = (/[a-zA-Z]+/gi.test(counter) && counter !== undefined) ? counter : 'Unknown Partner';
+                createCounter = {
+                    preferredName: preferredName,
+                    firstName: '',
+                    middleNames: '',
+                    lastName: '',
+                    pending: true,
+                    createdOn: now_3,
+                    updatedOn: now_3,
+                    tillNumber: ''
+                };
+                return [4 /*yield*/, Partner_1.default.query().insert(createCounter)
+                    // @ts-ignore
+                ];
+            case 7:
+                createdCounter = _a.sent();
+                // @ts-ignore
+                console.log({ createdCounter: createdCounter }, createdCounter.id);
+                // @ts-ignore
+                if (createdCounter && createdCounter.id) {
+                    // @ts-ignore			
+                    counterId = createdCounter.id;
+                }
+                _a.label = 8;
+            case 8:
+                if (!(req.body.supervisorId || req.body.supervisor)) return [3 /*break*/, 12];
+                supervisorId = req.body.count.supervisorId;
+                supervisor = req.body.count.supervisor;
+                return [4 /*yield*/, Partner_1.default.query()
+                        .select('id')
+                        .skipUndefined()
+                        .where('id', supervisorId)];
+            case 9:
+                supervisorQuery = _a.sent();
+                if (!(!supervisorId || isNaN(Number(supervisorId)) || !supervisorQuery || supervisorQuery.length === 0)) return [3 /*break*/, 12];
+                if (!(supervisor && /[a-zA-Z]+/gi.test(supervisor) && supervisor !== undefined)) return [3 /*break*/, 11];
+                res.json('joing to make a new user');
+                now_4 = Date.now();
+                preferredName = supervisor;
+                createSupervisor = {
+                    preferredName: preferredName,
+                    firstName: '',
+                    middleNames: '',
+                    lastName: '',
+                    pending: true,
+                    createdOn: now_4,
+                    updatedOn: now_4,
+                    tillNumber: ''
+                };
+                return [4 /*yield*/, Partner_1.default.query().insert(createSupervisor)
+                    // @ts-ignore
+                ];
+            case 10:
+                createdSupervisor = _a.sent();
+                // @ts-ignore
+                console.log({ createdSupervisor: createdSupervisor }, createdSupervisor.id);
+                // @ts-ignore
+                if (createdSupervisor && createdSupervisor.id) {
+                    // @ts-ignore			
+                    supervisorId = createdSupervisor.id;
+                }
+                return [3 /*break*/, 12];
+            case 11:
+                supervisorId = null;
+                _a.label = 12;
+            case 12:
+                if (counterId === supervisorId)
+                    supervisorId = null;
+                if (req.body.count.data) {
+                    console.log("data attr found, will update dloat: " + float.id);
+                    data = __assign({}, oldFloat);
+                    d = req.body.count.data;
+                    createFloat = {};
+                    if (d.bagged) {
+                        console.log('d.bagged found');
+                        bagged_1 = {
+                            bagPence1: d.bagged.pence_one || null,
+                            bagPence2: d.bagged.pence_two || null,
+                            bagPence5: d.bagged.pence_five || null,
+                            bagPence10: d.bagged.pence_ten || null,
+                            bagPence20: d.bagged.pence_twenty || null,
+                            bagPence50: d.bagged.pence_fifty || null,
+                            bagPound1: d.bagged.pound_one || null,
+                            bagPound2: d.bagged.pound_two || null,
+                            bagNote5: d.bagged.note_five || null,
+                        };
+                        Object.keys(bagged_1).forEach(function (e) {
+                            // @ts-ignore
+                            if (!bagged_1[e])
+                                delete bagged_1[e];
+                        });
+                        createFloat = __assign(__assign({}, createFloat), bagged_1);
+                    }
+                    if (d.loose) {
+                        console.log('d.loose found');
+                        loose_1 = {
+                            loosePence1: d.loose.pence_one || null,
+                            loosePence2: d.loose.pence_two || null,
+                            loosePence5: d.loose.pence_five || null,
+                            loosePence10: d.loose.pence_ten || null,
+                            loosePence20: d.loose.pence_twenty || null,
+                            loosePence50: d.loose.pence_fifty || null,
+                            loosePound1: d.loose.pound_one || null,
+                            loosePound2: d.loose.pound_two || null,
+                            looseOther: d.loose.other || null,
+                        };
+                        Object.keys(loose_1).forEach(function (e) {
+                            // @ts-ignore
+                            if (!loose_1[e])
+                                delete loose_1[e];
+                        });
+                        createFloat = __assign(__assign({}, createFloat), loose_1);
+                    }
+                    if (d.notes) {
+                        console.log('d.notes found');
+                        notes_1 = {
+                            note1: d.notes.note_one,
+                            note5: d.notes.note_five,
+                            note10: d.notes.note_ten,
+                            note20: d.notes.note_twenty,
+                            note50: d.notes.note_fifty,
+                        };
+                        Object.keys(notes_1).forEach(function (e) {
+                            // @ts-ignore
+                            if (!notes_1[e])
+                                delete notes_1[e];
+                        });
+                        createFloat = __assign(__assign({}, createFloat), notes_1);
+                    }
+                    flattenCountData = function (division) {
+                        var keys = Object.keys(division);
+                        var total = keys.reduce(function (acc, each) {
+                            return acc + division[each];
+                        }, 0);
+                        return total;
+                    };
+                    bagTotal = flattenCountData(d.bagged);
+                    looseTotal = flattenCountData(d.loose);
+                    noteTotal = flattenCountData(d.notes);
+                    createFloat.bagTotal = bagTotal;
+                    createFloat.looseTotal = looseTotal;
+                    createFloat.noteTotal = noteTotal;
+                    console.log({ d: d, createFloat: createFloat });
+                    float = __assign(__assign({}, float), createFloat);
+                }
+                now = Date.now();
+                console.log({
+                    // repositoryId, 
+                    updatedOn: now,
+                    // verified: true, 
+                    // authenticatorId: 0, 
+                    counterId: counterId,
+                    supervisorId: supervisorId,
+                    float: float,
+                });
+                // return res.json({ plarb: 'ok' })
+                delete float.id;
+                return [4 /*yield*/, Float_1.default.query()
+                        .patchAndFetchById(oldFloat.id, float)];
+            case 13:
+                floatId = _a.sent();
+                updatedCount = {
+                    // repositoryId, 
+                    updatedOn: now,
+                    // verified: true, 
+                    // authenticatorId: 0, 
+                    counterId: counterId,
+                    supervisorId: supervisorId,
+                };
+                return [4 /*yield*/, Count_1.default.query()
+                        .patchAndFetchById(oldCount.id, updatedCount)];
+            case 14:
+                dataUpdateCount = _a.sent();
+                validation = utils_1.validateCount(req.body.count);
+                if (validation.code === 'invalid') {
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid.', null, { validation: validation })];
+                }
+                return [4 /*yield*/, Count_1.default.query()
+                        .patchAndFetchById(dataUpdateCount.id, {
+                        // @ts-ignore
+                        completionStatus: validation.code,
+                    })];
+            case 15:
+                count = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Count successfully created, see response for validation status.', { validation: validation, count: count })
+                    // -lookup the counter and return its id is valid /
+                    // -lookup the supervisor and return its id is valid /
+                    // -check supervisor and counter are diffirent /
+                    // -validate the count /
+                    // -create a float, return id
+                    // insert count
+                ];
+            case 16:
+                error_3 = _a.sent();
+                console.error(error_3);
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'Something went wrong, please try again.', null, { error: error_3 })];
+            case 17: return [2 /*return*/];
+        }
+    });
+}); };
 exports.updateCount = updateCount;
 // Redux : false
 // Action : false
 // Logic : false
-var deleteCount = function (req, res) {
-    console.log("[updateCount]: Pretend that i'm deleting: " + req.body._id);
-    // res.json({ counts })
-};
+var deleteCount = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var count, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, Count_1.default.query()
+                        .patchAndFetchById(req.body.id, {
+                        // @ts-ignore
+                        deleted: true,
+                        deletedOn: Date.now(),
+                        deletedBy: 0
+                    })];
+            case 1:
+                count = _a.sent();
+                if (!count) {
+                    return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue deleting the user.', null, { count: count })];
+                }
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Count deleted successfully.', { count: count })];
+            case 2:
+                error_4 = _a.sent();
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue deleting the user.', null, { error: error_4 })];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
 exports.deleteCount = deleteCount;
 //# sourceMappingURL=countRoutes.js.map

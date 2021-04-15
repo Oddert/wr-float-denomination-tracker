@@ -11,8 +11,10 @@ import config from './knexfile'
 
 import coreRoutes from './routes/coreRoutes'
 import authRoutes from './routes/authRoutes'
-import repositoryRoutes from './routes/repositoryRoutes'
 import countRoutes from './routes/countRoutes'
+import floatRoutes from './routes/floatRoutes'
+import partnerRoutes from './routes/partnerRoutes'
+import repositoryRoutes from './routes/repositoryRoutes'
 import userRoutes from './routes/userRoutes'
 
 dotenv.config()
@@ -33,8 +35,10 @@ app.use(morgan('tiny'))
 
 app.use('/', coreRoutes)
 app.use('/api/v1/auth', authRoutes)
-app.use('/api/v1/repository', repositoryRoutes)
 app.use('/api/v1/count', countRoutes)
+app.use('/api/v1/float', floatRoutes)
+app.use('/api/v1/partner', partnerRoutes)
+app.use('/api/v1/repository', repositoryRoutes)
 app.use('/api/v1/user', userRoutes)
 
 const confirmStart: any = () => console.log(`${new Date().toLocaleTimeString()}: Server initialised on PORT ${PORT}`)
