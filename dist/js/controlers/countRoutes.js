@@ -87,13 +87,6 @@ var utils_1 = require("./utils");
 // 	for (let i=0; i<21; i++) {str += one()}
 // 	return str
 // }
-function sanitiseNumberQuery(param, fallback) {
-    var paramCoerced = Number(param);
-    if (typeof paramCoerced !== 'number' || isNaN(paramCoerced))
-        return fallback;
-    else
-        return paramCoerced;
-}
 // Redux : true
 // Action : countsDataWriteAll
 // Logic : /Counts
@@ -105,7 +98,7 @@ var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 _a.trys.push([0, 5, , 6]);
                 page = Number(req.query.page);
                 if (!(typeof page === 'number' || !isNaN(page))) return [3 /*break*/, 2];
-                pagelength = sanitiseNumberQuery(req.query.pagelength, 20);
+                pagelength = utils_1.sanitiseNumberQuery(req.query.pagelength, 20);
                 return [4 /*yield*/, Count_1.default.query()
                         .offset(page * pagelength)
                         .limit(pagelength)];
@@ -113,10 +106,10 @@ var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 counts = _a.sent();
                 return [2 /*return*/, utils_1.respondWell(res, null, null, 'List of all counts.', { counts: counts })];
             case 2:
-                fromdate = sanitiseNumberQuery(req.query.fromdate, 0);
-                todate = sanitiseNumberQuery(req.query.todate, Date.now());
-                limit = sanitiseNumberQuery(req.query.limit, 500);
-                offset = sanitiseNumberQuery(req.query.offset, 0);
+                fromdate = utils_1.sanitiseNumberQuery(req.query.fromdate, 0);
+                todate = utils_1.sanitiseNumberQuery(req.query.todate, Date.now());
+                limit = utils_1.sanitiseNumberQuery(req.query.limit, 500);
+                offset = utils_1.sanitiseNumberQuery(req.query.offset, 0);
                 return [4 /*yield*/, Count_1.default.query()
                         // .withGraphJoined('float')
                         .where('createdOn', '>=', fromdate)

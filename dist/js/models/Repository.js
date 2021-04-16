@@ -38,6 +38,7 @@ var Repository = /** @class */ (function (_super) {
                     id: { type: 'integer' },
                     name: { type: 'string' },
                     description: { type: 'string' },
+                    createdOn: { type: 'date' },
                     updatedOn: { type: 'date' },
                     activated: { type: 'boolean' },
                     activatedOn: { type: 'date' },

@@ -16,6 +16,7 @@ exports.up = function(knex) {
 			.references('id')
 			.inTable('partners')
 		
+		t.date('createdOn')
 		t.date('deactivatedOn')
 		t.string('name')
 		t.string('description')

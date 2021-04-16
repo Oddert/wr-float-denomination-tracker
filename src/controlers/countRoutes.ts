@@ -10,10 +10,11 @@ import Float from '../models/Float'
 import { 
 	respondErr, 
 	respondWell, 
-	CountType, 
+	// CountType, 
 	respondBadRequest, 
 	validateCount, 
-	PartnerServerType 
+	PartnerServerType,
+	sanitiseNumberQuery,
 } from './utils'
 
 // const completeCount = {"bagged":{"pence_one":500,"pence_two":300,"pence_five":2000,"pence_ten":1000,"pence_twenty":7000,"pence_fifty":3000,"pound_one":18000,"pound_two":10000,"note_five":1000,"total":42800},"loose":{"pence_one":164,"pence_two":200,"pence_five":1425,"pence_ten":1370,"pence_twenty":600,"pence_fifty":2450,"pound_one":6100,"pound_two":400,"other":0,"total":12709},"notes":{"note_one":0,"note_five":7500,"note_ten":24000,"note_twenty":12000,"note_fifty":5000,"total":48500},"total":0}
@@ -48,12 +49,6 @@ import {
 // 	for (let i=0; i<21; i++) {str += one()}
 // 	return str
 // }
-
-function sanitiseNumberQuery (param: any, fallback: number): number {
-	const paramCoerced = Number(param)
-	if (typeof paramCoerced !== 'number' || isNaN(paramCoerced)) return fallback
-	else return paramCoerced
-}
 
 
 // Redux : true

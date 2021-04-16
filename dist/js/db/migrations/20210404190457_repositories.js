@@ -11,6 +11,7 @@ exports.up = function (knex) {
         t.foreign('deactivatedById')
             .references('id')
             .inTable('partners');
+        t.date('createdOn');
         t.date('deactivatedOn');
         t.string('name');
         t.string('description');

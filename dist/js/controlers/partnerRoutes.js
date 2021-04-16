@@ -42,23 +42,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePartner = exports.updatePartner = exports.getPartner = exports.addPartner = exports.getPartners = void 0;
 var Partner_1 = __importDefault(require("../models/Partner"));
 var utils_1 = require("./utils");
-function sanitiseNumberQuery(param, fallback) {
-    var paramCoerced = Number(param);
-    if (typeof paramCoerced !== 'number' || isNaN(paramCoerced))
-        return fallback;
-    else
-        return paramCoerced;
-}
 var getPartners = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var fromdate, todate, limit, offset, partners, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                fromdate = sanitiseNumberQuery(req.query.fromdate, 0);
-                todate = sanitiseNumberQuery(req.query.todate, Date.now());
-                limit = sanitiseNumberQuery(req.query.limit, 500);
-                offset = sanitiseNumberQuery(req.query.offset, 0);
+                fromdate = utils_1.sanitiseNumberQuery(req.query.fromdate, 0);
+                todate = utils_1.sanitiseNumberQuery(req.query.todate, Date.now());
+                limit = utils_1.sanitiseNumberQuery(req.query.limit, 500);
+                offset = utils_1.sanitiseNumberQuery(req.query.offset, 0);
                 return [4 /*yield*/, Partner_1.default.query()
                         // .withGraphJoined('float')
                         .where('createdOn', '>=', fromdate)

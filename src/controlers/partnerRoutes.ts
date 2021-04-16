@@ -2,13 +2,12 @@
 import { Request, Response } from 'express'
 
 import Partner from '../models/Partner'
-import { respondErr, respondWell, respondBadRequest } from './utils'
-
-function sanitiseNumberQuery (param: any, fallback: number): number {
-	const paramCoerced = Number(param)
-	if (typeof paramCoerced !== 'number' || isNaN(paramCoerced)) return fallback
-	else return paramCoerced
-}
+import { 
+	respondErr, 
+	respondWell, 
+	respondBadRequest, 
+	sanitiseNumberQuery
+} from './utils'
 
 export const getPartners = async (req: Request, res: Response) => {
 	try {

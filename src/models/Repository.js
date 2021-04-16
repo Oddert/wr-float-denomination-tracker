@@ -17,6 +17,7 @@ class Repository extends Model {
 				id: { type: 'integer' },
 				name: { type: 'string' },
 				description: { type: 'string' },
+				createdOn: { type: 'date' },
 				updatedOn: { type: 'date' },
 				activated: { type: 'boolean' },
 				activatedOn: { type: 'date' },

@@ -11,7 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateCount = exports.respondErr = exports.respondBadRequest = exports.respondWell = void 0;
+exports.validateCount = exports.sanitiseNumberQuery = exports.respondErr = exports.respondBadRequest = exports.respondWell = void 0;
 var respondWell = function (res, status, errorMessage, responseMessage, other) {
     return res
         .status(status || 200)
@@ -30,6 +30,14 @@ var respondErr = function (res, status, errorMessage, responseMessage, other) {
         .json(__assign({ status: status || 500, errorMessage: errorMessage || 'There was a error processing your reponse.', responseMessage: responseMessage }, other));
 };
 exports.respondErr = respondErr;
+function sanitiseNumberQuery(param, fallback) {
+    var paramCoerced = Number(param);
+    if (typeof paramCoerced !== 'number' || isNaN(paramCoerced))
+        return fallback;
+    else
+        return paramCoerced;
+}
+exports.sanitiseNumberQuery = sanitiseNumberQuery;
 var validateCount = function (count) {
     // LAST CHANGE: 14-04-2021 1220
     console.log('### Begin Count ###');

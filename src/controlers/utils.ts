@@ -119,7 +119,11 @@ export interface CountType {
 	deletedOn?: number
 }
 
-
+export function sanitiseNumberQuery (param: any, fallback: number): number {
+	const paramCoerced = Number(param)
+	if (typeof paramCoerced !== 'number' || isNaN(paramCoerced)) return fallback
+	else return paramCoerced
+}
 
 export const validateCount = (count: any) => {
 	// LAST CHANGE: 14-04-2021 1220
