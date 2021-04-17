@@ -24,6 +24,9 @@ class Repository extends Model {
 				deactivatedOn: { type: 'date' },
 				activatedById: { type: ['integer', 'null'] },
 				deactivatedById: { type: ['integer', 'null'] },
+				deleted: { type: 'boolean' },
+				deletedOn: { type: 'date' },
+				deletedById: { type: ['integer', 'null'] },
 			}
 		}
 	}

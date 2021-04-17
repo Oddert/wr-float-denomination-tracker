@@ -76,9 +76,45 @@ export const addRepository = async (req: Request, res: Response) => {
 	}
 }
 
-export const getRepository = (req: Request, res: Response) => {
+export const getRepository = async (req: Request, res: Response) => {
 	try {
+		const { id } = req.params
+		const multiRepository: any = req.query.repository || req.query.repo
+		if (!id) return respondBadRequest(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)
 
+		if (id === 'details' && multiRepository) {
+
+			if (!multiRepository || typeof multiRepository === undefined) {
+				return respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)
+			}
+			
+			if (Array.isArray(multiRepository)) {
+				
+				const repositories = await Repository.query()
+					.whereIn('repositories.id', multiRepository)
+				return respondWell(res, 200, null, 'Details for provided id.', { repositories })
+				
+			} else if (/,/gi.test(multiRepository) || /[0-9]/gi.test(multiRepository)) {
+				
+				const splitMultiRepository = multiRepository.split(',')
+				const repositories = await Repository.query()
+					.whereIn('repositories.id', splitMultiRepository)
+
+				return respondWell(res, 200, null, 'Details for provided id.', { repositories })
+				
+			} else {
+
+				return respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)
+
+			}
+		} else {
+
+			const repository = await Repository.query()
+				.where('repositories.id', Number(id))
+
+			return respondWell(res, 200, null, 'Details for provided id.', { repository })
+		
+		}
 	} catch (error) {
 		return respondErr(res, 500, 'There was an issue processing your request.', null, { error })
 	}
@@ -137,9 +173,18 @@ export const updateRepository = async (req: Request, res: Response) => {
 	}
 }
 
-export const deleteRepository = (req: Request, res: Response) => {
+export const deleteRepository = async (req: Request, res: Response) => {
 	try {
+		const now = Date.now()
+		const repository = await Repository.query()
+			.patchAndFetchById(req.params.id, {
+				// @ts-ignore
+				deleted: true,
+				deletedOn: now,
+				deletedById: 1,
+			})
 
+		return respondWell(res, 200, null, 'Repository deleted successfully.', { repository })
 	} catch (error) {
 		return respondErr(res, 500, 'There was an issue processing your request.', null, { error })
 	}

@@ -99,16 +99,52 @@ var addRepository = function (req, res) { return __awaiter(void 0, void 0, void 
     });
 }); };
 exports.addRepository = addRepository;
-var getRepository = function (req, res) {
-    try {
-    }
-    catch (error) {
-        return utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error });
-    }
-};
+var getRepository = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, multiRepository, repositories, splitMultiRepository, repositories, repository, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 9, , 10]);
+                id = req.params.id;
+                multiRepository = req.query.repository || req.query.repo;
+                if (!id)
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)];
+                if (!(id === 'details' && multiRepository)) return [3 /*break*/, 6];
+                if (!multiRepository || typeof multiRepository === undefined) {
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
+                }
+                if (!Array.isArray(multiRepository)) return [3 /*break*/, 2];
+                return [4 /*yield*/, Repository_1.default.query()
+                        .whereIn('repositories.id', multiRepository)];
+            case 1:
+                repositories = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { repositories: repositories })];
+            case 2:
+                if (!(/,/gi.test(multiRepository) || /[0-9]/gi.test(multiRepository))) return [3 /*break*/, 4];
+                splitMultiRepository = multiRepository.split(',');
+                return [4 /*yield*/, Repository_1.default.query()
+                        .whereIn('repositories.id', splitMultiRepository)];
+            case 3:
+                repositories = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { repositories: repositories })];
+            case 4: return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
+            case 5: return [3 /*break*/, 8];
+            case 6: return [4 /*yield*/, Repository_1.default.query()
+                    .where('repositories.id', Number(id))];
+            case 7:
+                repository = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { repository: repository })];
+            case 8: return [3 /*break*/, 10];
+            case 9:
+                error_3 = _a.sent();
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_3 })];
+            case 10: return [2 /*return*/];
+        }
+    });
+}); };
 exports.getRepository = getRepository;
 var updateRepository = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var oldRepo, b, now, createRepo, repository, error_3;
+    var oldRepo, b, now, createRepo, repository, error_4;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -144,19 +180,36 @@ var updateRepository = function (req, res) { return __awaiter(void 0, void 0, vo
                 repository = _a.sent();
                 return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Repositroy modified succesfully', { repository: repository })];
             case 3:
-                error_3 = _a.sent();
-                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_3 })];
+                error_4 = _a.sent();
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_4 })];
             case 4: return [2 /*return*/];
         }
     });
 }); };
 exports.updateRepository = updateRepository;
-var deleteRepository = function (req, res) {
-    try {
-    }
-    catch (error) {
-        return utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error });
-    }
-};
+var deleteRepository = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var now, repository, error_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                now = Date.now();
+                return [4 /*yield*/, Repository_1.default.query()
+                        .patchAndFetchById(req.params.id, {
+                        // @ts-ignore
+                        deleted: true,
+                        deletedOn: now,
+                        deletedById: 1,
+                    })];
+            case 1:
+                repository = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Repository deleted successfully.', { repository: repository })];
+            case 2:
+                error_5 = _a.sent();
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_5 })];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
 exports.deleteRepository = deleteRepository;
 //# sourceMappingURL=repositoryRoutes.js.map

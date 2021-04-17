@@ -45,6 +45,9 @@ var Repository = /** @class */ (function (_super) {
                     deactivatedOn: { type: 'date' },
                     activatedById: { type: ['integer', 'null'] },
                     deactivatedById: { type: ['integer', 'null'] },
+                    deleted: { type: 'boolean' },
+                    deletedOn: { type: 'date' },
+                    deletedById: { type: ['integer', 'null'] },
                 }
             };
         },

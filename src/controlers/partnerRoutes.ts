@@ -65,13 +65,10 @@ export const getPartner = async (req: Request, res: Response) => {
 		if (id === 'details' && multiPartner) {
 
 			if (!multiPartner || typeof multiPartner === undefined) {
-				console.log('1')
 				return respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)
 			}
-			console.log('2')
 			
 			if (Array.isArray(multiPartner)) {
-				console.log('3')
 				
 				const partner = await Partner.query()
 				// .withGraphJoined('float')
@@ -79,7 +76,6 @@ export const getPartner = async (req: Request, res: Response) => {
 				return respondWell(res, 200, null, 'Details for provided id including float amount.', { partner })
 				
 			} else if (/,/gi.test(multiPartner) || /[0-9]/gi.test(multiPartner)) {
-				console.log('4')
 				
 				const splitMultiPartner = multiPartner.split(',')
 				const partner = await Partner.query()
@@ -88,7 +84,6 @@ export const getPartner = async (req: Request, res: Response) => {
 				return respondWell(res, 200, null, 'Details for provided id including float amount.', { partner })
 				
 			} else {
-				console.log('5')
 
 				return respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)
 

@@ -114,12 +114,9 @@ var getPartner = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                     return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)];
                 if (!(id === 'details' && multiPartner)) return [3 /*break*/, 6];
                 if (!multiPartner || typeof multiPartner === undefined) {
-                    console.log('1');
                     return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
                 }
-                console.log('2');
                 if (!Array.isArray(multiPartner)) return [3 /*break*/, 2];
-                console.log('3');
                 return [4 /*yield*/, Partner_1.default.query()
                         // .withGraphJoined('float')
                         .whereIn('partners.id', multiPartner)];
@@ -128,7 +125,6 @@ var getPartner = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id including float amount.', { partner: partner })];
             case 2:
                 if (!(/,/gi.test(multiPartner) || /[0-9]/gi.test(multiPartner))) return [3 /*break*/, 4];
-                console.log('4');
                 splitMultiPartner = multiPartner.split(',');
                 return [4 /*yield*/, Partner_1.default.query()
                         // .withGraphJoined('float')
@@ -136,9 +132,7 @@ var getPartner = function (req, res) { return __awaiter(void 0, void 0, void 0, 
             case 3:
                 partner = _a.sent();
                 return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id including float amount.', { partner: partner })];
-            case 4:
-                console.log('5');
-                return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
+            case 4: return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
             case 5: return [3 /*break*/, 8];
             case 6: return [4 /*yield*/, Partner_1.default.query()
                     // .withGraphJoined('float')

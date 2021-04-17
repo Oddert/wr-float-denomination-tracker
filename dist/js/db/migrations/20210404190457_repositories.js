@@ -11,6 +11,9 @@ exports.up = function (knex) {
         t.foreign('deactivatedById')
             .references('id')
             .inTable('partners');
+        t.integer('deletedById')
+            .references('id')
+            .inTable('users');
         t.date('createdOn');
         t.date('deactivatedOn');
         t.string('name');
@@ -18,6 +21,8 @@ exports.up = function (knex) {
         t.date('updatedOn');
         t.boolean('activated');
         t.date('activatedOn');
+        t.boolean('deleted');
+        t.date('deletedOn');
     });
 };
 exports.down = function (knex) {

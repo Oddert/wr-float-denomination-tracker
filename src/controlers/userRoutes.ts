@@ -1,6 +1,14 @@
 
 import { Request, Response } from 'express'
 
+import {
+	sanitiseNumberQuery,
+	respondWell,
+	respondBadRequest,
+	respondErr,
+} from './utils'
+
+import User from '../models/User'
 
 const createId = () => {
 	const one = () => {
@@ -48,29 +56,68 @@ const users = [
 	},
 ]
 
-export const getUsers = (req: Request, res: Response): void => {
-  res.json({
-		users,
-	})
+export const getUsers = async (req: Request, res: Response) => {
+	try {
+		let limit: number = sanitiseNumberQuery(req.query.limit, 500)
+		let offset: number = sanitiseNumberQuery(req.query.offset, 0)
+			
+		const repositories = await User.query()
+			.limit(limit)
+			.offset(offset)
+	
+		return respondWell(res, 200, null, 'List of all users.', { users })
+
+	}  catch (error) {
+		return respondErr(res, 500, 'There was an issue processing your request.', null, { error })
+	}
 }
 
 export const addUser = (req: Request, res: Response): void => {
   res.json('addUser route not implamented yet')
 }
 
-export const getUser = (req: Request, res: Response): void => {
-  const user = users.reduce((acc: any, each: any) => {
-		if (each.id === req.params.id) return each
-		else return acc
-	}, null)
-	if (user) {
-		res.status(200).json({
-			user
-		})
-	} else {
-		res.status(200).json({
-			message: 'No such user found'
-		})
+export const getUser = async (req: Request, res: Response) => {
+	try {
+		const { id } = req.params
+		const multiUser: any = req.query.user
+		if (!id) return respondBadRequest(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)
+
+		if (id === 'details' && multiUser) {
+
+			if (!multiUser || typeof multiUser === undefined) {
+				return respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?user=2,3,4"', null, null)
+			}
+			
+			if (Array.isArray(multiUser)) {
+				
+				const users = await User.query()
+					.whereIn('users.id', multiUser)
+
+				return respondWell(res, 200, null, 'Details for provided id.', { users })
+				
+			} else if (/,/gi.test(multiUser) || /[0-9]/gi.test(multiUser)) {
+				
+				const splitMultiUser = multiUser.split(',')
+				const users = await User.query()
+					.whereIn('users.id', splitMultiUser)
+
+				return respondWell(res, 200, null, 'Details for provided id.', { users })
+				
+			} else {
+
+				return respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?user=2,3,4"', null, null)
+
+			}
+		} else {
+
+			const user = await User.query()
+				.where('users.id', Number(id))
+
+			return respondWell(res, 200, null, 'Details for provided id.', { user })
+		
+		}
+	} catch (error) {
+		return respondErr(res, 500, 'There was an issue processing your request.', null, { error })
 	}
 }
 
