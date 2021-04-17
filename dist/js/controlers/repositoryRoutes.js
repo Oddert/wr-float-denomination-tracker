@@ -51,11 +51,15 @@ var getRepositories = function (req, res) { return __awaiter(void 0, void 0, voi
                 limit = utils_1.sanitiseNumberQuery(req.query.limit, 500);
                 offset = utils_1.sanitiseNumberQuery(req.query.offset, 0);
                 return [4 /*yield*/, Repository_1.default.query()
-                        // .withGraphJoined('float')
-                        .limit(limit)
-                        .offset(offset)];
+                    // .withGraphJoined('float')
+                    // .limit(limit)
+                    // .offset(offset)
+                ];
             case 1:
                 repositories = _a.sent();
+                // .withGraphJoined('float')
+                // .limit(limit)
+                // .offset(offset)
                 return [2 /*return*/, utils_1.respondWell(res, 200, null, 'List of all repositories.', { repositories: repositories })];
             case 2:
                 error_1 = _a.sent();

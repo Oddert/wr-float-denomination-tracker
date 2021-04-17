@@ -34,6 +34,7 @@ exports.up = function (knex) {
         t.boolean('deleted');
         t.date('deletedOn');
         t.date('updatedOn');
+        t.date('timestamp');
     });
 };
 exports.down = function (knex) {

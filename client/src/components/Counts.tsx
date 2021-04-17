@@ -36,7 +36,7 @@ const Counts: React.FC = () => {
 	const { data: counts, updated } = countState
 	const days = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
 
-	const colorMap = (str: any): string => {
+	const colourMap = (str: any): string => {
 		const m: any = {
 			'complete': 'theme_light.info.complete',
 			'partial': 'theme_light.info.partial',
@@ -88,27 +88,27 @@ const Counts: React.FC = () => {
 			>
 				{
 					counts
-						.filter((each: any) => each.repository === repo || repo === 'all')
+						.filter((each: any) => each.repositoryId === repo || repo === 'all')
 						.map((each: any) => {
 							const date = new Date(each.timestamp)
 							const py='10px'
 							const px='40px'
 							return (
 								<Flex
-									key={each._id}
+									key={each.id}
 									bgColor='#ffffff'
 									alignItems='center'
 									justifyContent='space-between'
 									m='4px 0'
 									borderLeft='10px solid'
-									borderLeftColor={colorMap(each.status)}
+									borderLeftColor={colourMap(each.completionStatus)}
 									transition='.1s linear'
 									_hover={{
 										bgColor: '#DADADB'
 									}}
 								>
 									<Link 
-										href={`#/count/${each._id}`}
+										href={`#/count/${each.id}`}
 										flex='1'
 										py={py}
 										pl={px}
@@ -121,7 +121,7 @@ const Counts: React.FC = () => {
 											justifyContent='space-between'
 										>
 											<Text>
-												{each.repository}
+												{each.repositoryId}
 											</Text>
 											<Text>
 												{days[date.getDay()]}

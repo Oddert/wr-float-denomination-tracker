@@ -178,7 +178,7 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     pending: true,
                     createdOn: now_1,
                     updatedOn: now_1,
-                    tillNumber: ''
+                    tillNumber: '',
                 };
                 return [4 /*yield*/, Partner_1.default.query().insert(createCounter)
                     // @ts-ignore
@@ -291,6 +291,7 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     authenticatorId: 0,
                     counterId: counterId,
                     supervisorId: supervisorId,
+                    timestamp: req.body.count.timestamp,
                 };
                 count = Count_1.default.query().insert(createCount);
                 return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Count successfully created, see response for validation status.', { validation: validation, count: count })
@@ -560,6 +561,7 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                     counterId: counterId,
                     supervisorId: supervisorId,
                     float: float,
+                    timestamp: req.body.count.timestamp || oldCount.timestamp
                 });
                 // return res.json({ plarb: 'ok' })
                 delete float.id;

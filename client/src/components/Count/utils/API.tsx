@@ -38,6 +38,7 @@ export const validateCount = (count: any): Validation => {
 
 	const sampleState: StateType = {
 		repository: repositories[0],
+		repositoryId: 1,
 		counter: '',
 		counterId: '',
 		supervisor: '',

@@ -89,7 +89,7 @@ var users = [
     },
 ];
 var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var limit, offset, repositories, error_1;
+    var limit, offset, users_1, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -100,10 +100,11 @@ var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                         .limit(limit)
                         .offset(offset)];
             case 1:
-                repositories = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'List of all users.', { users: users })];
+                users_1 = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'List of all users.', { users: users_1 })];
             case 2:
                 error_1 = _a.sent();
+                console.log(error_1);
                 return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_1 })];
             case 3: return [2 /*return*/];
         }
@@ -115,7 +116,7 @@ var addUser = function (req, res) {
 };
 exports.addUser = addUser;
 var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, multiUser, users_1, splitMultiUser, users_2, user, error_2;
+    var id, multiUser, users_2, splitMultiUser, users_3, user, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -132,16 +133,16 @@ var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 return [4 /*yield*/, User_1.default.query()
                         .whereIn('users.id', multiUser)];
             case 1:
-                users_1 = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { users: users_1 })];
+                users_2 = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { users: users_2 })];
             case 2:
                 if (!(/,/gi.test(multiUser) || /[0-9]/gi.test(multiUser))) return [3 /*break*/, 4];
                 splitMultiUser = multiUser.split(',');
                 return [4 /*yield*/, User_1.default.query()
                         .whereIn('users.id', splitMultiUser)];
             case 3:
-                users_2 = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { users: users_2 })];
+                users_3 = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { users: users_3 })];
             case 4: return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?user=2,3,4"', null, null)];
             case 5: return [3 /*break*/, 8];
             case 6: return [4 /*yield*/, User_1.default.query()

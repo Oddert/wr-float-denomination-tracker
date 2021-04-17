@@ -22,7 +22,7 @@ var User = /** @class */ (function (_super) {
     function User() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(User, "TableName", {
+    Object.defineProperty(User, "tableName", {
         get: function () {
             return 'users';
         },

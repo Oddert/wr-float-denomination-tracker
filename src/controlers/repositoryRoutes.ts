@@ -18,8 +18,8 @@ export const getRepositories = async (req: Request, res: Response) => {
 			
 		const repositories = await Repository.query()
 			// .withGraphJoined('float')
-			.limit(limit)
-			.offset(offset)
+			// .limit(limit)
+			// .offset(offset)
 	
 		return respondWell(res, 200, null, 'List of all repositories.', { repositories })
 

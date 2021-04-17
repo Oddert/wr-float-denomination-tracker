@@ -61,13 +61,14 @@ export const getUsers = async (req: Request, res: Response) => {
 		let limit: number = sanitiseNumberQuery(req.query.limit, 500)
 		let offset: number = sanitiseNumberQuery(req.query.offset, 0)
 			
-		const repositories = await User.query()
+		const users = await User.query()
 			.limit(limit)
 			.offset(offset)
 	
 		return respondWell(res, 200, null, 'List of all users.', { users })
 
-	}  catch (error) {
+	} catch (error) {
+		console.log(error)
 		return respondErr(res, 500, 'There was an issue processing your request.', null, { error })
 	}
 }

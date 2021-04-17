@@ -91,6 +91,7 @@ export const authUsersWriteAll = () => async (dispatch: ThunkDispatch<any, any, 
 	const OPTS = getOptions()
 	const res = await fetch(EXT, OPTS)
 	const data = await res.json()
+	console.log(data)
 	dispatch({
 		type: ActionTypes.AUTH_USERS_WRITE_ALL,
 		payload: data.users,

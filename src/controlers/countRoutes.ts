@@ -167,7 +167,7 @@ export const addCount = async (req: Request, res: Response) => {
 				pending: true, 
 				createdOn: now, 
 				updatedOn: now, 
-				tillNumber: ''
+				tillNumber: '',
 			}
 			// @ts-ignore
 			const createdCounter = await Partner.query().insert(createCounter)
@@ -283,6 +283,7 @@ export const addCount = async (req: Request, res: Response) => {
 			authenticatorId: 0, 
 			counterId,
 			supervisorId,
+			timestamp: req.body.count.timestamp,
 		}
 
 		// @ts-ignore
@@ -605,6 +606,7 @@ export const updateCount = async (req: Request, res: Response) => {
 			counterId,
 			supervisorId,
 			float,
+			timestamp: req.body.count.timestamp || oldCount.timestamp
 		})
 		// return res.json({ plarb: 'ok' })
 		

@@ -42,6 +42,7 @@ export interface DataType {
 
 export interface StateType {
 	repository: string
+	repositoryId: number
 	timestamp: number | Date
 	data: DataType
 	counter: string
