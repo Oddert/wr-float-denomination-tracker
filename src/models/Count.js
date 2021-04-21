@@ -75,11 +75,11 @@ class Count extends Model {
 				}
 			},
 
-			checker: {
+			supervisor: {
 				relation: Model.BelongsToOneRelation,
 				modelClass: Partner,
 				join: {
-					from: 'counts.checkerId',
+					from: 'counts.supervisorId',
 					to: 'partners.id'
 				}
 			},

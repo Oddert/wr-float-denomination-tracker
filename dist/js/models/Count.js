@@ -93,11 +93,11 @@ var Count = /** @class */ (function (_super) {
                         to: 'partners.id'
                     }
                 },
-                checker: {
+                supervisor: {
                     relation: Model.BelongsToOneRelation,
                     modelClass: Partner,
                     join: {
-                        from: 'counts.checkerId',
+                        from: 'counts.supervisorId',
                         to: 'partners.id'
                     }
                 },

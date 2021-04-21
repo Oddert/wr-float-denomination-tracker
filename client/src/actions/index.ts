@@ -97,3 +97,15 @@ export const authUsersWriteAll = () => async (dispatch: ThunkDispatch<any, any, 
 		payload: data.users,
 	})
 }
+
+
+export const repositoriesWriteAll = () => async (dispatch: ThunkDispatch<any, any, any>) => {
+	const EXT = '/api/v1/repository'
+	const OPTS = getOptions()
+	const res = await fetch(EXT, OPTS)
+	const data = await res.json()
+	dispatch({
+		type: ActionTypes.REPOSITORIES_WRITE_ALL,
+		payload: data.repositories,
+	})
+}

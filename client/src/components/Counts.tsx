@@ -29,8 +29,9 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const Counts: React.FC = () => {
 	const dispatch = useDispatch()
-	const repos = ['401', '403', 'lotto']
-	const [repo, setRepo] = useState('all')
+	const repositories = useSelector((s: any) => s.repositories.repositoryList)
+	// const repos = ['401', '403', 'lotto']
+	const [selectedRepo, setSelectedRepo] = useState('all')
 
 	const countState = useSelector((state: any) => state.counts)
 	const { data: counts, updated } = countState
@@ -68,17 +69,17 @@ const Counts: React.FC = () => {
 		<div>
 			<Select
 				w='50%'
-				value={repo}
-				onChange={(e: any) => setRepo(e.target.value)}
+				value={selectedRepo}
+				onChange={(e: any) => setSelectedRepo(e.target.value)}
 			>
 				<option value='all'>All</option>
 				{
-					repos.map((e: any) =>
+					repositories.map((e: any) =>
 						<option 
-							key={e} 
-							value={e}
+							key={e.id} 
+							value={e.id}
 						>
-							{e}
+							{e.name}
 						</option>
 					)
 				}
@@ -88,7 +89,7 @@ const Counts: React.FC = () => {
 			>
 				{
 					counts
-						.filter((each: any) => each.repositoryId === repo || repo === 'all')
+						.filter((each: any) => each.repositoryId === Number(selectedRepo) || selectedRepo === 'all')
 						.map((each: any) => {
 							const date = new Date(each.timestamp)
 							const py='10px'
@@ -121,7 +122,9 @@ const Counts: React.FC = () => {
 											justifyContent='space-between'
 										>
 											<Text>
-												{each.repositoryId}
+												{
+													repositories.find((repo: any) => each.repositoryId === repo.id).name
+												}
 											</Text>
 											<Text>
 												{days[date.getDay()]}

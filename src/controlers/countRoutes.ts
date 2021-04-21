@@ -322,7 +322,10 @@ export const getCount = async (req: Request, res: Response) => {
 
 			const count = await Count.query()
 				.withGraphJoined('float')
+				.withGraphJoined('counter')
+				.withGraphJoined('supervisor')
 				.whereIn('counts.id', multiCount)
+
 			return respondWell(res, 200, null, 'Details for provided id including float amount.', { count })
 
 		} else if (/,/gi.test(multiCount) || /[0-9]/gi.test(multiCount)) {
@@ -330,7 +333,10 @@ export const getCount = async (req: Request, res: Response) => {
 			const splitMultiCount = multiCount.split(',')
 			const count = await Count.query()
 				.withGraphJoined('float')
+				.withGraphJoined('counter')
+				.withGraphJoined('supervisor')
 				.whereIn('counts.id', splitMultiCount)
+
 			return respondWell(res, 200, null, 'Details for provided id including float amount.', { count })
 
 		} else {
@@ -342,7 +348,10 @@ export const getCount = async (req: Request, res: Response) => {
 	} else {
 
 		const count = await Count.query()
+			.skipUndefined()
 			.withGraphJoined('float')
+			.withGraphJoined('counter')
+			.withGraphJoined('supervisor')
 			.where('counts.id', Number(id))
 
 		return respondWell(res, 200, null, 'Details for provided id including float amount.', { count })

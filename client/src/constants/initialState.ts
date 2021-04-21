@@ -20,6 +20,10 @@ const initialState = {
 		userList: [],
 		userListUpdated: null,
 	},
+	repositories: {
+		repositoryList: [],
+		repositoryListUpdated: null,
+	}
 }
 
 export default initialState

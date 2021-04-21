@@ -14,13 +14,14 @@ import Count from './Count/'
 
 import 'react-datepicker/dist/react-datepicker.css'
 import { useDispatch } from 'react-redux'
-import { authUsersWriteAll } from '../actions'
+import { authUsersWriteAll, repositoriesWriteAll } from '../actions'
 
 const App: React.FC = () => {
 	const dispatch = useDispatch()
 
 	useEffect(() => {
 		function initialiseApp () {
+			dispatch(repositoriesWriteAll())
 			dispatch(authUsersWriteAll())
 		}
 		initialiseApp()

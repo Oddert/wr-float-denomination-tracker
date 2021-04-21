@@ -331,6 +331,8 @@ var getCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 if (!Array.isArray(multiCount)) return [3 /*break*/, 2];
                 return [4 /*yield*/, Count_1.default.query()
                         .withGraphJoined('float')
+                        .withGraphJoined('counter')
+                        .withGraphJoined('supervisor')
                         .whereIn('counts.id', multiCount)];
             case 1:
                 count = _a.sent();
@@ -340,6 +342,8 @@ var getCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 splitMultiCount = multiCount.split(',');
                 return [4 /*yield*/, Count_1.default.query()
                         .withGraphJoined('float')
+                        .withGraphJoined('counter')
+                        .withGraphJoined('supervisor')
                         .whereIn('counts.id', splitMultiCount)];
             case 3:
                 count = _a.sent();
@@ -347,7 +351,10 @@ var getCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
             case 4: return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?count=2,3,4"', null, null)];
             case 5: return [3 /*break*/, 8];
             case 6: return [4 /*yield*/, Count_1.default.query()
+                    .skipUndefined()
                     .withGraphJoined('float')
+                    .withGraphJoined('counter')
+                    .withGraphJoined('supervisor')
                     .where('counts.id', Number(id))];
             case 7:
                 count = _a.sent();
