@@ -19,6 +19,7 @@ import CountContext from './utils/CountContext'
 import { 
 	CountActions, 
 	// validateCount,
+	formatReadableName,
 } from './utils/API'
 
 import {
@@ -68,9 +69,9 @@ const Count: React.FC<Props> = ({ edit }) => {
 							repository: `${count.repositoryId}`,
 							repositoryId: count.repositoryId,
 							timestamp: count.timestamp,
-							counter: '',
+							counter: formatReadableName(count.counter),
 							counterId: count.counterId,
-							supervisor: `${count.supervisorId}`,
+							supervisor: formatReadableName(count.supervisor),
 							supervisorId: count.supervisorId,
 							ready: false,
 							verified: Boolean(count.verified),
@@ -111,12 +112,6 @@ const Count: React.FC<Props> = ({ edit }) => {
 							}
 						}
 						// TODO: replace with server side join
-						if (users) {
-							const selectedUser = users[count.counterId]
-							if (selectedUser) {
-								stateFromRequest.counter = selectedUser.preferredName
-							}
-						}
 						dispatch({ type: CountActions.WRITE_ALL, payload: stateFromRequest })
 					} else {
 						console.error(res.errorMessage)

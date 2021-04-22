@@ -19,6 +19,8 @@ const initialState = {
 	auth: {
 		userList: [],
 		userListUpdated: null,
+		partnerList: [],
+		partnerListUpdated: null,
 	},
 	repositories: {
 		repositoryList: [],

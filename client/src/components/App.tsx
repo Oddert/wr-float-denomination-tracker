@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom'
 
-import './Carbon.css'
-import './Carbon-alterations.css'
-import './ReactDatetime.css'
-import './App.scss'
+import { authUsersWriteAll, repositoriesWriteAll, authPartnersWriteAll } from '../actions'
 
 import PageWrapper from './PageWrapper'
 import Login from './Login'
@@ -12,20 +10,24 @@ import Dashboard from './Dashboard'
 import Counts from './Counts'
 import Count from './Count/'
 
+import './Carbon.css'
+import './Carbon-alterations.css'
+import './ReactDatetime.css'
+import './App.scss'
+
 import 'react-datepicker/dist/react-datepicker.css'
-import { useDispatch } from 'react-redux'
-import { authUsersWriteAll, repositoriesWriteAll } from '../actions'
 
 const App: React.FC = () => {
 	const dispatch = useDispatch()
 
 	useEffect(() => {
 		function initialiseApp () {
+			dispatch(authPartnersWriteAll())
 			dispatch(repositoriesWriteAll())
 			dispatch(authUsersWriteAll())
 		}
 		initialiseApp()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line
 	}, [])
 
   return (

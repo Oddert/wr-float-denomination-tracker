@@ -26,31 +26,42 @@ const Denomination: React.FC<Props> = ({
 	const [error, setError]: [null | string, any] = useState(null)
 	const [value, setValue]: [string | number | undefined, Dispatch<SetStateAction<any>>] = useState(undefined)
 
+	label = `loose ${label}`
+	
 	useEffect(() => {
+		console.log(inVal)
 		if (typeof inVal === 'number') setValue(inVal / 100)
 		else setValue(undefined)
 	}, [inVal])
 
 	function handleChange (v: any): void {
+		console.log(v)
 		const valueAsNumber = Math.floor(Number(v) * 100)
+		console.log(valueAsNumber)
 		const val = (v === '' || v === null || v === undefined) ? null : valueAsNumber
 
-		// setValue(v)
+		console.log('setting internal val', v)
+		setValue(v)
 
 		const minimumValueTest = valueAsNumber % 1
 		const nanTest = isNaN(valueAsNumber)
 		const outOfStepTest = valueAsNumber % step
-
+		const isPartialInput = /\.$/gi.test(v)
+		
+		if (isPartialInput) {
+			setError(`Error [LooseCountInput] at isPartialInput test: value contains a trailling full stop.`)
+			return
+		}
 		if (minimumValueTest) {
 			setError(`Error [LooseCoinInput] at minimumValueTest: value entered is bellow the value of this denomination: value: ${v}, denomination: ${step / 100}`)
 			return
 		}
 		if (nanTest) {
-			setError(`Error [LooseCoinInput] at minimumValueTest: value entered is not a number: value: ${v}`)
+			setError(`Error [LooseCoinInput] at nanTest: value entered is not a number: value: ${v}`)
 			return
 		}
 		if (outOfStepTest) {
-			setError(`Error [LooseCoinInput] at minimumValueTest: value entered is incompatible with the denomination's min value: value: ${v}, denomination: ${step / 100}`)
+			setError(`Error [LooseCoinInput] at outOfStepTest: value entered is incompatible with the denomination's min value: value: ${v}, denomination: ${step / 100}`)
 			return
 		}
 		const payload = {
@@ -71,6 +82,7 @@ const Denomination: React.FC<Props> = ({
 	
 	const sideColumns = '3fr'
 	const inputColumn = '4fr'
+	if (label === "loose 50p") console.log(label, value)
 
 	return (
 		<GridItem
@@ -90,6 +102,7 @@ const Denomination: React.FC<Props> = ({
 					{label}
 				</FormLabel>
 				<NumberInput
+					value={value === null ? undefined : value}
 				>
 					<NumberInputField 
 						onChange={(e: any) => handleChange(e.target.value)}

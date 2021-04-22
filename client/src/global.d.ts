@@ -75,3 +75,19 @@ interface Validation {
 	code: 'complete' | 'incomplete' | 'partial' | 'unverified' | 'invalid'
 	message: string
 }
+
+export interface Repository {
+	id: number
+	name: string
+	updatedOn: number
+	activated: boolean | number
+	activatedById?: number
+	deactivatedById?: number
+	deletedById?: number
+	createdOn?: number
+	deactivatedOn?: number
+	description?: string
+	activatedOn?: number
+	deleted?: boolean | number
+	deletedOn?: number
+}

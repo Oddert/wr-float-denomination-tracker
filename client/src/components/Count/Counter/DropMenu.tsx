@@ -26,7 +26,6 @@ const DropMenu: React.FC<Props> = ({
 	filteredList
 }) => {
 	const { userListUpdated } = useSelector((s: any) => s.auth)
-
 	return (
 		<Flex
 			flexDirection='column'

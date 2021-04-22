@@ -42,9 +42,11 @@ const Denomination: React.FC<Props> = ({
 	const [error, setError]: [null | string, any] = useState(null)
 	const [value, setValue]: [null | undefined | string | number, Dispatch<SetStateAction<any>>] = useState(null)
 
+	label = `bagged: ${label}`
+
 	useEffect(() => {
+		console.log('set value to:', inVal)
 		setValue(inVal)
-		// console.log('set value to:', inVal)
 	}, [inVal])
 
 	function handleChange (v: any): void {
@@ -134,9 +136,11 @@ const Denomination: React.FC<Props> = ({
 					// String(sanitiseNumberInputVal(value, step))
 					}
 				</FormLabel>
-				<NumberInput>
+				<NumberInput
+					value={sanitiseNumberInputVal(typeof value === 'number' ? value/step : value, step)}
+					>
 					<NumberInputField 
-						value={sanitiseNumberInputVal(value, step)}
+						value={sanitiseNumberInputVal(typeof value === 'number' ? value/step : value, step)}
 						onKeyDown={handleKeyDown}
 						onChange={(e: any) => handleChange(e.target.value)}
 						bgColor='#f8f8f8'

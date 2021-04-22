@@ -21,7 +21,7 @@ const countReducer = (state: StateType, action: ActionType) => {
 		case CountActions.UPDATE_REPO:
 			return {
 				...state,
-				repository: action.payload
+				repositoryId: action.payload
 			}
 		case CountActions.UPDATE_COUTNER:
 			return {

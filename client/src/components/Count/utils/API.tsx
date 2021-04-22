@@ -30,6 +30,27 @@ export const sanitiseNumberInputVal = (
 
 // }
 
+export const formatReadableName = (user: any): string => {
+	let out = ''
+	let useFullName = user.shortUid === null
+	if (user === undefined) return ''
+	console.log(user)
+	if (useFullName) {
+		out += `${user.firstName} ${user.lastName}`
+	} else {
+		out += `${user.tillNumber} `
+		if (user.firstName && user.firstName !== '') {
+			if (user.lastName && user.lastName !== '') {	
+				out += user.firstName.substring(0,1).toUpperCase()
+				out += user.lastName.substring(0,1).toUpperCase()
+			} else {
+				out += user.firstName
+			}
+		}
+	}
+	return out	
+}
+
 export const validateCount = (count: any): Validation => {
 	// LAST CHANGE: 14-04-2021 1220
 

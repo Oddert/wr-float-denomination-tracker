@@ -10,7 +10,7 @@ import Input from '../../base/Input'
 import DropMenu from './DropMenu'
 
 import CountContext from '../utils/CountContext'
-import { CountActions } from '../utils/API'
+import { CountActions, formatReadableName } from '../utils/API'
 import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
 
@@ -26,9 +26,9 @@ const Counter: React.FC<Props> = ({
 	stateAssignment,
 }) => {
 	const { state, dispatch } = useContext(CountContext)
-	const { userList } = useSelector((s: any) => s.auth)
+	const partnerList = useSelector((s: any) => s.auth.partnerList)
 	const [showMenu, setShowMenu] = useState(false)
-	const [filteredList, setFilteredList] = useState(userList)
+	const [filteredList, setFilteredList] = useState(partnerList)
 
 	const onChange = (e: any) => dispatch({
 		type: dispatchType, 
@@ -36,25 +36,6 @@ const Counter: React.FC<Props> = ({
 			[stateAssignment]: e.target.value,
 		},
 	})
-
-	const formatReadableName = (user: any): string => {
-		let out = ''
-		let useFullName = user.shortUid === null
-		if (useFullName) {
-			out += `${user.firstName} ${user.lastName}`
-		} else {
-			out += `${user.shortUid} `
-			if (user.firstName && user.firstName !== '') {
-				if (user.lastName && user.lastName !== '') {
-					out += user.firstName.substring(0,1).toUpperCase()
-					out += user.lastName.substring(0,1).toUpperCase()
-				} else {
-					out += user.firstName
-				}
-			}
-		}
-		return out	
-	}
 
 	const handleFocus = () => {
 		setShowMenu(true)
@@ -93,7 +74,7 @@ const Counter: React.FC<Props> = ({
 	}
 
 	useEffect(() => {
-		const createdList = userList
+		const createdList = partnerList
 			.filter((each: any) => {
 				if (!/\w+/.test(state[stateAssignment])) return true
 				const names = [each.firstName, each.middleNames, each.lastName]

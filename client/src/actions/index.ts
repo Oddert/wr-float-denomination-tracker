@@ -87,7 +87,7 @@ export const uiFlashRemoveOne = (id: string) => ({
 
 
 export const authUsersWriteAll = () => async (dispatch: ThunkDispatch<any, any, any>) => {
-	const EXT = '/api/v1/user'
+	const EXT = '/api/v1/partner'
 	const OPTS = getOptions()
 	const res = await fetch(EXT, OPTS)
 	const data = await res.json()
@@ -95,6 +95,17 @@ export const authUsersWriteAll = () => async (dispatch: ThunkDispatch<any, any, 
 	dispatch({
 		type: ActionTypes.AUTH_USERS_WRITE_ALL,
 		payload: data.users,
+	})
+}
+
+export const authPartnersWriteAll = () => async (dispatch: ThunkDispatch<any, any, any>) => {
+	const EXT = '/api/v1/partner'
+	const OPTS = getOptions()
+	const res = await fetch(EXT, OPTS)
+	const data = await res.json()
+	dispatch({
+		type: ActionTypes.AUTH_PARTNER_WRITE_ALL,
+		payload: data.partners
 	})
 }
 
