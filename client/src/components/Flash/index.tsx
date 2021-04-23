@@ -14,7 +14,7 @@ const Flash: React.FC = () => {
 			position='fixed'
 			bottom='10px'
 			left='10px'
-			w='40vw'
+			w='30vw'
 			direction='column'
 		>
 			{

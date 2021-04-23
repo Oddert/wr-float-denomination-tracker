@@ -52,7 +52,7 @@ const App: React.FC = () => {
 						</PageWrapper>
           </Route>
           <Route path='/count/:id'>
-            <PageWrapper title='Count'>
+            <PageWrapper title='Edit Count'>
 							<Count edit={true} />
 						</PageWrapper>
           </Route>

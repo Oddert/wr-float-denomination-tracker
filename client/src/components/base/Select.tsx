@@ -9,11 +9,12 @@ const Select: React.FC<any> = (props) => <ChakraSelect
 	borderColor='theme_light.text.lighter'
 	m='10px 0'
 	_hover={{
-		borderColor: 'theme_light.text.standard'
+		color: 'theme_light.text.darker',
+		borderColor: 'theme_light.text.light',
 	}}
 	_focus={{
-		color: 'theme_light.text.darker',
 		boxShadow: '0 0 0 2px #5EAFFB',
+		borderColor: 'theme_light.text.standard',
 	}}
 />
 

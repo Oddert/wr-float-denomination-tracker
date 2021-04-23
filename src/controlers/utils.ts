@@ -65,6 +65,7 @@ export interface StateType {
 	verified: boolean
 	counterId: string
 	supervisorId: string
+	comment?: string
 }
 
 

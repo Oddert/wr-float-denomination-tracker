@@ -92,7 +92,7 @@ const SingleFlash: React.FC<any> = ({
 					>
 					{
 						title
-					}: {duration}
+					}
 				</Heading>
 				<Text
 					fontSize='1.1em'

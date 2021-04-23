@@ -277,7 +277,7 @@ const colors = {
 		info: {
 			unfinished: '#ca6d6d',
 			partial: '#bed800',
-			complete: '#598d00',
+			complete: '#004A32',
 			unverified: '#3db8b5',
 		}
   },

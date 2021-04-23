@@ -111,43 +111,50 @@ export const addCount = async (req: Request, res: Response) => {
 
 		const repositoryId = Number(req.body.count.repositoryId)
 
+		console.log({ repositoryId })
+
 		if (typeof repositoryId !== 'number' || isNaN(repositoryId)) {
 			return respondBadRequest(
 				res, 
 				400, 
-				'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', 
+				'[NaN check]: Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', 
 				null, 
 				{ repositoryId }
 			)
 		}
 
 		const repository = await Repository.query()
-			.select('id')
+			// .select('id')
 			.skipUndefined()
-			.where('id', req.body.count.repositoryId)
+			.where('id', repositoryId)
+			
+		console.log({ repository })
 
 		if (repository === null || repository === undefined || repository.length === 0) {
 			return respondBadRequest(
 				res, 
 				400, 
-				'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', 
-				null, 
+				'[Repository DB Query 404]: Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', 
+				null,
 				{ repository, repositoryId }
 			)
 		}
 
-		const validation = validateCount(req.body.count)
+		console.log('Repository checks done, moving on to validation')
+
+		const validation = validateFloat(req.body.count.float)
 
 		if (validation.code === 'invalid') {
 			return respondBadRequest(res, 400, 'Bad request. The count provided was invalid.', null, { validation })
 		}
 
-
+		console.log('Validation Pass.')
 
 		let counterId = req.body.count.counterId
-		// "2", null
+		// could be 2, "2", null
+
 		const counter = req.body.count.counter
-		// "Ben sisko", ""
+		// could be "Ben sisko", "", null
 
 		const counterQuery: any = await Partner.query()
 			.select('id')
@@ -155,29 +162,31 @@ export const addCount = async (req: Request, res: Response) => {
 			.where('id', counterId)
 
 		if (!counterId || isNaN(Number(counterId)) || !counterQuery || counterQuery.length === 0) {
-			res.json('joing to make a new user')
+			if (counter && /[a-zA-Z]+/gi.test(counter) && counter !== undefined && counter !== null) {
+				console.log('joing to make a new user')
 
-			const now = Date.now()
-			const preferredName: string = (/[a-zA-Z]+/gi.test(counter) && counter !== undefined) ? counter : 'Unknown Partner'
+				const now = Date.now()
+				const preferredName: string = (/[a-zA-Z]+/gi.test(counter) && counter !== undefined && counter !== null) ? counter : 'Unknown Partner'
 
-			const createCounter: Omit<PartnerServerType, 'id'> = {
-				preferredName, 
-				firstName: '', 
-				middleNames: '', 
-				lastName: '', 
-				pending: true, 
-				createdOn: now, 
-				updatedOn: now, 
-				tillNumber: '',
-			}
-			// @ts-ignore
-			const createdCounter = await Partner.query().insert(createCounter)
-			// @ts-ignore
-			console.log({ createdCounter }, createdCounter.id)
-			// @ts-ignore
-			if (createdCounter && createdCounter.id) {
-				// @ts-ignore			
-				counterId = createdCounter.id
+				const createCounter: Omit<PartnerServerType, 'id'> = {
+					preferredName, 
+					firstName: '', 
+					middleNames: '', 
+					lastName: '', 
+					pending: true, 
+					createdOn: now, 
+					updatedOn: now, 
+					tillNumber: '',
+				}
+				// @ts-ignore
+				const createdCounter = await Partner.query().insert(createCounter)
+				// @ts-ignore
+				console.log({ createdCounter }, createdCounter.id)
+				// @ts-ignore
+				if (createdCounter && createdCounter.id) {
+					// @ts-ignore
+					counterId = createdCounter.id
+				}
 			}
 		}
 
@@ -191,8 +200,8 @@ export const addCount = async (req: Request, res: Response) => {
 			.where('id', supervisorId)
 
 		if (!supervisorId || isNaN(Number(supervisorId)) || !supervisorQuery || supervisorQuery.length === 0) {
-			if (supervisor && /[a-zA-Z]+/gi.test(supervisor) && supervisor !== undefined) {
-				res.json('joing to make a new user')
+			if (supervisor && /[a-zA-Z]+/gi.test(supervisor) && supervisor !== undefined && supervisor !== null) {
+				console.log('joing to make a new user')
 
 				const now = Date.now()
 				const preferredName: string = supervisor
@@ -222,60 +231,42 @@ export const addCount = async (req: Request, res: Response) => {
 		}
 		
 		if (counterId === supervisorId) supervisorId = null
+		console.log('Partner check done')
 
-		const d = req.body.count.data
 
-		const flattenCountData = (division: any) => {
-			const keys = Object.keys(division)
-			const total = keys.reduce((acc, each) => {
-				return acc + division[each]
+
+		/// here
+		const f = req.body.count.float
+
+		const flattenCountData = (division: any[]) => {
+			return division.reduce((acc, each) => {
+				if (each) return acc + each
+				else return acc
 			}, 0)
-			return total
 		}
 
-		const bagTotal = flattenCountData(d.bagged) 
-		const looseTotal = flattenCountData(d.loose) 
-		const noteTotal = flattenCountData(d.notes)
+		const bagTotal = flattenCountData([f.bagPence1, f.bagPence2, f.bagPence5, f.bagPence10, f.bagPence20, f.bagPence50, f.bagPound1, f.bagPound2, f.bagNote5])
+		const looseTotal = flattenCountData([f.loosePence1, f.loosePence2, f.loosePence5, f.loosePence10, f.loosePence20, f.loosePence50, f.loosePound1, f.loosePound2, f.looseOther]) 
+		const noteTotal = flattenCountData([f.note1, f.note5, f.note10, f.note20, f.note50])
 
 		const createFloat = {
-			bagPence1: d.bagged.pence_one,
-			bagPence2: d.bagged.pence_two,
-			bagPence5: d.bagged.pence_five,
-			bagPence10: d.bagged.pence_ten,
-			bagPence20: d.bagged.pence_twenty,
-			bagPence50: d.bagged.pence_fifty,
-			bagPound1: d.bagged.pound_one,
-			bagPound2: d.bagged.pound_two,
-			bagNote5: d.bagged.note_five,
-			bagTotal, 
-			loosePence1: d.loose.pence_one,
-			loosePence2: d.loose.pence_two,
-			loosePence5: d.loose.pence_five,
-			loosePence10: d.loose.pence_ten,
-			loosePence20: d.loose.pence_twenty,
-			loosePence50: d.loose.pence_fifty,
-			loosePound1: d.loose.pound_one,
-			loosePound2: d.loose.pound_two,
-			looseOther: d.loose.other,
-			looseTotal, 
-			note1: d.notes.note_one,
-			note5: d.notes.note_five,
-			note10: d.notes.note_ten,
-			note20: d.notes.note_twenty,
-			note50: d.notes.note_fifty,
+			...f,
+			bagTotal,
+			looseTotal,
 			noteTotal,
 			floatTotal: bagTotal + looseTotal + noteTotal
 		}
 
-		console.log({ d, createFloat })
-			
+		console.log({ f, createFloat })
+		
 		// @ts-ignore
-		const floatId = await Float.query().insert(createFloat)
+		const createdFloat: any = await Float.query().insert(createFloat)
 
+		console.log('...float created')
 		const now = Date.now()
 
 		const createCount = {
-			floatId, 
+			floatId: createdFloat.id, 
 			repositoryId, 
 			completionStatus: validation.code, 
 			createdOn: now, 
@@ -285,12 +276,16 @@ export const addCount = async (req: Request, res: Response) => {
 			counterId,
 			supervisorId,
 			timestamp: req.body.count.timestamp,
+			comment: req.body.count.comment || null,
 		}
 
 		// @ts-ignore
-		const count = Count.query().insert(createCount)
+		const createdCount: any = await Count.query().insert(createCount)
+		console.log('...count created', createdCount)
+		const count: any = await Count.query().where('id', createdCount.id)
+		console.log('..count queried..responding')
 
-		return respondWell(res, 200, null, 'Count successfully created, see response for validation status.', { validation, count })
+		return respondWell(res, 200, null, 'Count successfully created, see response for validation status.', { validation, count: count[0] })
 
 		// -lookup the counter and return its id is valid /
 		// -lookup the supervisor and return its id is valid /
@@ -402,6 +397,10 @@ export const updateCount = async (req: Request, res: Response) => {
 
 		// float attr is used on update, optionally overwritten later
 		let float = { ...oldFloat }
+
+		let comment = oldCount.comment
+
+		if (req.body.count.comment && typeof req.body.count.comment === 'string') comment = req.body.count.comment
 
 		// Default behavour is to use old counter and supervisor (inheriting null if not set)
 		let counterId = oldCount.counterId
@@ -610,6 +609,7 @@ export const updateCount = async (req: Request, res: Response) => {
 			// authenticatorId: 0, 
 			counterId,
 			supervisorId,
+			comment,
 		}
 
 		// Update the counts table before moving on to floats

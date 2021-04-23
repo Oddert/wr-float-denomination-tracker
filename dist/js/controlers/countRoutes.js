@@ -132,32 +132,36 @@ exports.getCounts = getCounts;
 // Action : countsDataWriteSingle
 // Logic : false
 var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var repositoryId, repository, validation, counterId, counter, counterQuery, now_1, preferredName, createCounter, createdCounter, supervisorId, supervisor, supervisorQuery, now_2, preferredName, createSupervisor, createdSupervisor, d, flattenCountData, bagTotal, looseTotal, noteTotal, createFloat, floatId, now, createCount, count, error_2;
+    var repositoryId, repository, validation, counterId, counter, counterQuery, now_1, preferredName, createCounter, createdCounter, supervisorId, supervisor, supervisorQuery, now_2, preferredName, createSupervisor, createdSupervisor, f, flattenCountData, bagTotal, looseTotal, noteTotal, createFloat, createdFloat, now, createCount, createdCount, count, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                _a.trys.push([0, 10, , 11]);
+                _a.trys.push([0, 12, , 13]);
                 if (!req.body || !req.body.count)
                     return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Error: no count provided?? What were you expecting? ??', null, { requestBody: req.body })];
                 if (!req.body.count.repositoryId)
                     return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Error: Invalid repository ID provided', null, { repositoryId: req.body.count.repositoryId })];
                 repositoryId = Number(req.body.count.repositoryId);
+                console.log({ repositoryId: repositoryId });
                 if (typeof repositoryId !== 'number' || isNaN(repositoryId)) {
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repositoryId: repositoryId })];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, '[NaN check]: Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repositoryId: repositoryId })];
                 }
                 return [4 /*yield*/, Repository_1.default.query()
-                        .select('id')
+                        // .select('id')
                         .skipUndefined()
-                        .where('id', req.body.count.repositoryId)];
+                        .where('id', repositoryId)];
             case 1:
                 repository = _a.sent();
+                console.log({ repository: repository });
                 if (repository === null || repository === undefined || repository.length === 0) {
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repository: repository, repositoryId: repositoryId })];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, '[Repository DB Query 404]: Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repository: repository, repositoryId: repositoryId })];
                 }
-                validation = utils_1.validateCount(req.body.count);
+                console.log('Repository checks done, moving on to validation');
+                validation = utils_1.validateFloat(req.body.count.float);
                 if (validation.code === 'invalid') {
                     return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid.', null, { validation: validation })];
                 }
+                console.log('Validation Pass.');
                 counterId = req.body.count.counterId;
                 counter = req.body.count.counter;
                 return [4 /*yield*/, Partner_1.default.query()
@@ -167,9 +171,10 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
             case 2:
                 counterQuery = _a.sent();
                 if (!(!counterId || isNaN(Number(counterId)) || !counterQuery || counterQuery.length === 0)) return [3 /*break*/, 4];
-                res.json('joing to make a new user');
+                if (!(counter && /[a-zA-Z]+/gi.test(counter) && counter !== undefined && counter !== null)) return [3 /*break*/, 4];
+                console.log('joing to make a new user');
                 now_1 = Date.now();
-                preferredName = (/[a-zA-Z]+/gi.test(counter) && counter !== undefined) ? counter : 'Unknown Partner';
+                preferredName = (/[a-zA-Z]+/gi.test(counter) && counter !== undefined && counter !== null) ? counter : 'Unknown Partner';
                 createCounter = {
                     preferredName: preferredName,
                     firstName: '',
@@ -189,7 +194,7 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 console.log({ createdCounter: createdCounter }, createdCounter.id);
                 // @ts-ignore
                 if (createdCounter && createdCounter.id) {
-                    // @ts-ignore			
+                    // @ts-ignore
                     counterId = createdCounter.id;
                 }
                 _a.label = 4;
@@ -203,8 +208,8 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
             case 5:
                 supervisorQuery = _a.sent();
                 if (!(!supervisorId || isNaN(Number(supervisorId)) || !supervisorQuery || supervisorQuery.length === 0)) return [3 /*break*/, 8];
-                if (!(supervisor && /[a-zA-Z]+/gi.test(supervisor) && supervisor !== undefined)) return [3 /*break*/, 7];
-                res.json('joing to make a new user');
+                if (!(supervisor && /[a-zA-Z]+/gi.test(supervisor) && supervisor !== undefined && supervisor !== null)) return [3 /*break*/, 7];
+                console.log('joing to make a new user');
                 now_2 = Date.now();
                 preferredName = supervisor;
                 createSupervisor = {
@@ -236,53 +241,30 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
             case 8:
                 if (counterId === supervisorId)
                     supervisorId = null;
-                d = req.body.count.data;
+                console.log('Partner check done');
+                f = req.body.count.float;
                 flattenCountData = function (division) {
-                    var keys = Object.keys(division);
-                    var total = keys.reduce(function (acc, each) {
-                        return acc + division[each];
+                    return division.reduce(function (acc, each) {
+                        if (each)
+                            return acc + each;
+                        else
+                            return acc;
                     }, 0);
-                    return total;
                 };
-                bagTotal = flattenCountData(d.bagged);
-                looseTotal = flattenCountData(d.loose);
-                noteTotal = flattenCountData(d.notes);
-                createFloat = {
-                    bagPence1: d.bagged.pence_one,
-                    bagPence2: d.bagged.pence_two,
-                    bagPence5: d.bagged.pence_five,
-                    bagPence10: d.bagged.pence_ten,
-                    bagPence20: d.bagged.pence_twenty,
-                    bagPence50: d.bagged.pence_fifty,
-                    bagPound1: d.bagged.pound_one,
-                    bagPound2: d.bagged.pound_two,
-                    bagNote5: d.bagged.note_five,
-                    bagTotal: bagTotal,
-                    loosePence1: d.loose.pence_one,
-                    loosePence2: d.loose.pence_two,
-                    loosePence5: d.loose.pence_five,
-                    loosePence10: d.loose.pence_ten,
-                    loosePence20: d.loose.pence_twenty,
-                    loosePence50: d.loose.pence_fifty,
-                    loosePound1: d.loose.pound_one,
-                    loosePound2: d.loose.pound_two,
-                    looseOther: d.loose.other,
+                bagTotal = flattenCountData([f.bagPence1, f.bagPence2, f.bagPence5, f.bagPence10, f.bagPence20, f.bagPence50, f.bagPound1, f.bagPound2, f.bagNote5]);
+                looseTotal = flattenCountData([f.loosePence1, f.loosePence2, f.loosePence5, f.loosePence10, f.loosePence20, f.loosePence50, f.loosePound1, f.loosePound2, f.looseOther]);
+                noteTotal = flattenCountData([f.note1, f.note5, f.note10, f.note20, f.note50]);
+                createFloat = __assign(__assign({}, f), { bagTotal: bagTotal,
                     looseTotal: looseTotal,
-                    note1: d.notes.note_one,
-                    note5: d.notes.note_five,
-                    note10: d.notes.note_ten,
-                    note20: d.notes.note_twenty,
-                    note50: d.notes.note_fifty,
-                    noteTotal: noteTotal,
-                    floatTotal: bagTotal + looseTotal + noteTotal
-                };
-                console.log({ d: d, createFloat: createFloat });
+                    noteTotal: noteTotal, floatTotal: bagTotal + looseTotal + noteTotal });
+                console.log({ f: f, createFloat: createFloat });
                 return [4 /*yield*/, Float_1.default.query().insert(createFloat)];
             case 9:
-                floatId = _a.sent();
+                createdFloat = _a.sent();
+                console.log('...float created');
                 now = Date.now();
                 createCount = {
-                    floatId: floatId,
+                    floatId: createdFloat.id,
                     repositoryId: repositoryId,
                     completionStatus: validation.code,
                     createdOn: now,
@@ -292,9 +274,17 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     counterId: counterId,
                     supervisorId: supervisorId,
                     timestamp: req.body.count.timestamp,
+                    comment: req.body.count.comment || null,
                 };
-                count = Count_1.default.query().insert(createCount);
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Count successfully created, see response for validation status.', { validation: validation, count: count })
+                return [4 /*yield*/, Count_1.default.query().insert(createCount)];
+            case 10:
+                createdCount = _a.sent();
+                console.log('...count created', createdCount);
+                return [4 /*yield*/, Count_1.default.query().where('id', createdCount.id)];
+            case 11:
+                count = _a.sent();
+                console.log('..count queried..responding');
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Count successfully created, see response for validation status.', { validation: validation, count: count[0] })
                     // -lookup the counter and return its id is valid /
                     // -lookup the supervisor and return its id is valid /
                     // -check supervisor and counter are diffirent /
@@ -302,11 +292,11 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     // -create a float, return id
                     // insert count
                 ];
-            case 10:
+            case 12:
                 error_2 = _a.sent();
                 // console.error(error)
                 return [2 /*return*/, utils_1.respondErr(res, 500, 'Something went wrong, please try again.', null, { error: error_2 })];
-            case 11: return [2 /*return*/];
+            case 13: return [2 /*return*/];
         }
     });
 }); };
@@ -368,7 +358,7 @@ exports.getCount = getCount;
 // Action : countsDataUpdateSingle
 // Logic : false
 var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var repositoryId, repository, oldCount, oldFloat, float, counterId, supervisorId, counter, counterQuery, now_3, preferredName, createCounter, createdCounter, supervisor, supervisorQuery, now_4, preferredName, createSupervisor, createdSupervisor, f, createFloat, flattenCountData, bagTotal, looseTotal, noteTotal, now, updatedFloat, updateCount_1, updatedCount, validation, count, error_3;
+    var repositoryId, repository, oldCount, oldFloat, float, comment, counterId, supervisorId, counter, counterQuery, now_3, preferredName, createCounter, createdCounter, supervisor, supervisorQuery, now_4, preferredName, createSupervisor, createdSupervisor, f, createFloat, flattenCountData, bagTotal, looseTotal, noteTotal, now, updatedFloat, updateCount_1, updatedCount, validation, count, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -404,6 +394,9 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 5:
                 oldFloat = _a.sent();
                 float = __assign({}, oldFloat);
+                comment = oldCount.comment;
+                if (req.body.count.comment && typeof req.body.count.comment === 'string')
+                    comment = req.body.count.comment;
                 counterId = oldCount.counterId;
                 supervisorId = oldCount.supervisorId;
                 if (!(req.body.counterId || req.body.counter)) return [3 /*break*/, 8];
@@ -618,6 +611,7 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                     // authenticatorId: 0, 
                     counterId: counterId,
                     supervisorId: supervisorId,
+                    comment: comment,
                 };
                 return [4 /*yield*/, Count_1.default.query()
                         .patchAndFetchById(oldCount.id, updateCount_1)

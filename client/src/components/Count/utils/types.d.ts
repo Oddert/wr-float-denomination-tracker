@@ -41,17 +41,17 @@ export interface DataType {
 }
 
 export interface StateType {
-	id: number
+	id: number | null
 	repository: string
-	repositoryId: number
-	timestamp: number | Date
+	repositoryId: number | null
+	timestamp: number
 	data: DataType
 	counter: string
 	supervisor: string
 	ready: boolean
 	verified: boolean
-	counterId: string
-	supervisorId: string
+	counterId: string | number
+	supervisorId: string | number
 }
 
 export interface ActionType {

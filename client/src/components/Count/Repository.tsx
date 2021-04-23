@@ -21,7 +21,7 @@ const Repository = () => {
 		>
 			<Select
 				w='50%'
-				value={state.repositoryId}
+				value={state.repositoryId || undefined}
 				onChange={(e: any) => dispatch({ type: CountActions.UPDATE_REPO, payload: e.target.value})}
 			>
 				{

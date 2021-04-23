@@ -31,9 +31,9 @@ export const sanitiseNumberInputVal = (
 // }
 
 export const formatReadableName = (user: any): string => {
+	if (user === undefined || user === null || !user) return ''
 	let out = ''
 	let useFullName = user.shortUid === null
-	if (user === undefined) return ''
 	console.log(user)
 	if (useFullName) {
 		out += `${user.firstName} ${user.lastName}`

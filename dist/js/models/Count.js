@@ -37,6 +37,7 @@ var Count = /** @class */ (function (_super) {
                 properties: {
                     id: { type: 'integer' },
                     floatId: { type: 'integer' },
+                    comment: { type: ['string', 'null'] },
                     repositoryId: { type: ['integer', 'null'] },
                     deletedById: { type: ['integer', 'null'] },
                     counterId: { type: ['integer', 'null'] },

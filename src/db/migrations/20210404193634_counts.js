@@ -49,6 +49,7 @@ exports.up = function(knex) {
 		t.date('deletedOn')
 		t.date('updatedOn')
 		t.date('timestamp')
+		t.string('comment')
 	})
 };
 

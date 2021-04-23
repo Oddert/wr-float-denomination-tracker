@@ -4,9 +4,9 @@ import {
 } from './types'
 
 const initialState: StateType = {
-	id: 1,
+	id: null,
 	repository: repositories[0],
-	repositoryId: 0,
+	repositoryId: null,
 	counter: '',
 	counterId: '',
 	supervisor: '',

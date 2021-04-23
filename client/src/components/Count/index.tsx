@@ -1,4 +1,5 @@
-import React, { Dispatch, useReducer, useEffect } from 'react'
+import React, { Dispatch, useReducer, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import {
 	Flex,
 	FormLabel,
@@ -30,7 +31,6 @@ import {
 import countReducer from './utils/reducer'
 import initialState from './utils/initialState'
 import SaveInterface from './SaveInterface/'
-// import { useSelector } from 'react-redux'
 
 interface Props {
 	edit?: boolean
@@ -39,14 +39,48 @@ interface Props {
 const Count: React.FC<Props> = ({ edit }) => {
 
 	const params: any = useParams()
-	// const users = useSelector((s: any) => s.auth.userList)
+	const repos = useSelector((s: any) => s.repositories.repositoryList)
 	const [state, dispatch]: [StateType, Dispatch<ActionType>] = useReducer(countReducer, initialState)
+	const [createdOn, setCreatedOn] = useState(null)
 
 	useEffect(() => {
 
 		const ready = () => dispatch({ type: CountActions.SET_READY, payload: {} })
 
-		if (!edit) return ready()
+		// 22 - 6
+
+		if (!edit) {
+			if (repos.length) {
+				dispatch({
+					type: CountActions.WRITE_ALL, 
+					payload: {
+						...initialState,
+						repositoryId: repos[0].id
+					}
+				})
+				return ready()
+			} else {
+				const EXT = `/api/v1/repository?limit=1`
+				const OPTS = {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}
+				fetch(EXT, OPTS)
+					.then(res => res.json())
+					.then(res => {
+						dispatch({
+							type: CountActions.WRITE_ALL, 
+							payload: {
+								...initialState,
+								repositoryId: res.repositories[0].id
+							}
+						})
+					})
+				return ready()
+			}
+		}
 
 		const ext = `/api/v1/count/${params.id}`
 		const opts = {
@@ -65,7 +99,7 @@ const Count: React.FC<Props> = ({ edit }) => {
 				// } else {
 					if (res.status > 100 && res.status < 300) {
 						const count = res.count[0]
-						console.log(count.id)
+						// console.log(count.id)
 						const stateFromRequest: StateType = {
 							id: count.id,
 							repository: `${count.repositoryId}`,
@@ -113,6 +147,7 @@ const Count: React.FC<Props> = ({ edit }) => {
 								total: count.float.floatTotal
 							}
 						}
+						setCreatedOn(count.createdOn)
 						// TODO: replace with server side join
 						dispatch({ type: CountActions.WRITE_ALL, payload: stateFromRequest })
 					} else {
@@ -121,6 +156,8 @@ const Count: React.FC<Props> = ({ edit }) => {
 				// }
 			})
 			.catch(err => console.error(err))
+			
+		// eslint-disable-next-line
 	}, [edit, params.id, dispatch])
 
 	if (edit && !state.ready) {
@@ -143,6 +180,13 @@ const Count: React.FC<Props> = ({ edit }) => {
 		<CountContext.Provider value={{
 			state, dispatch
 		}}>
+			{
+				typeof createdOn === 'number'
+					? <Text>
+							Count originally created {new Date(createdOn || '').toLocaleString('en-GB')}
+						</Text>
+					: ''
+			}
 			<Text
 				wordBreak='break-all'
 			>
