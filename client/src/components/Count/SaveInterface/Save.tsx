@@ -1,14 +1,13 @@
 import React, { useContext } from 'react'
+import { useDispatch } from 'react-redux'
 
 import { 
 	Button,
 } from '@chakra-ui/react'
+
 import CountContext from '../utils/CountContext'
 
-import { useDispatch } from 'react-redux'
 import { saveExisting, saveNew } from './utils'
-import { uiFlashWriteOne } from '../../../actions'
-import { FlashCatts } from '../../../global'
 import { useHistory } from 'react-router'
 
 interface Props {

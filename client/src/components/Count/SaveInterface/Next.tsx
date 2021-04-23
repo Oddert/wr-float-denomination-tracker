@@ -10,9 +10,7 @@ import {
 } from '@chakra-ui/icons'
 
 import CountContext from '../utils/CountContext'
-import { FlashCatts } from '../../../global'
 import { saveExisting, saveNew } from './utils'
-import { uiFlashWriteOne } from '../../../actions/'
 
 interface Props {
 	edit?: boolean

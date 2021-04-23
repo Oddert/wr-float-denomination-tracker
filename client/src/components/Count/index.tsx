@@ -15,6 +15,7 @@ import LooseCoin from './LooseCoin/'
 import Notes from './Notes/'
 import Repository from './Repository'
 import Time from './Time'
+import Options from './Options/'
 
 import CountContext from './utils/CountContext'
 import { 
@@ -190,11 +191,13 @@ const Count: React.FC<Props> = ({ edit }) => {
 			<Text
 				wordBreak='break-all'
 			>
-				{ JSON.stringify(state) }
+				{/* { JSON.stringify(state) } */}
 			</Text>
 			<Flex
 				flexDirection='column'
 			>
+				
+				<Options />
 				<Repository />
 				<Flex
 					flexDirection='column'
