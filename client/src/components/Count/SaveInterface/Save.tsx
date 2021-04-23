@@ -24,25 +24,21 @@ const Save: React.FC<Props> = ({
 
 	const handleClick = () => {
 		if (edit) {
+
 			console.log('Send ajax to PUT, show flash')
 			// optional perform validation and show popup
-			console.log(state)
+			// console.log(state)
 			// return
 			saveExisting(state, dispatch)
+
 		} else {
 			console.log('Send ajax POST, show flash')
 			saveNew(state, dispatch, (res: any) => {
-				console.log(res)
-				const catt: FlashCatts = res.validation.code
-				if (res.status === 200) {
-					dispatch(uiFlashWriteOne('New count created successfully', `Count status: ${catt}`, 'complete', 8000))
-					const editUrl = `/count/${res.count.id}`
-					console.log('redirecting to: ', editUrl)
-					history.push(editUrl)
-				} else {
-					dispatch(uiFlashWriteOne('There was an issue posting the new count', res.errorMessage || res.responseMessage || '', catt, 8000))
-				}
+				const editUrl = `/count/${res.count.id}`
+				console.log('redirecting to: ', editUrl)
+				return history.push(editUrl)
 			})
+
 		}
 	}
 

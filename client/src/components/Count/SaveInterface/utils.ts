@@ -44,7 +44,7 @@ interface ServerFloatType {
 }
 
 
-export function saveExisting (state: StateType, dispatch: any) {
+export function saveExisting (state: StateType, dispatch: any, callback?: (arg0: any) => any) {
 	const count: ServerCountType = {
 		repositoryId: state.repositoryId,
 		timestamp: state.timestamp,
@@ -111,7 +111,9 @@ export function saveExisting (state: StateType, dispatch: any) {
 			} else {
 				dispatch(uiFlashWriteOne('There was an issue updating the count', res.errorMessage || res.responseMessage || '', catt, 8000))
 			}
+			return res
 		})
+		.then(callback)
 		.catch(error => {
 			dispatch(uiFlashWriteOne('Something went wrong.', error, 'danger', 8000))
 			console.error(error)
@@ -178,6 +180,16 @@ export function saveNew (state: StateType, dispatch: any, callback: (res: any) =
 	}
 	fetch(EXT, OPTS)
 		.then(res => res.json())
+		.then((res: any) => {
+			// console.log(res)
+			const catt: FlashCatts = res.validation.code
+			if (res.status === 200) {
+				dispatch(uiFlashWriteOne('New count created successfully', `Count status: ${catt}`, 'complete', 8000))
+			} else {
+				dispatch(uiFlashWriteOne('There was an issue posting the new count', res.errorMessage || res.responseMessage || '', catt, 8000))
+			}
+			return res
+		})
 		.then(callback)
 		.catch(error => {
 			console.error({ error })
