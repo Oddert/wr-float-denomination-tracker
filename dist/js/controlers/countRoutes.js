@@ -368,7 +368,7 @@ exports.getCount = getCount;
 // Action : countsDataUpdateSingle
 // Logic : false
 var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var repositoryId, repository, oldCount, oldFloat, float, counterId, supervisorId, counter, counterQuery, now_3, preferredName, createCounter, createdCounter, supervisor, supervisorQuery, now_4, preferredName, createSupervisor, createdSupervisor, data, d, createFloat, bagged_1, loose_1, notes_1, flattenCountData, bagTotal, looseTotal, noteTotal, now, floatId, updatedCount, dataUpdateCount, validation, count, error_3;
+    var repositoryId, repository, oldCount, oldFloat, float, counterId, supervisorId, counter, counterQuery, now_3, preferredName, createCounter, createdCounter, supervisor, supervisorQuery, now_4, preferredName, createSupervisor, createdSupervisor, f, createFloat, flattenCountData, bagTotal, looseTotal, noteTotal, now, updatedFloat, updateCount_1, updatedCount, validation, count, error_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -377,7 +377,9 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 1:
                 _a.trys.push([1, 16, , 17]);
                 if (!req.body || !req.body.count)
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Error: no count provided?? What were you expecting? ??', null, { requestBody: req.body })];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Error: no count provided?? What were you expecting? ??', null, { requestBody: req.body })
+                        // Validate the validity of the repository ID if provided (all attrs are optional, saving as 'incomplete')
+                    ];
                 if (!req.body.count.repositoryId) return [3 /*break*/, 3];
                 repositoryId = Number(req.body.count.repositoryId);
                 if (typeof repositoryId !== 'number' || isNaN(repositoryId)) {
@@ -396,7 +398,9 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 3: return [4 /*yield*/, Count_1.default.query().findById(req.params.id)];
             case 4:
                 oldCount = _a.sent();
-                return [4 /*yield*/, Float_1.default.query().findById(oldCount.floatId)];
+                return [4 /*yield*/, Float_1.default.query().findById(oldCount.floatId)
+                    // float attr is used on update, optionally overwritten later
+                ];
             case 5:
                 oldFloat = _a.sent();
                 float = __assign({}, oldFloat);
@@ -408,7 +412,9 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 return [4 /*yield*/, Partner_1.default.query()
                         .select('id')
                         .skipUndefined()
-                        .where('id', counterId)];
+                        .where('id', counterId)
+                    // No counterId or counterId is not found in partners table
+                ];
             case 6:
                 counterQuery = _a.sent();
                 if (!(!counterId || isNaN(Number(counterId)) || !counterQuery || counterQuery.length === 0)) return [3 /*break*/, 8];
@@ -445,7 +451,9 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 return [4 /*yield*/, Partner_1.default.query()
                         .select('id')
                         .skipUndefined()
-                        .where('id', supervisorId)];
+                        .where('id', supervisorId)
+                    // No supervisorId or supervisorId is not found in partners table
+                ];
             case 9:
                 supervisorQuery = _a.sent();
                 if (!(!supervisorId || isNaN(Number(supervisorId)) || !supervisorQuery || supervisorQuery.length === 0)) return [3 /*break*/, 12];
@@ -480,84 +488,110 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 supervisorId = null;
                 _a.label = 12;
             case 12:
+                // Nullify the supervisor signature if the user has signed their own name twice
                 if (counterId === supervisorId)
                     supervisorId = null;
-                if (req.body.count.data) {
-                    console.log("data attr found, will update dloat: " + float.id);
-                    data = __assign({}, oldFloat);
-                    d = req.body.count.data;
+                // Client has provided 'float', process and update. Skip if not provided (client wants metadata update only, for instance)
+                if (req.body.count.float) {
+                    console.log("float attr found, will update float: " + float.id);
+                    f = req.body.count.float;
                     createFloat = {};
-                    if (d.bagged) {
-                        console.log('d.bagged found');
-                        bagged_1 = {
-                            bagPence1: d.bagged.pence_one || null,
-                            bagPence2: d.bagged.pence_two || null,
-                            bagPence5: d.bagged.pence_five || null,
-                            bagPence10: d.bagged.pence_ten || null,
-                            bagPence20: d.bagged.pence_twenty || null,
-                            bagPence50: d.bagged.pence_fifty || null,
-                            bagPound1: d.bagged.pound_one || null,
-                            bagPound2: d.bagged.pound_two || null,
-                            bagNote5: d.bagged.note_five || null,
-                        };
-                        Object.keys(bagged_1).forEach(function (e) {
-                            // @ts-ignore
-                            if (!bagged_1[e])
-                                delete bagged_1[e];
-                        });
-                        createFloat = __assign(__assign({}, createFloat), bagged_1);
-                    }
-                    if (d.loose) {
-                        console.log('d.loose found');
-                        loose_1 = {
-                            loosePence1: d.loose.pence_one || null,
-                            loosePence2: d.loose.pence_two || null,
-                            loosePence5: d.loose.pence_five || null,
-                            loosePence10: d.loose.pence_ten || null,
-                            loosePence20: d.loose.pence_twenty || null,
-                            loosePence50: d.loose.pence_fifty || null,
-                            loosePound1: d.loose.pound_one || null,
-                            loosePound2: d.loose.pound_two || null,
-                            looseOther: d.loose.other || null,
-                        };
-                        Object.keys(loose_1).forEach(function (e) {
-                            // @ts-ignore
-                            if (!loose_1[e])
-                                delete loose_1[e];
-                        });
-                        createFloat = __assign(__assign({}, createFloat), loose_1);
-                    }
-                    if (d.notes) {
-                        console.log('d.notes found');
-                        notes_1 = {
-                            note1: d.notes.note_one,
-                            note5: d.notes.note_five,
-                            note10: d.notes.note_ten,
-                            note20: d.notes.note_twenty,
-                            note50: d.notes.note_fifty,
-                        };
-                        Object.keys(notes_1).forEach(function (e) {
-                            // @ts-ignore
-                            if (!notes_1[e])
-                                delete notes_1[e];
-                        });
-                        createFloat = __assign(__assign({}, createFloat), notes_1);
-                    }
+                    if (f.hasOwnProperty('bagPence1'))
+                        createFloat.bagPence1 = f.bagPence1;
+                    if (f.hasOwnProperty('bagPence2'))
+                        createFloat.bagPence2 = f.bagPence2;
+                    if (f.hasOwnProperty('bagPence5'))
+                        createFloat.bagPence5 = f.bagPence5;
+                    if (f.hasOwnProperty('bagPence10'))
+                        createFloat.bagPence10 = f.bagPence10;
+                    if (f.hasOwnProperty('bagPence20'))
+                        createFloat.bagPence20 = f.bagPence20;
+                    if (f.hasOwnProperty('bagPence50'))
+                        createFloat.bagPence50 = f.bagPence50;
+                    if (f.hasOwnProperty('bagPound1'))
+                        createFloat.bagPound1 = f.bagPound1;
+                    if (f.hasOwnProperty('bagPound2'))
+                        createFloat.bagPound2 = f.bagPound2;
+                    if (f.hasOwnProperty('bagNote5'))
+                        createFloat.bagNote5 = f.bagNote5;
+                    if (f.hasOwnProperty('bagTotal'))
+                        createFloat.bagTotal = f.bagTotal;
+                    if (f.hasOwnProperty('loosePence1'))
+                        createFloat.loosePence1 = f.loosePence1;
+                    if (f.hasOwnProperty('loosePence2'))
+                        createFloat.loosePence2 = f.loosePence2;
+                    if (f.hasOwnProperty('loosePence5'))
+                        createFloat.loosePence5 = f.loosePence5;
+                    if (f.hasOwnProperty('loosePence10'))
+                        createFloat.loosePence10 = f.loosePence10;
+                    if (f.hasOwnProperty('loosePence20'))
+                        createFloat.loosePence20 = f.loosePence20;
+                    if (f.hasOwnProperty('loosePence50'))
+                        createFloat.loosePence50 = f.loosePence50;
+                    if (f.hasOwnProperty('loosePound1'))
+                        createFloat.loosePound1 = f.loosePound1;
+                    if (f.hasOwnProperty('loosePound2'))
+                        createFloat.loosePound2 = f.loosePound2;
+                    if (f.hasOwnProperty('looseOther'))
+                        createFloat.looseOther = f.looseOther;
+                    if (f.hasOwnProperty('looseTotal'))
+                        createFloat.looseTotal = f.looseTotal;
+                    if (f.hasOwnProperty('note1'))
+                        createFloat.note1 = f.note1;
+                    if (f.hasOwnProperty('note5'))
+                        createFloat.note5 = f.note5;
+                    if (f.hasOwnProperty('note10'))
+                        createFloat.note10 = f.note10;
+                    if (f.hasOwnProperty('note20'))
+                        createFloat.note20 = f.note20;
+                    if (f.hasOwnProperty('note50'))
+                        createFloat.note50 = f.note50;
+                    if (f.hasOwnProperty('noteTotal'))
+                        createFloat.noteTotal = f.noteTotal;
                     flattenCountData = function (division) {
                         var keys = Object.keys(division);
                         var total = keys.reduce(function (acc, each) {
-                            return acc + division[each];
+                            if (division[each])
+                                return acc + division[each];
+                            else
+                                return acc;
                         }, 0);
                         return total;
                     };
-                    bagTotal = flattenCountData(d.bagged);
-                    looseTotal = flattenCountData(d.loose);
-                    noteTotal = flattenCountData(d.notes);
-                    createFloat.bagTotal = bagTotal;
-                    createFloat.looseTotal = looseTotal;
-                    createFloat.noteTotal = noteTotal;
-                    console.log({ d: d, createFloat: createFloat });
                     float = __assign(__assign({}, float), createFloat);
+                    bagTotal = flattenCountData({
+                        bagPence1: f.bagPence1,
+                        bagPence2: f.bagPence2,
+                        bagPence5: f.bagPence5,
+                        bagPence10: f.bagPence10,
+                        bagPence20: f.bagPence20,
+                        bagPence50: f.bagPence50,
+                        bagPound1: f.bagPound1,
+                        bagPound2: f.bagPound2,
+                        bagNote5: f.bagNote5,
+                    });
+                    looseTotal = flattenCountData({
+                        loosePence1: f.loosePence1,
+                        loosePence2: f.loosePence2,
+                        loosePence5: f.loosePence5,
+                        loosePence10: f.loosePence10,
+                        loosePence20: f.loosePence20,
+                        loosePence50: f.loosePence50,
+                        loosePound1: f.loosePound1,
+                        loosePound2: f.loosePound2,
+                        looseOther: f.looseOther,
+                    });
+                    noteTotal = flattenCountData({
+                        note1: f.note1,
+                        note5: f.note5,
+                        note10: f.note10,
+                        note20: f.note20,
+                        note50: f.note50,
+                    });
+                    float.bagTotal = bagTotal;
+                    float.looseTotal = looseTotal;
+                    float.noteTotal = noteTotal;
+                    // console.log({ f, createFloat, float })
                 }
                 now = Date.now();
                 console.log({
@@ -570,13 +604,14 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                     float: float,
                     timestamp: req.body.count.timestamp || oldCount.timestamp
                 });
+                // console.log({ float })
                 // return res.json({ plarb: 'ok' })
                 delete float.id;
                 return [4 /*yield*/, Float_1.default.query()
                         .patchAndFetchById(oldFloat.id, float)];
             case 13:
-                floatId = _a.sent();
-                updatedCount = {
+                updatedFloat = _a.sent();
+                updateCount_1 = {
                     // repositoryId, 
                     updatedOn: now,
                     // verified: true, 
@@ -585,21 +620,24 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                     supervisorId: supervisorId,
                 };
                 return [4 /*yield*/, Count_1.default.query()
-                        .patchAndFetchById(oldCount.id, updatedCount)];
+                        .patchAndFetchById(oldCount.id, updateCount_1)
+                    // HERE NEEDS REWRITTEN
+                ];
             case 14:
-                dataUpdateCount = _a.sent();
-                validation = utils_1.validateCount(req.body.count);
+                updatedCount = _a.sent();
+                validation = utils_1.validateFloat(updatedFloat);
                 if (validation.code === 'invalid') {
                     return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid.', null, { validation: validation })];
                 }
                 return [4 /*yield*/, Count_1.default.query()
-                        .patchAndFetchById(dataUpdateCount.id, {
+                        .patchAndFetchById(updatedCount.id, {
                         // @ts-ignore
                         completionStatus: validation.code,
                     })];
             case 15:
                 count = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Count successfully created, see response for validation status.', { validation: validation, count: count })
+                count.float = updatedFloat;
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Count successfully updated, see response for validation status.', { validation: validation, count: count })
                     // -lookup the counter and return its id is valid /
                     // -lookup the supervisor and return its id is valid /
                     // -check supervisor and counter are diffirent /

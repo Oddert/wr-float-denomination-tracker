@@ -45,7 +45,7 @@ const Denomination: React.FC<Props> = ({
 	label = `bagged: ${label}`
 
 	useEffect(() => {
-		console.log('set value to:', inVal)
+		// console.log('set value to:', inVal)
 		setValue(inVal)
 	}, [inVal])
 

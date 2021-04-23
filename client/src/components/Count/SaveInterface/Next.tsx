@@ -26,7 +26,7 @@ const Next: React.FC<Props> = ({
 			py='12px'
 			onClick={handleClick}
 		>
-			Next Count <ChevronRightIcon />
+			Save &#38; Next <ChevronRightIcon />
 		</Button>
 	)
 }

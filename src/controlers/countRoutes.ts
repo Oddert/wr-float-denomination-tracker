@@ -15,6 +15,7 @@ import {
 	validateCount, 
 	PartnerServerType,
 	sanitiseNumberQuery,
+	validateFloat,
 } from './utils'
 
 // const completeCount = {"bagged":{"pence_one":500,"pence_two":300,"pence_five":2000,"pence_ten":1000,"pence_twenty":7000,"pence_fifty":3000,"pound_one":18000,"pound_two":10000,"note_five":1000,"total":42800},"loose":{"pence_one":164,"pence_two":200,"pence_five":1425,"pence_ten":1370,"pence_twenty":600,"pence_fifty":2450,"pound_one":6100,"pound_two":400,"other":0,"total":12709},"notes":{"note_one":0,"note_five":7500,"note_ten":24000,"note_twenty":12000,"note_fifty":5000,"total":48500},"total":0}
@@ -367,6 +368,7 @@ export const updateCount = async (req: Request, res: Response) => {
 	try {
 		if (!req.body || !req.body.count) return respondBadRequest(res, 400, 'Error: no count provided?? What were you expecting? ??', null, { requestBody: req.body })
 
+		// Validate the validity of the repository ID if provided (all attrs are optional, saving as 'incomplete')
 		if (req.body.count.repositoryId) {
 			const repositoryId = Number(req.body.count.repositoryId)
 
@@ -394,25 +396,30 @@ export const updateCount = async (req: Request, res: Response) => {
 			}
 		}
 
+		// 
 		const oldCount: any = await Count.query().findById(req.params.id)
 		const oldFloat: any = await Float.query().findById(oldCount.floatId)
 
+		// float attr is used on update, optionally overwritten later
 		let float = { ...oldFloat }
 
+		// Default behavour is to use old counter and supervisor (inheriting null if not set)
 		let counterId = oldCount.counterId
 		let supervisorId = oldCount.supervisorId
 
+		// Validate the counter or create new partner if self delcleration option is used
 		if (req.body.counterId || req.body.counter) {
 			counterId = req.body.count.counterId
-			// "2", null
+			// could be 2, "2", null
 			const counter = req.body.count.counter
-			// "Ben sisko", ""
+			// could be "Ben sisko", "", null
 	
 			const counterQuery: any = await Partner.query()
 				.select('id')
 				.skipUndefined()
 				.where('id', counterId)
 	
+			// No counterId or counterId is not found in partners table
 			if (!counterId || isNaN(Number(counterId)) || !counterQuery || counterQuery.length === 0) {
 				res.json('joing to make a new user')
 	
@@ -441,7 +448,7 @@ export const updateCount = async (req: Request, res: Response) => {
 			}
 		}
 
-
+		// Validate the supervisor or create new partner if self delcleration option is used
 		if (req.body.supervisorId || req.body.supervisor) {
 			supervisorId = req.body.count.supervisorId
 			const supervisor = req.body.count.supervisor
@@ -450,7 +457,8 @@ export const updateCount = async (req: Request, res: Response) => {
 				.select('id')
 				.skipUndefined()
 				.where('id', supervisorId)
-	
+				
+			// No supervisorId or supervisorId is not found in partners table
 			if (!supervisorId || isNaN(Number(supervisorId)) || !supervisorQuery || supervisorQuery.length === 0) {
 				if (supervisor && /[a-zA-Z]+/gi.test(supervisor) && supervisor !== undefined) {
 					res.json('joing to make a new user')
@@ -483,126 +491,96 @@ export const updateCount = async (req: Request, res: Response) => {
 			}
 		}
 		
+		// Nullify the supervisor signature if the user has signed their own name twice
 		if (counterId === supervisorId) supervisorId = null
 
 
+		// Client has provided 'float', process and update. Skip if not provided (client wants metadata update only, for instance)
+		if (req.body.count.float) {
+			console.log(`float attr found, will update float: ${float.id}`)
 
-		if (req.body.count.data) {
-			console.log(`data attr found, will update dloat: ${float.id}`)
+			const f = req.body.count.float
 
-			let data = { ...oldFloat }
+			let createFloat: any = {}
 
-			const d = req.body.count.data
-
-			let createFloat: any = {
-				
-			}
-
-			if (d.bagged) {
-				console.log('d.bagged found')
-				const bagged: {
-					bagPence1: number | null,
-					bagPence2: number | null,
-					bagPence5: number | null,
-					bagPence10: number | null,
-					bagPence20: number | null,
-					bagPence50: number | null,
-					bagPound1: number | null,
-					bagPound2: number | null,
-					bagNote5: number | null,
-				} = {
-					bagPence1: d.bagged.pence_one || null,
-					bagPence2: d.bagged.pence_two || null,
-					bagPence5: d.bagged.pence_five || null,
-					bagPence10: d.bagged.pence_ten || null,
-					bagPence20: d.bagged.pence_twenty || null,
-					bagPence50: d.bagged.pence_fifty || null,
-					bagPound1: d.bagged.pound_one || null,
-					bagPound2: d.bagged.pound_two || null,
-					bagNote5: d.bagged.note_five || null,
-				}
-				Object.keys(bagged).forEach((e: any) => {
-					// @ts-ignore
-					if (!bagged[e]) delete bagged[e]
-				})
-				createFloat = { ...createFloat, ...bagged }
-			}
-
-			if (d.loose) {
-				console.log('d.loose found')
-				const loose: {
-					loosePence1: number | null
-					loosePence2: number | null
-					loosePence5: number | null
-					loosePence10: number | null
-					loosePence20: number | null
-					loosePence50: number | null
-					loosePound1: number | null
-					loosePound2: number | null
-					looseOther: number | null
-				} = {
-					loosePence1: d.loose.pence_one || null,
-					loosePence2: d.loose.pence_two || null,
-					loosePence5: d.loose.pence_five || null,
-					loosePence10: d.loose.pence_ten || null,
-					loosePence20: d.loose.pence_twenty || null,
-					loosePence50: d.loose.pence_fifty || null,
-					loosePound1: d.loose.pound_one || null,
-					loosePound2: d.loose.pound_two || null,
-					looseOther: d.loose.other || null,
-				}
-				Object.keys(loose).forEach((e: any) => {
-					// @ts-ignore
-					if (!loose[e]) delete loose[e]
-				})
-				createFloat = { ...createFloat, ...loose }
-			}
-
-			if (d.notes) {
-				console.log('d.notes found')
-				const notes: {
-					note1: number | null,
-					note5: number | null,
-					note10: number | null,
-					note20: number | null,
-					note50: number | null,
-				} = {
-					note1: d.notes.note_one,
-					note5: d.notes.note_five,
-					note10: d.notes.note_ten,
-					note20: d.notes.note_twenty,
-					note50: d.notes.note_fifty,
-				}
-				Object.keys(notes).forEach((e: any) => {
-					// @ts-ignore
-					if (!notes[e]) delete notes[e]
-				})
-				createFloat = {  ...createFloat, ...notes }
-			}
+			if (f.hasOwnProperty('bagPence1')) createFloat.bagPence1 = f.bagPence1
+			if (f.hasOwnProperty('bagPence2')) createFloat.bagPence2 = f.bagPence2
+			if (f.hasOwnProperty('bagPence5')) createFloat.bagPence5 = f.bagPence5
+			if (f.hasOwnProperty('bagPence10')) createFloat.bagPence10 = f.bagPence10
+			if (f.hasOwnProperty('bagPence20')) createFloat.bagPence20 = f.bagPence20
+			if (f.hasOwnProperty('bagPence50')) createFloat.bagPence50 = f.bagPence50
+			if (f.hasOwnProperty('bagPound1')) createFloat.bagPound1 = f.bagPound1
+			if (f.hasOwnProperty('bagPound2')) createFloat.bagPound2 = f.bagPound2
+			if (f.hasOwnProperty('bagNote5')) createFloat.bagNote5 = f.bagNote5
+			if (f.hasOwnProperty('bagTotal')) createFloat.bagTotal = f.bagTotal
+			
+			if (f.hasOwnProperty('loosePence1')) createFloat.loosePence1 = f.loosePence1
+			if (f.hasOwnProperty('loosePence2')) createFloat.loosePence2 = f.loosePence2
+			if (f.hasOwnProperty('loosePence5')) createFloat.loosePence5 = f.loosePence5
+			if (f.hasOwnProperty('loosePence10')) createFloat.loosePence10 = f.loosePence10
+			if (f.hasOwnProperty('loosePence20')) createFloat.loosePence20 = f.loosePence20
+			if (f.hasOwnProperty('loosePence50')) createFloat.loosePence50 = f.loosePence50
+			if (f.hasOwnProperty('loosePound1')) createFloat.loosePound1 = f.loosePound1
+			if (f.hasOwnProperty('loosePound2')) createFloat.loosePound2 = f.loosePound2
+			if (f.hasOwnProperty('looseOther')) createFloat.looseOther = f.looseOther
+			if (f.hasOwnProperty('looseTotal')) createFloat.looseTotal = f.looseTotal
+			
+			if (f.hasOwnProperty('note1')) createFloat.note1 = f.note1
+			if (f.hasOwnProperty('note5')) createFloat.note5 = f.note5
+			if (f.hasOwnProperty('note10')) createFloat.note10 = f.note10
+			if (f.hasOwnProperty('note20')) createFloat.note20 = f.note20
+			if (f.hasOwnProperty('note50')) createFloat.note50 = f.note50
+			if (f.hasOwnProperty('noteTotal')) createFloat.noteTotal = f.noteTotal
 	
 			const flattenCountData = (division: any) => {
 				const keys = Object.keys(division)
 				const total = keys.reduce((acc, each) => {
-					return acc + division[each]
+					if (division[each]) return acc + division[each]
+					else return acc
 				}, 0)
 				return total
 			}
 	
-			
-			
-			const bagTotal = flattenCountData(d.bagged) 
-			const looseTotal = flattenCountData(d.loose) 
-			const noteTotal = flattenCountData(d.notes)
-
-			createFloat.bagTotal = bagTotal
-			createFloat.looseTotal = looseTotal
-			createFloat.noteTotal = noteTotal
-
-			console.log({ d, createFloat })
 			float = {
 				...float,
 				...createFloat
 			}
+
+			const bagTotal = flattenCountData({
+				bagPence1: f.bagPence1,
+				bagPence2: f.bagPence2,
+				bagPence5: f.bagPence5,
+				bagPence10: f.bagPence10,
+				bagPence20: f.bagPence20,
+				bagPence50: f.bagPence50,
+				bagPound1: f.bagPound1,
+				bagPound2: f.bagPound2,
+				bagNote5: f.bagNote5,
+			}) 
+			const looseTotal = flattenCountData({
+				loosePence1: f.loosePence1,
+				loosePence2: f.loosePence2,
+				loosePence5: f.loosePence5,
+				loosePence10: f.loosePence10,
+				loosePence20: f.loosePence20,
+				loosePence50: f.loosePence50,
+				loosePound1: f.loosePound1,
+				loosePound2: f.loosePound2,
+				looseOther: f.looseOther,
+			}) 
+			const noteTotal = flattenCountData({
+				note1: f.note1,
+				note5: f.note5,
+				note10: f.note10,
+				note20: f.note20,
+				note50: f.note50,
+			})
+
+			float.bagTotal = bagTotal
+			float.looseTotal = looseTotal
+			float.noteTotal = noteTotal
+
+			// console.log({ f, createFloat, float })
 		}
 
 		const now: number = Date.now()
@@ -617,14 +595,15 @@ export const updateCount = async (req: Request, res: Response) => {
 			float,
 			timestamp: req.body.count.timestamp || oldCount.timestamp
 		})
+		// console.log({ float })
 		// return res.json({ plarb: 'ok' })
 		
 		delete float.id
 		// @ts-ignore
-		const floatId = await Float.query()
+		const updatedFloat = await Float.query()
 			.patchAndFetchById(oldFloat.id, float)
 
-		const updatedCount: any = {
+		const updateCount: any = {
 			// repositoryId, 
 			updatedOn: now, 
 			// verified: true, 
@@ -633,24 +612,26 @@ export const updateCount = async (req: Request, res: Response) => {
 			supervisorId,
 		}
 
+		// Update the counts table before moving on to floats
 		// @ts-ignore
-		const dataUpdateCount: any = await Count.query()
-			.patchAndFetchById(oldCount.id, updatedCount)
+		const updatedCount: any = await Count.query()
+			.patchAndFetchById(oldCount.id, updateCount)
 
-
-		const validation = validateCount(req.body.count)
+		// HERE NEEDS REWRITTEN
+		const validation = validateFloat(updatedFloat)
 
 		if (validation.code === 'invalid') {
 			return respondBadRequest(res, 400, 'Bad request. The count provided was invalid.', null, { validation })
 		}
 
 		const count: any = await Count.query()
-			.patchAndFetchById(dataUpdateCount.id, {
+			.patchAndFetchById(updatedCount.id, {
 				// @ts-ignore
 				completionStatus: validation.code,
 			})
 
-		return respondWell(res, 200, null, 'Count successfully created, see response for validation status.', { validation, count })
+		count.float = updatedFloat
+		return respondWell(res, 200, null, 'Count successfully updated, see response for validation status.', { validation, count })
 
 		// -lookup the counter and return its id is valid /
 		// -lookup the supervisor and return its id is valid /

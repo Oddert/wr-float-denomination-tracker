@@ -91,3 +91,5 @@ export interface Repository {
 	deleted?: boolean | number
 	deletedOn?: number
 }
+
+export type FlashCatts = 'unverified' | 'info' | 'complete' | 'partial' | 'danger' | 'incomplete'

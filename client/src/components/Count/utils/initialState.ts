@@ -4,6 +4,7 @@ import {
 } from './types'
 
 const initialState: StateType = {
+	id: 1,
 	repository: repositories[0],
 	repositoryId: 0,
 	counter: '',

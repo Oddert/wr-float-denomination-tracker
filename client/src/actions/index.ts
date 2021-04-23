@@ -3,6 +3,8 @@ import {
 	ThunkDispatch,
 } from 'redux-thunk'
 
+import { FlashCatts } from '../global'
+
 // ThunkAction<R> = (dispatch, getState, extraArgument) => R
 
 // ThunkDispatch<S, E, A extends Action<any>>
@@ -65,10 +67,7 @@ export const countsDataUpdateSingle = (count: any) => async (dispatch: ThunkDisp
 
 // deleteCount
 
-
-
-
-export const uiFlashWriteOne = (title: string, description: string, catt?: string, duration?: string | number) => ({
+export const uiFlashWriteOne = (title: string, description: string, catt?: FlashCatts, duration?: string | number) => ({
 	type: ActionTypes.UI_FLASH_WRITE_ONE,
 	payload: {
 		title,

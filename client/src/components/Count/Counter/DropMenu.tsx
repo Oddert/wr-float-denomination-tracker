@@ -60,7 +60,7 @@ const DropMenu: React.FC<Props> = ({
 										borderRadius='0px'
 										width='100%'
 										justifyContent='flex-start'
-										bgColor='#fff'
+										bgColor={idx === 0 ? '#cde6fe' : '#fff'}
 										border='none'
 										onClick={() => handleDropDownSelect(each)}
 										display='flex'

@@ -41,6 +41,7 @@ export interface DataType {
 }
 
 export interface StateType {
+	id: number
 	repository: string
 	repositoryId: number
 	timestamp: number | Date

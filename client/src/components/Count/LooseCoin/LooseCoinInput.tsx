@@ -29,18 +29,18 @@ const Denomination: React.FC<Props> = ({
 	label = `loose ${label}`
 	
 	useEffect(() => {
-		console.log(inVal)
-		if (typeof inVal === 'number') setValue(inVal / 100)
+		// console.log(inVal)
+		if (typeof inVal === 'number') setValue((inVal / 100).toFixed(2))
 		else setValue(undefined)
 	}, [inVal])
 
 	function handleChange (v: any): void {
-		console.log(v)
+		console.log(typeof v, v)
 		const valueAsNumber = Math.floor(Number(v) * 100)
 		console.log(valueAsNumber)
 		const val = (v === '' || v === null || v === undefined) ? null : valueAsNumber
 
-		console.log('setting internal val', v)
+		// console.log('setting internal val', v)
 		setValue(v)
 
 		const minimumValueTest = valueAsNumber % 1
@@ -74,15 +74,27 @@ const Denomination: React.FC<Props> = ({
 		})
 	}
 
-	const handleFocusLeave = (value: any) => {
-		// const val: number = Number(value)
-		// if (isNaN(val)) return
-		// else if (!error) setValue(val.toFixed(2))
+	const handleFocusLeave = (e: any) => {
+		const val: number = Number(e.target.value)
+		if (isNaN(val)) {
+			return
+		} else if (!error) {
+			const fixedVal = val.toFixed(2)
+			setValue(fixedVal)
+			// console.log(typeof fixedVal, fixedVal)
+			// const payload = {
+			// 	[denomination]: fixedVal
+			// }
+			// dispatch({
+			// 	type: CountActions.UPDATE_LOOSE,
+			// 	payload,
+			// })
+		}
 	}
 	
 	const sideColumns = '3fr'
 	const inputColumn = '4fr'
-	if (label === "loose 50p") console.log(label, value)
+	// if (label === "loose 50p") console.log(label, value)
 
 	return (
 		<GridItem
@@ -103,11 +115,11 @@ const Denomination: React.FC<Props> = ({
 				</FormLabel>
 				<NumberInput
 					value={value === null ? undefined : value}
+					onBlur={handleFocusLeave}
 				>
 					<NumberInputField 
 						onChange={(e: any) => handleChange(e.target.value)}
 						value={value === null ? undefined : value}
-						onBlur={handleFocusLeave}
 						bgColor='#f8f8f8'
 						borderColor='rgba(0,0,0,0)'
 						borderRadius='none'

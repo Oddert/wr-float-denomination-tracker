@@ -30,7 +30,7 @@ import {
 import countReducer from './utils/reducer'
 import initialState from './utils/initialState'
 import SaveInterface from './SaveInterface/'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 
 interface Props {
 	edit?: boolean
@@ -39,7 +39,7 @@ interface Props {
 const Count: React.FC<Props> = ({ edit }) => {
 
 	const params: any = useParams()
-	const users = useSelector((s: any) => s.auth.userList)
+	// const users = useSelector((s: any) => s.auth.userList)
 	const [state, dispatch]: [StateType, Dispatch<ActionType>] = useReducer(countReducer, initialState)
 
 	useEffect(() => {
@@ -65,7 +65,9 @@ const Count: React.FC<Props> = ({ edit }) => {
 				// } else {
 					if (res.status > 100 && res.status < 300) {
 						const count = res.count[0]
+						console.log(count.id)
 						const stateFromRequest: StateType = {
+							id: count.id,
 							repository: `${count.repositoryId}`,
 							repositoryId: count.repositoryId,
 							timestamp: count.timestamp,
@@ -85,8 +87,8 @@ const Count: React.FC<Props> = ({ edit }) => {
 									pence_fifty: count.float.bagPence50,
 									pound_one: count.float.bagPound1,
 									pound_two: count.float.bagPound2,
-									note_five: count.bagNoteFive,
-									total: count.bagTotal,
+									note_five: count.float.bagNote5,
+									total: count.float.bagTotal,
 								},
 								loose: {
 									pence_one: count.float.loosePence1,
@@ -97,8 +99,8 @@ const Count: React.FC<Props> = ({ edit }) => {
 									pence_fifty: count.float.loosePence50,
 									pound_one: count.float.loosePound1,
 									pound_two: count.float.loosePound2,
-									other: count.looseOther,
-									total: count.looseTotal,
+									other: count.float.looseOther,
+									total: count.float.looseTotal,
 								},
 								notes: {
 									note_one: count.float.note1,
