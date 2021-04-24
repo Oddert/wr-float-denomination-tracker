@@ -36,7 +36,7 @@ const putOptions = (body: any) => ({
 })
 
 export const countsDataWriteAll = () => async (dispatch: ThunkDispatch<any, any, any>) => {
-	const EXT = '/api/v1/count'
+	const EXT = '/api/v1/count?deleted=false'
 	const res = await fetch(EXT, getOptions())
 	const data = await res.json()
 	dispatch({
@@ -45,6 +45,7 @@ export const countsDataWriteAll = () => async (dispatch: ThunkDispatch<any, any,
 	})
 }
 
+// TODO: change this to countsDataCreateSingle - it does more than write to redux
 export const countsDataWriteSingle = (body: any) => async (dispatch: ThunkDispatch<any, any, any>) => {
 	const EXT = '/api/v1/count/'
 	const res = await fetch(EXT, postOptions(body))
@@ -86,7 +87,7 @@ export const uiFlashRemoveOne = (id: string) => ({
 
 
 export const authUsersWriteAll = () => async (dispatch: ThunkDispatch<any, any, any>) => {
-	const EXT = '/api/v1/partner'
+	const EXT = '/api/v1/user?deleted=false'
 	const OPTS = getOptions()
 	const res = await fetch(EXT, OPTS)
 	const data = await res.json()
@@ -98,7 +99,7 @@ export const authUsersWriteAll = () => async (dispatch: ThunkDispatch<any, any, 
 }
 
 export const authPartnersWriteAll = () => async (dispatch: ThunkDispatch<any, any, any>) => {
-	const EXT = '/api/v1/partner'
+	const EXT = '/api/v1/partner?deleted=false'
 	const OPTS = getOptions()
 	const res = await fetch(EXT, OPTS)
 	const data = await res.json()
@@ -110,7 +111,7 @@ export const authPartnersWriteAll = () => async (dispatch: ThunkDispatch<any, an
 
 
 export const repositoriesWriteAll = () => async (dispatch: ThunkDispatch<any, any, any>) => {
-	const EXT = '/api/v1/repository'
+	const EXT = '/api/v1/repository?deleted=false'
 	const OPTS = getOptions()
 	const res = await fetch(EXT, OPTS)
 	const data = await res.json()

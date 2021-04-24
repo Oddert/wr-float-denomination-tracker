@@ -26,7 +26,7 @@ const Denomination: React.FC<Props> = ({
 	const [error, setError]: [null | string, any] = useState(null)
 	const [value, setValue]: [string | number | undefined, Dispatch<SetStateAction<any>>] = useState(undefined)
 
-	label = `loose ${label}`
+	// label = `loose ${label}`
 	
 	useEffect(() => {
 		// console.log(inVal)

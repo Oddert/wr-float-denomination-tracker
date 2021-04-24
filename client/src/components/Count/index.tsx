@@ -83,15 +83,15 @@ const Count: React.FC<Props> = ({ edit }) => {
 			}
 		}
 
-		const ext = `/api/v1/count/${params.id}`
-		const opts = {
+		const EXT = `/api/v1/count/${params.id}`
+		const OPTS = {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 		}
 
-		fetch(ext, opts)
+		fetch(EXT, OPTS)
 			.then(res => res.json())
 			.then(res => {
 				// const validation = validateCount(res.count)

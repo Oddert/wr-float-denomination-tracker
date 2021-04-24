@@ -18,6 +18,29 @@ import {
 	validateFloat,
 } from './utils'
 
+
+// Higher-order mixins to query builders
+
+// @ts-ignore
+function deleteFilterActive (query: any) {
+	return () => query
+	.where('deleted', null)
+	.orWhere('deleted', 0)
+	.orWhere('deleted', false)
+}
+
+// @ts-ignore
+function deleteFilterInactive (query: any) {
+	return () => query
+	.where('deleted', true)
+	.orWhere('deleted', 1)
+}
+
+// @ts-ignore
+function noFilter (query: any) {
+	return () => query
+}
+
 // const completeCount = {"bagged":{"pence_one":500,"pence_two":300,"pence_five":2000,"pence_ten":1000,"pence_twenty":7000,"pence_fifty":3000,"pound_one":18000,"pound_two":10000,"note_five":1000,"total":42800},"loose":{"pence_one":164,"pence_two":200,"pence_five":1425,"pence_ten":1370,"pence_twenty":600,"pence_fifty":2450,"pound_one":6100,"pound_two":400,"other":0,"total":12709},"notes":{"note_one":0,"note_five":7500,"note_ten":24000,"note_twenty":12000,"note_fifty":5000,"total":48500},"total":0}
 // const partialCount = {"bagged":{"pence_one":800,"pence_two":300,"pence_five":3500,"pence_ten":4500,"pence_twenty":1000,"pence_fifty":1000,"pound_one":12000,"pound_two":4000,"note_five":0,"total":27100},"loose":{"pence_one":0,"pence_two":0,"pence_five":0,"pence_ten":0,"pence_twenty":0,"pence_fifty":0,"pound_one":0,"pound_two":0,"other":0,"total":0},"notes":{"note_one":0,"note_five":0,"note_ten":0,"note_twenty":0,"note_fifty":5000,"total":5000},"total":0}
 // const incompleteCount = {"bagged":{"pence_one":0,"pence_two":300,"pence_five":3500,"pence_ten":0,"pence_twenty":0,"pence_fifty":1000,"pound_one":12000,"pound_two":4000,"note_five":0,"total":20800},"loose":{"pence_one":0,"pence_two":0,"pence_five":0,"pence_ten":0,"pence_twenty":0,"pence_fifty":0,"pound_one":0,"pound_two":0,"other":0,"total":0},"notes":{"note_one":0,"note_five":0,"note_ten":0,"note_twenty":0,"note_fifty":5000,"total":5000},"total":0}
@@ -68,32 +91,64 @@ export const getCounts = async (req: Request, res: Response) => {
 	// ?todate=???
 	// ?limit=10
 	// ?offset=20
+
+	// deleted === 'undefined' || deleted === 'false' || deleted === '0'
+	//		- where Not deleted = 1
+	
+	// deleted === 'true' || deleted === '1'
+	//		- where deleted = 1
+
+	// deleted === 'include'
+	// 		- (no extra command)
+
 	try {
+
 		let page: number = Number(req.query.page)
+		let deleted: string = String(req.query.deleted)
+
+		let applyDeleteFilter = deleteFilterActive
+
+		if (deleted === 'undefeind' || deleted === '0' || deleted === 'false') {
+			applyDeleteFilter = deleteFilterActive
+		}
+		if (deleted === 'true' || deleted === '1') {
+			applyDeleteFilter = deleteFilterInactive
+		}
+		if (deleted === 'include') {
+			applyDeleteFilter = noFilter
+		}
+
 		if (typeof page === 'number' || !isNaN(page)) {
 	
 			let pagelength: number = sanitiseNumberQuery(req.query.pagelength, 20)
 	
-			const counts: Count[] = await Count.query()
-				.offset(page * pagelength)
-				.limit(pagelength)
+			const q = applyDeleteFilter(
+				Count.query()
+					.offset(page * pagelength)
+					.limit(pagelength)
+			)
+
+			const counts = await q()
 	
 			return respondWell(res, null, null, 'List of all counts.', { counts })
 	
 		} else {
 			let fromdate: number = sanitiseNumberQuery(req.query.fromdate, 0)
 			let todate: number = sanitiseNumberQuery(req.query.todate, Date.now())
-			let limit: number = sanitiseNumberQuery(req.query.limit, 500)
+			let limit: number = sanitiseNumberQuery(req.query.limit, 100)
 			let offset: number = sanitiseNumberQuery(req.query.offset, 0)
 				
-			const counts: Count[] = await Count.query()
-				// .withGraphJoined('float')
-				.where('createdOn', '>=', fromdate)
-				.andWhere('createdOn', '<=', todate)
-				.limit(limit)
-				.offset(offset)
+			const q = applyDeleteFilter(
+				Count.query()
+					.andWhere('createdOn', '>=', fromdate)
+					.andWhere('createdOn', '<=', todate)
+					.limit(limit)
+					.offset(offset)
+			)
+
+			const counts = await q()
 		
-			return respondWell(res, null, null, 'noice', { counts })
+			return respondWell(res, null, null, 'List of all counts.', { counts })
 		}
 	} catch (error) {
 		return respondErr(res, 500, 'There was a server error, please try again.', null, { error })

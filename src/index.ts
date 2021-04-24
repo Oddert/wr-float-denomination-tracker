@@ -33,6 +33,14 @@ app.use(urlencoded({ extended: true }))
 app.use(cors())
 app.use(morgan('tiny'))
 
+app.get('/test', (req, res) => {
+	const input = req.query.t
+	res.json({
+		raw: input,
+		type: typeof input
+	})
+})
+
 app.use('/', coreRoutes)
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/count', countRoutes)

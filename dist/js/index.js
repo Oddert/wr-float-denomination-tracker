@@ -48,6 +48,13 @@ app.use(express_1.json());
 app.use(express_1.urlencoded({ extended: true }));
 app.use(cors_1.default());
 app.use(morgan_1.default('tiny'));
+app.get('/test', function (req, res) {
+    var input = req.query.t;
+    res.json({
+        raw: input,
+        type: typeof input
+    });
+});
 app.use('/', coreRoutes_1.default);
 app.use('/api/v1/auth', authRoutes_1.default);
 app.use('/api/v1/count', countRoutes_1.default);

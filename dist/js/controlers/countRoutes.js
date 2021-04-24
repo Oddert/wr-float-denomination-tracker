@@ -57,6 +57,24 @@ var Count_1 = __importDefault(require("../models/Count"));
 var Partner_1 = __importDefault(require("../models/Partner"));
 var Float_1 = __importDefault(require("../models/Float"));
 var utils_1 = require("./utils");
+// Higher-order mixins to query builders
+// @ts-ignore
+function deleteFilterActive(query) {
+    return function () { return query
+        .where('deleted', null)
+        .orWhere('deleted', 0)
+        .orWhere('deleted', false); };
+}
+// @ts-ignore
+function deleteFilterInactive(query) {
+    return function () { return query
+        .where('deleted', true)
+        .orWhere('deleted', 1); };
+}
+// @ts-ignore
+function noFilter(query) {
+    return function () { return query; };
+}
 // const completeCount = {"bagged":{"pence_one":500,"pence_two":300,"pence_five":2000,"pence_ten":1000,"pence_twenty":7000,"pence_fifty":3000,"pound_one":18000,"pound_two":10000,"note_five":1000,"total":42800},"loose":{"pence_one":164,"pence_two":200,"pence_five":1425,"pence_ten":1370,"pence_twenty":600,"pence_fifty":2450,"pound_one":6100,"pound_two":400,"other":0,"total":12709},"notes":{"note_one":0,"note_five":7500,"note_ten":24000,"note_twenty":12000,"note_fifty":5000,"total":48500},"total":0}
 // const partialCount = {"bagged":{"pence_one":800,"pence_two":300,"pence_five":3500,"pence_ten":4500,"pence_twenty":1000,"pence_fifty":1000,"pound_one":12000,"pound_two":4000,"note_five":0,"total":27100},"loose":{"pence_one":0,"pence_two":0,"pence_five":0,"pence_ten":0,"pence_twenty":0,"pence_fifty":0,"pound_one":0,"pound_two":0,"other":0,"total":0},"notes":{"note_one":0,"note_five":0,"note_ten":0,"note_twenty":0,"note_fifty":5000,"total":5000},"total":0}
 // const incompleteCount = {"bagged":{"pence_one":0,"pence_two":300,"pence_five":3500,"pence_ten":0,"pence_twenty":0,"pence_fifty":1000,"pound_one":12000,"pound_two":4000,"note_five":0,"total":20800},"loose":{"pence_one":0,"pence_two":0,"pence_five":0,"pence_ten":0,"pence_twenty":0,"pence_fifty":0,"pound_one":0,"pound_two":0,"other":0,"total":0},"notes":{"note_one":0,"note_five":0,"note_ten":0,"note_twenty":0,"note_fifty":5000,"total":5000},"total":0}
@@ -91,34 +109,46 @@ var utils_1 = require("./utils");
 // Action : countsDataWriteAll
 // Logic : /Counts
 var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var page, pagelength, counts, fromdate, todate, limit, offset, counts, error_1;
+    var page, deleted, applyDeleteFilter, pagelength, q, counts, fromdate, todate, limit, offset, q, counts, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 5, , 6]);
                 page = Number(req.query.page);
+                deleted = String(req.query.deleted);
+                applyDeleteFilter = deleteFilterActive;
+                if (deleted === 'undefeind' || deleted === '0' || deleted === 'false') {
+                    applyDeleteFilter = deleteFilterActive;
+                }
+                if (deleted === 'true' || deleted === '1') {
+                    applyDeleteFilter = deleteFilterInactive;
+                }
+                if (deleted === 'include') {
+                    applyDeleteFilter = noFilter;
+                }
                 if (!(typeof page === 'number' || !isNaN(page))) return [3 /*break*/, 2];
                 pagelength = utils_1.sanitiseNumberQuery(req.query.pagelength, 20);
-                return [4 /*yield*/, Count_1.default.query()
-                        .offset(page * pagelength)
-                        .limit(pagelength)];
+                q = applyDeleteFilter(Count_1.default.query()
+                    .offset(page * pagelength)
+                    .limit(pagelength));
+                return [4 /*yield*/, q()];
             case 1:
                 counts = _a.sent();
                 return [2 /*return*/, utils_1.respondWell(res, null, null, 'List of all counts.', { counts: counts })];
             case 2:
                 fromdate = utils_1.sanitiseNumberQuery(req.query.fromdate, 0);
                 todate = utils_1.sanitiseNumberQuery(req.query.todate, Date.now());
-                limit = utils_1.sanitiseNumberQuery(req.query.limit, 500);
+                limit = utils_1.sanitiseNumberQuery(req.query.limit, 100);
                 offset = utils_1.sanitiseNumberQuery(req.query.offset, 0);
-                return [4 /*yield*/, Count_1.default.query()
-                        // .withGraphJoined('float')
-                        .where('createdOn', '>=', fromdate)
-                        .andWhere('createdOn', '<=', todate)
-                        .limit(limit)
-                        .offset(offset)];
+                q = applyDeleteFilter(Count_1.default.query()
+                    .andWhere('createdOn', '>=', fromdate)
+                    .andWhere('createdOn', '<=', todate)
+                    .limit(limit)
+                    .offset(offset));
+                return [4 /*yield*/, q()];
             case 3:
                 counts = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, null, null, 'noice', { counts: counts })];
+                return [2 /*return*/, utils_1.respondWell(res, null, null, 'List of all counts.', { counts: counts })];
             case 4: return [3 /*break*/, 6];
             case 5:
                 error_1 = _a.sent();

@@ -42,7 +42,7 @@ const Denomination: React.FC<Props> = ({
 	const [error, setError]: [null | string, any] = useState(null)
 	const [value, setValue]: [null | undefined | string | number, Dispatch<SetStateAction<any>>] = useState(null)
 
-	label = `bagged: ${label}`
+	// label = `bagged: ${label}`
 
 	useEffect(() => {
 		// console.log('set value to:', inVal)
