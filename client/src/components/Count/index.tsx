@@ -196,8 +196,9 @@ const Count: React.FC<Props> = ({ edit }) => {
 			<Flex
 				flexDirection='column'
 			>
-				
-				<Options />
+				{
+					edit ? <Options /> : ''
+				}
 				<Repository />
 				<Flex
 					flexDirection='column'

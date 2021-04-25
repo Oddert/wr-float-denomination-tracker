@@ -688,7 +688,7 @@ var deleteCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 0:
                 _a.trys.push([0, 2, , 3]);
                 return [4 /*yield*/, Count_1.default.query()
-                        .patchAndFetchById(req.body.id, {
+                        .patchAndFetchById(req.params.id, {
                         // @ts-ignore
                         deleted: true,
                         deletedOn: Date.now(),
@@ -696,13 +696,14 @@ var deleteCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                     })];
             case 1:
                 count = _a.sent();
+                console.log(count);
                 if (!count) {
-                    return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue deleting the user.', null, { count: count })];
+                    return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue deleting the count.', null, { count: count })];
                 }
                 return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Count deleted successfully.', { count: count })];
             case 2:
                 error_4 = _a.sent();
-                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue deleting the user.', null, { error: error_4 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue deleting the count.', null, { error: error_4 })];
             case 3: return [2 /*return*/];
         }
     });

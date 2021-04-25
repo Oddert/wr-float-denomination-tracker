@@ -40,6 +40,14 @@ app.get('/test', (req, res) => {
 		type: typeof input
 	})
 })
+app.get('/test/badly', (req, res) => {
+	const input = req.query.t
+	res.status(500).json({
+		raw: input,
+		type: typeof input,
+		responseMessage: `Something went wrong: raw=${input}, type=${typeof input}`
+	})
+})
 
 app.use('/', coreRoutes)
 app.use('/api/v1/auth', authRoutes)

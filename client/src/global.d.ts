@@ -93,3 +93,17 @@ export interface Repository {
 }
 
 export type FlashCatts = 'unverified' | 'info' | 'complete' | 'partial' | 'danger' | 'incomplete'
+
+export interface Partner {
+	id: number,
+	tillNumber: string,
+	firstName: string,
+	createdOn: number,
+	preferredName?: string,
+	middleNames?: string,
+	lastName?: string,
+	pending?: boolean,
+	updatedOn?: number,
+	deleted?: boolean,
+	deletedOn?: number,
+}

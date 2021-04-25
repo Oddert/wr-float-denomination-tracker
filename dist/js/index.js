@@ -55,6 +55,14 @@ app.get('/test', function (req, res) {
         type: typeof input
     });
 });
+app.get('/test/badly', function (req, res) {
+    var input = req.query.t;
+    res.status(500).json({
+        raw: input,
+        type: typeof input,
+        responseMessage: "Something went wrong: raw=" + input + ", type=" + typeof input
+    });
+});
 app.use('/', coreRoutes_1.default);
 app.use('/api/v1/auth', authRoutes_1.default);
 app.use('/api/v1/count', countRoutes_1.default);

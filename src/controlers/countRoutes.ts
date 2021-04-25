@@ -706,18 +706,19 @@ export const updateCount = async (req: Request, res: Response) => {
 export const deleteCount = async (req: Request, res: Response) => {
 	try {
 		const count = await Count.query()
-			.patchAndFetchById(req.body.id, {
+			.patchAndFetchById(req.params.id, {
 				// @ts-ignore
 				deleted: true,
 				deletedOn: Date.now(),
 				deletedBy: 0
 			})
+		console.log(count)
 		if (!count) {
-			return respondErr(res, 500, 'There was an issue deleting the user.', null, { count })
+			return respondErr(res, 500, 'There was an issue deleting the count.', null, { count })
 		}
 		return respondWell(res, 200, null, 'Count deleted successfully.', { count })
 	} catch (error) {
-		return respondErr(res, 500, 'There was an issue deleting the user.', null, { error })
+		return respondErr(res, 500, 'There was an issue deleting the count.', null, { error })
 	}
 }
 

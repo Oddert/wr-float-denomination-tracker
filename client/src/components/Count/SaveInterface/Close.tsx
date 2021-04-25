@@ -6,9 +6,9 @@ import {
 	Button,
 } from '@chakra-ui/react'
 
-import { FlashCatts } from '../../../global'
+// import { FlashCatts } from '../../../global'
+// import { uiFlashWriteOne } from '../../../actions'
 import { saveExisting, saveNew } from './utils'
-import { uiFlashWriteOne } from '../../../actions'
 import CountContext from '../utils/CountContext'
 
 interface Props {
