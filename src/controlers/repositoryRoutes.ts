@@ -175,15 +175,16 @@ export const updateRepository = async (req: Request, res: Response) => {
 
 export const deleteRepository = async (req: Request, res: Response) => {
 	try {
-		const now = Date.now()
 		const repository = await Repository.query()
 			.patchAndFetchById(req.params.id, {
 				// @ts-ignore
 				deleted: true,
-				deletedOn: now,
+				deletedOn: Date.now(),
 				deletedById: 1,
 			})
-
+		if (!repository) {
+			return respondErr(res, 500, 'There was an issue deleting the repository.', null, { repository })
+		}
 		return respondWell(res, 200, null, 'Repository deleted successfully.', { repository })
 	} catch (error) {
 		return respondErr(res, 500, 'There was an issue processing your request.', null, { error })

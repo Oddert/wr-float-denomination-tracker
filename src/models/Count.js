@@ -12,7 +12,7 @@ class Count extends Model {
 	static get jsonSchema () {
 		return {
 			type: 'object',
-			required: ['floatId', 'repositoryId', 'verified', 'completionStatus'],
+			required: ['floatId', 'repositoryId', 'verified', 'completionStatus', 'timestamp'],
 			properties: {
 				id: { type: 'integer' },
 				floatId: { type: 'integer' },
@@ -28,6 +28,7 @@ class Count extends Model {
 				deleted: { type: 'boolean' },
 				deletedOn: { type: 'date' },
 				updatedOn: { type: 'date' },
+				timestamp: { type: 'date' },
 			}
 		}
 	}

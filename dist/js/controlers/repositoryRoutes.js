@@ -192,21 +192,23 @@ var updateRepository = function (req, res) { return __awaiter(void 0, void 0, vo
 }); };
 exports.updateRepository = updateRepository;
 var deleteRepository = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var now, repository, error_5;
+    var repository, error_5;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                now = Date.now();
                 return [4 /*yield*/, Repository_1.default.query()
                         .patchAndFetchById(req.params.id, {
                         // @ts-ignore
                         deleted: true,
-                        deletedOn: now,
+                        deletedOn: Date.now(),
                         deletedById: 1,
                     })];
             case 1:
                 repository = _a.sent();
+                if (!repository) {
+                    return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue deleting the repository.', null, { repository: repository })];
+                }
                 return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Repository deleted successfully.', { repository: repository })];
             case 2:
                 error_5 = _a.sent();

@@ -76,6 +76,8 @@ interface Validation {
 	message: string
 }
 
+type completionStatus = 'complete' | 'incomplete' | 'partial' | 'unverified'
+
 export interface Repository {
 	id: number
 	name: string
@@ -106,4 +108,22 @@ export interface Partner {
 	updatedOn?: number,
 	deleted?: boolean,
 	deletedOn?: number,
+}
+
+export interface ListCount {
+	id: number
+	floatId: number
+	timestamp: number
+	comment?: string
+	repositoryId?: number
+	deletedById?: number
+	counterId?: number
+	supervisorId?: number
+	authenticatorId?: number
+	completionStatus: completionStatus
+	createdOn: number
+	verified: boolean
+	deleted?: boolean
+	deletedOn?: number
+	updatedOn?: number
 }

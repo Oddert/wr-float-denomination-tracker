@@ -12,7 +12,7 @@ import {
 	respondWell, 
 	// CountType, 
 	respondBadRequest, 
-	validateCount, 
+	// validateCount, 
 	PartnerServerType,
 	sanitiseNumberQuery,
 	validateFloat,
@@ -712,7 +712,6 @@ export const deleteCount = async (req: Request, res: Response) => {
 				deletedOn: Date.now(),
 				deletedBy: 0
 			})
-		console.log(count)
 		if (!count) {
 			return respondErr(res, 500, 'There was an issue deleting the count.', null, { count })
 		}

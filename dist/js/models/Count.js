@@ -33,7 +33,7 @@ var Count = /** @class */ (function (_super) {
         get: function () {
             return {
                 type: 'object',
-                required: ['floatId', 'repositoryId', 'verified', 'completionStatus'],
+                required: ['floatId', 'repositoryId', 'verified', 'completionStatus', 'timestamp'],
                 properties: {
                     id: { type: 'integer' },
                     floatId: { type: 'integer' },
@@ -49,6 +49,7 @@ var Count = /** @class */ (function (_super) {
                     deleted: { type: 'boolean' },
                     deletedOn: { type: 'date' },
                     updatedOn: { type: 'date' },
+                    timestamp: { type: 'date' },
                 }
             };
         },

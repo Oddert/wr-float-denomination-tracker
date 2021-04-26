@@ -188,11 +188,14 @@ var deletePartner = function (req, res) {
     try {
         var partner = Partner_1.default
             // @ts-ignore
-            .patchAndFetchById(req.body.id, {
+            .patchAndFetchById(req.params.id, {
             deleted: true,
             deletedById: 1,
             updated: Date.now()
         });
+        if (!partner) {
+            return utils_1.respondErr(res, 500, 'There was an issue deleting the partner.', null, { partner: partner });
+        }
         return utils_1.respondWell(res, 200, null, 'Partner deleted successfully.', { partner: partner });
     }
     catch (error) {

@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/icons'
 
 import DeleteCount from './DeleteCount'
+import SaveCount from './SaveCount'
 
 const Options: React.FC = () => {
 	const fs = 16
@@ -29,8 +30,11 @@ const Options: React.FC = () => {
 					icon={<HamburgerIcon fontSize='26px' />}
 					variant='ui'
 				/>
-				<MenuList>
+				<MenuList
+					boxShadow='0 5px 10px rgba(0,0,0,.3)'
+				>
 					<DeleteCount />
+					<SaveCount />
 				</MenuList>
 			</Menu>
 		</Flex>

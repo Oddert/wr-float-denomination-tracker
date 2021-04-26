@@ -696,7 +696,6 @@ var deleteCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                     })];
             case 1:
                 count = _a.sent();
-                console.log(count);
                 if (!count) {
                     return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue deleting the count.', null, { count: count })];
                 }

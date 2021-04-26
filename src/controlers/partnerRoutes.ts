@@ -136,11 +136,14 @@ export const deletePartner = (req: Request, res: Response) => {
 	try {
 		const partner: any = Partner
 		// @ts-ignore
-			.patchAndFetchById(req.body.id, {
+			.patchAndFetchById(req.params.id, {
 				deleted: true,
 				deletedById: 1,
 				updated: Date.now()
 			})
+		if (!partner) {
+			return respondErr(res, 500, 'There was an issue deleting the partner.', null, { partner })
+		}
 		return respondWell(res, 200, null, 'Partner deleted successfully.', { partner })
 	} catch (error) {
 		return respondErr(res, 500, 'There was an issue processing your request.', null, { error })
