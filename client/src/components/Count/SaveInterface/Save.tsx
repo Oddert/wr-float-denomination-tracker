@@ -45,7 +45,7 @@ const Save: React.FC<Props> = ({
 		<Button
 			variant='link'
 			size='lg'
-			my='16px'
+			py='16px'
 			onClick={handleClick}
 		>
 			Save

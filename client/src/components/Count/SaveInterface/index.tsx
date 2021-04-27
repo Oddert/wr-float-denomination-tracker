@@ -4,7 +4,7 @@ import {
 	Flex,
 } from '@chakra-ui/react'
 
-import Temp from './Temp'
+// import Temp from './Temp'
 
 import Save from './Save'
 import Close from './Close'
@@ -21,17 +21,17 @@ const SaveInterface: React.FC<Props> = ({
 
 	return (
 		<Flex
-			w='100%'
 			border='1px dashed'
-			borderColor='rgba(0,0,0,0)'
+			borderColor='rgba(155,0,0,0)'
 			alignItems='center'
 			justifyContent='center'
 			py='1em'
 			my='3em'
 			position='sticky'
 			bottom='0px'
+			flexWrap='wrap'
 		>
-			<Temp />
+			{/* <Temp /> */}
 			<Save edit={edit} />
 			<Close edit={edit} />
 			<Next edit={edit} />			

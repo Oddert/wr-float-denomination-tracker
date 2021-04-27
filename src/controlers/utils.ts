@@ -75,7 +75,6 @@ export const respondWell =
 			status: status || 200,
 			errorMessage,
 			responseMessage: responseMessage || 'Request processed successfully.',
-			...other
 		})
 		return res
 		.status(status || 200)

@@ -84,6 +84,7 @@ const Time: React.FC = () => {
 			<Flex
 				w='100%'
 				justifyContent='space-around'
+				flexWrap='wrap'
 			>
 					{/* <DatePicker
 						id='date-picker'
@@ -130,28 +131,33 @@ const Time: React.FC = () => {
 					timeCaption='time input'
 					dateFormat='HH:mm'
 				/> */}
-				<DateInput 
-					flex='1' 
-					selected={timestamp}
-					onChange={handleChange}
-					name='Date Start'
-					locale='gb'
-					timeFormat='HH:mm'
-					timeCaption='time input'
-					dateFormat='dd/MM/yyyy'
-				/>
-				<TimeInput 
-					flex='1' 
-					selected={timestamp}
-					onChange={handleChange}
-					name='Date Start'
-					showTimeSelect={true}
-					showTimeSelectOnly={true}
-					locale='gb'
-					timeFormat='HH:mm'
-					timeCaption='time input'
-					dateFormat='HH:mm'
-				/>
+				<Flex
+					flexWrap='wrap'
+					justifyContent='center'
+				>
+					<DateInput 
+						flex='1' 
+						selected={timestamp}
+						onChange={handleChange}
+						name='Date Start'
+						locale='gb'
+						timeFormat='HH:mm'
+						timeCaption='time input'
+						dateFormat='dd/MM/yyyy'
+					/>
+					<TimeInput 
+						flex='1' 
+						selected={timestamp}
+						onChange={handleChange}
+						name='Date Start'
+						showTimeSelect={true}
+						showTimeSelectOnly={true}
+						locale='gb'
+						timeFormat='HH:mm'
+						timeCaption='time input'
+						dateFormat='HH:mm'
+					/>
+				</Flex>
 				<Button 
 					variant='ui'
 					onClick={handleResetTime}

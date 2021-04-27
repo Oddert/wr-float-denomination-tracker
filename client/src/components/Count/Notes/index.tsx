@@ -6,17 +6,19 @@ import {
 	FormLabel,
 	Box,
 	Divider,
-	Text,
 } from '@chakra-ui/react'
 
 import NoteInputWrapper from './NoteInputWrapper'
 import CountContext from '../utils/CountContext'
+import SubTotal from '../SubTotal'
 
 const BaggedCoin: React.FC = () => {
 	const { state: { data: { notes: { total } } } } = useContext(CountContext)
 	return (
 		<>
+			<Divider />
 			<FormLabel
+				marginTop='10px'
 				title='Notes in the till or Uncounted Pickups is this was a spot check. (Uncounted Pickups are notes which were in the safe during a pickup but not yet processed. Hence VBS would have assumed they were still in the till.'
 			>
 				Notes / Uncounted Pickups
@@ -66,13 +68,10 @@ const BaggedCoin: React.FC = () => {
 						denomination='note_one'
 					/>
 				</Flex>
-				<Text
-					textAlign='right'
-					title='total bagged value (£)'
-				>
-					Total: { (total / 100).toFixed(2) }
-				</Text>
-				<Divider />
+				<SubTotal
+					value={total}
+					title='total value of notes (£)'
+				/>
 			</GridItem>
 		</>
 	)

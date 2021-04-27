@@ -1,5 +1,6 @@
 import React, { SetStateAction, useContext, useState } from 'react'
 import {
+	useMediaQuery,
 	FormLabel,
 	GridItem,
 	NumberInput,
@@ -42,6 +43,7 @@ const Denomination: React.FC<Props> = ({
 	const [error, setError]: [null | string, any] = useState(null)
 	const [value, setValue]: [null | undefined | string | number, Dispatch<SetStateAction<any>>] = useState(null)
 
+	const smallScreen = useMediaQuery('(max-width: 760px)')
 	// label = `bagged: ${label}`
 
 	useEffect(() => {
@@ -115,11 +117,11 @@ const Denomination: React.FC<Props> = ({
 	}
 
 	const sideColumns = '3fr'
-	const inputColumn = '4fr'
+	const inputColumn = smallScreen ? '6fr' : '4fr'
 
 	return (
 		<GridItem
-			p='8px 20px'
+			p={smallScreen ? '8px 10px' : '8px 20px'}
 		>
 			<Grid
 				alignItems='center'

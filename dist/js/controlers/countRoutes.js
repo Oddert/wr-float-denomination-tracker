@@ -50,7 +50,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCount = exports.updateCount = exports.getCount = exports.addCount = exports.getCounts = void 0;
+exports.countTotals = exports.deleteCount = exports.updateCount = exports.getCount = exports.addCount = exports.getCounts = void 0;
 // import { PartialModelObject } from 'objection'
 var Repository_1 = __importDefault(require("../models/Repository"));
 var Count_1 = __importDefault(require("../models/Count"));
@@ -74,6 +74,10 @@ function deleteFilterInactive(query) {
 // @ts-ignore
 function noFilter(query) {
     return function () { return query; };
+}
+function repoFilter(query, repoId) {
+    console.log(repoId, typeof repoId);
+    return function () { return query.andWhere('repositoryId', repoId); };
 }
 // const completeCount = {"bagged":{"pence_one":500,"pence_two":300,"pence_five":2000,"pence_ten":1000,"pence_twenty":7000,"pence_fifty":3000,"pound_one":18000,"pound_two":10000,"note_five":1000,"total":42800},"loose":{"pence_one":164,"pence_two":200,"pence_five":1425,"pence_ten":1370,"pence_twenty":600,"pence_fifty":2450,"pound_one":6100,"pound_two":400,"other":0,"total":12709},"notes":{"note_one":0,"note_five":7500,"note_ten":24000,"note_twenty":12000,"note_fifty":5000,"total":48500},"total":0}
 // const partialCount = {"bagged":{"pence_one":800,"pence_two":300,"pence_five":3500,"pence_ten":4500,"pence_twenty":1000,"pence_fifty":1000,"pound_one":12000,"pound_two":4000,"note_five":0,"total":27100},"loose":{"pence_one":0,"pence_two":0,"pence_five":0,"pence_ten":0,"pence_twenty":0,"pence_fifty":0,"pound_one":0,"pound_two":0,"other":0,"total":0},"notes":{"note_one":0,"note_five":0,"note_ten":0,"note_twenty":0,"note_fifty":5000,"total":5000},"total":0}
@@ -109,15 +113,17 @@ function noFilter(query) {
 // Action : countsDataWriteAll
 // Logic : /Counts
 var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var page, deleted, applyDeleteFilter, pagelength, q, counts, fromdate, todate, limit, offset, q, counts, error_1;
+    var page, deleted, repo, applyDeleteFilter, applyRepoFilter, pagelength, q, counts, fromdate, todate, limit, offset, q, counts, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 5, , 6]);
                 page = Number(req.query.page);
                 deleted = String(req.query.deleted);
+                repo = String(req.query.repository);
                 applyDeleteFilter = deleteFilterActive;
-                if (deleted === 'undefeind' || deleted === '0' || deleted === 'false') {
+                applyRepoFilter = noFilter;
+                if (deleted === 'undefined' || deleted === '0' || deleted === 'false') {
                     applyDeleteFilter = deleteFilterActive;
                 }
                 if (deleted === 'true' || deleted === '1') {
@@ -126,11 +132,16 @@ var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 if (deleted === 'include') {
                     applyDeleteFilter = noFilter;
                 }
+                if (repo !== 'undefined' && repo !== 'all') {
+                    repo = Number(repo);
+                    applyRepoFilter = repoFilter;
+                }
                 if (!(typeof page === 'number' || !isNaN(page))) return [3 /*break*/, 2];
-                pagelength = utils_1.sanitiseNumberQuery(req.query.pagelength, 20);
-                q = applyDeleteFilter(Count_1.default.query()
+                pagelength = utils_1.sanitiseNumberQuery(req.query.pagelength, 10);
+                q = applyDeleteFilter(applyRepoFilter(Count_1.default.query()
                     .offset(page * pagelength)
-                    .limit(pagelength));
+                    .limit(pagelength)
+                    .orderBy('timestamp', 'DESC'), repo)());
                 return [4 /*yield*/, q()];
             case 1:
                 counts = _a.sent();
@@ -140,11 +151,11 @@ var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 todate = utils_1.sanitiseNumberQuery(req.query.todate, Date.now());
                 limit = utils_1.sanitiseNumberQuery(req.query.limit, 100);
                 offset = utils_1.sanitiseNumberQuery(req.query.offset, 0);
-                q = applyDeleteFilter(Count_1.default.query()
+                q = applyRepoFilter(applyDeleteFilter(Count_1.default.query()
                     .andWhere('createdOn', '>=', fromdate)
                     .andWhere('createdOn', '<=', todate)
                     .limit(limit)
-                    .offset(offset));
+                    .offset(offset)));
                 return [4 /*yield*/, q()];
             case 3:
                 counts = _a.sent();
@@ -708,4 +719,26 @@ var deleteCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
     });
 }); };
 exports.deleteCount = deleteCount;
+var countTotals = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var total, error_5;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, Count_1.default.query()
+                        .where('deleted', null)
+                        .orWhere('deleted', 0)
+                        .orWhere('deleted', false)
+                        .count()];
+            case 1:
+                total = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, 'Number of total counts in the database.', null, { total: total[0] })];
+            case 2:
+                error_5 = _a.sent();
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_5 })];
+            case 3: return [2 /*return*/];
+        }
+    });
+}); };
+exports.countTotals = countTotals;
 //# sourceMappingURL=countRoutes.js.map

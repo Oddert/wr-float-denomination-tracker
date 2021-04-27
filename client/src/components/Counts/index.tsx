@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { countsDataWriteAll } from '../../actions'
+import { 
+	countsDataWriteMultiple, 
+	countsServerTotalWrite 
+} from '../../actions'
 import initialState from '../../constants/initialState'
 
 import { 
@@ -11,9 +14,6 @@ import {
 
 import {
 	Flex,
-	// Text,
-	// Checkbox,
-	// Link,
 	Skeleton,
 } from '@chakra-ui/react'
 
@@ -22,6 +22,7 @@ import {
 import QuickAdd from '../QuickAdd'
 import ListCount from './ListCount'
 import FilterRepos from './FilterRepos'
+import PaginateNumberInput from './PaginateNumberInput'
 
 // interface CountType {
 // 	repository: '403' | '401' | 'lotto',
@@ -42,19 +43,35 @@ const Counts: React.FC = () => {
 	const repositories: Repository[] = useSelector((s: typeof initialState) => s.repositories.repositoryList)
 	// const repos = ['401', '403', 'lotto']
 	const [selectedRepo, setSelectedRepo] = useState('all')
+	const [page, setPage] = useState(0)
 
 	const countState = useSelector((state: any) => state.counts)
-	const { data: counts, updated } = countState
+	const { data: counts, updated, pageLength } = countState
 
 	useEffect(() => {
-		dispatch(countsDataWriteAll())
-	}, [dispatch])
+		// dispatch(countsDataWriteAll(page, pageLength))
+		dispatch(countsServerTotalWrite())
+	}, [dispatch, page])
+
+	useEffect(() => {
+		if ((page + 1) * pageLength > counts.length && (counts.length % pageLength === 0)) {
+			dispatch(countsDataWriteMultiple(page, pageLength, selectedRepo))
+		}
+		
+	// eslint-disable-next-line react-hooks/exhaustive-deps		
+	}, [dispatch, page])
+
+	function changeSeletedRepo (value: any) {
+		setSelectedRepo(value)
+		setPage(0)
+		dispatch(countsDataWriteMultiple(page, pageLength))
+	}
 
 	if (!updated) {
 		return (
 			<Flex
 				direction='column'
-				>
+			>
 				<Skeleton height='40px' width='50%' my='10px' />
 				{
 					Array.from({ length: 3 }).map((e: any, i) => 
@@ -68,7 +85,7 @@ const Counts: React.FC = () => {
 		<div>
 			<FilterRepos
 				selectedRepo={selectedRepo}
-				setSelectedRepo={setSelectedRepo}
+				changeSeletedRepo={changeSeletedRepo}
 				repositories={repositories}
 			/>
 			<Flex
@@ -78,6 +95,7 @@ const Counts: React.FC = () => {
 					counts
 						.filter((each: any) => 
 							each.repositoryId === Number(selectedRepo) || selectedRepo === 'all')
+						.slice(page * pageLength, (page + 1) * pageLength)
 						.map((each: ListCountT, idx: number) => 
 							<ListCount 
 								key={idx}
@@ -87,6 +105,11 @@ const Counts: React.FC = () => {
 						)
 				}
 			</Flex>
+			<PaginateNumberInput 
+				page={page}
+				setPage={setPage}
+				pageLength={pageLength}
+			/>
 			<QuickAdd />
 		</div>
 	)

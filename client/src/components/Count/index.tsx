@@ -2,8 +2,6 @@ import React, { Dispatch, useReducer, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import {
 	Flex,
-	FormLabel,
-	Divider,
 	Text,
 	Skeleton,
 } from '@chakra-ui/react'
@@ -16,6 +14,7 @@ import Notes from './Notes/'
 import Repository from './Repository'
 import Time from './Time'
 import Options from './Options/'
+import Total from './Total/'
 
 import CountContext from './utils/CountContext'
 import { 
@@ -166,11 +165,11 @@ const Count: React.FC<Props> = ({ edit }) => {
 			<Flex
 				direction='column'
 			>
-				<Text
+				{/* <Text
 					wordBreak='break-all'
 				>
 					{ JSON.stringify(state) }
-				</Text>
+				</Text> */}
 				<Skeleton height='30px' my='4px'></Skeleton>
 				<Skeleton height='30px' my='4px'></Skeleton>
 				<Skeleton height='30px' my='4px'></Skeleton>
@@ -203,35 +202,33 @@ const Count: React.FC<Props> = ({ edit }) => {
 				<Flex
 					flexDirection='column'
 					bgColor='#fff'
-					p='3em'
-					m='0 0 6em'
+					p='3em 1em'
+					m='0 0 3em'
 				>
 					<Time />
 					<Flex
-						w='100%'
+						// w='100%'
 						justifyContent='space-around'
 						m='30px 0'
 					>
-						<Counter 
+						<Counter
 							label='Counter'
 							dispatchType={CountActions.UPDATE_COUTNER}
 							stateAssignment='counter'
 						/>
-						<Counter 
+						<Counter
 							label='Supervisor'
 							dispatchType={CountActions.UPDATE_SUPERVISOR}
 							stateAssignment='supervisor'
 						/>
 					</Flex>
-					<Divider />
-					<FormLabel>Bagged Coin</FormLabel>
 					<BaggedCoin />
-					<FormLabel>Loose Coin</FormLabel>
 					<LooseCoin />
 					<Notes />
+					<Total />
 					<SaveInterface 
 						edit={edit}
-					/>
+					/> 
 				</Flex>
 			</Flex>
 		</CountContext.Provider>

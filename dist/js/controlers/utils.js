@@ -13,7 +13,11 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateFloat = exports.validateCount = exports.sanitiseNumberQuery = exports.respondErr = exports.respondBadRequest = exports.respondWell = void 0;
 var respondWell = function (res, status, errorMessage, responseMessage, other) {
-    console.log('Respond Well: ', __assign({ status: status || 200, errorMessage: errorMessage, responseMessage: responseMessage || 'Request processed successfully.' }, other));
+    console.log('Respond Well: ', {
+        status: status || 200,
+        errorMessage: errorMessage,
+        responseMessage: responseMessage || 'Request processed successfully.',
+    });
     return res
         .status(status || 200)
         .json(__assign({ status: status || 200, errorMessage: errorMessage, responseMessage: responseMessage || 'Request processed successfully.' }, other));

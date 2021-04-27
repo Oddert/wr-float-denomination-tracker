@@ -5,20 +5,20 @@ import { Repository } from '../../global'
 
 interface Props {
 	selectedRepo: string
-	setSelectedRepo: any
+	changeSeletedRepo: any
 	repositories: Repository[]
 }
 
 const FilterRepos: React.FC<Props> = ({
 	selectedRepo,
-	setSelectedRepo,
+	changeSeletedRepo,
 	repositories,
 }) => {
 	return (
 		<Select
 			w='50%'
 			value={selectedRepo}
-			onChange={(e: any) => setSelectedRepo(e.target.value)}
+			onChange={(e: any) => changeSeletedRepo(e.target.value)}
 		>
 			<option value='all'>All Repositories</option>
 			{

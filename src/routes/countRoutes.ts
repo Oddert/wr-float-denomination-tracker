@@ -5,7 +5,8 @@ import {
   addCount,
   getCount,
   updateCount,
-  deleteCount
+  deleteCount,
+	countTotals,
 } from '../controlers/countRoutes'
 
 const router: Router = Router()
@@ -14,6 +15,9 @@ router
   .route('/')
   .get(getCounts)
   .post(addCount)
+
+router.route('/total')
+	.get(countTotals)
 
 router
   .route('/:id')

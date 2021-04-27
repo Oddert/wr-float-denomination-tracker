@@ -43,7 +43,7 @@ const Dashboard: React.FC<any> = ({
       </GridItem>
 			<GridItem 
         w='100%' 
-        p='2em 5em'
+        p='2em 40px'
         textAlign='left'
         bg='theme_light.background.primary'
         colStart={2}
@@ -51,6 +51,7 @@ const Dashboard: React.FC<any> = ({
         rowStart={2}
         rowEnd={2}
 				bgColor='theme_light.background.primary'
+				
       >
 				{ children }
 			</GridItem>

@@ -3,16 +3,23 @@ import {
 	Grid,
 	Box,
 	Divider,
-	Text,
+	FormLabel,
 } from '@chakra-ui/react'
 
 import BaggedCoinInput from './BaggedCoinInput'
 import CountContext from '../utils/CountContext'
+import SubTotal from '../SubTotal'
 
 const BaggedCoin: React.FC = () => {
 	const { state: { data: { bagged: { total } } }} = useContext(CountContext)
 	return (
 		<>
+			<Divider />
+			<FormLabel
+				marginTop='10px'
+			>
+				Bagged Coin
+			</FormLabel>
 			<Grid
 				templateColumns='1fr 1fr'
 				autoRows='1fr'
@@ -73,13 +80,10 @@ const BaggedCoin: React.FC = () => {
 					display='pound'
 				/>
 			</Grid>
-			<Text
-				textAlign='right'
+			<SubTotal
+				value={total}
 				title='total bagged value (£)'
-			>
-				Total: { (total / 100).toFixed(2) }
-			</Text>
-			<Divider />
+			/>
 		</>
 	)
 }

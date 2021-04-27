@@ -27,6 +27,7 @@ const Header: React.FC<Props> = ({
 				m='0'
 				borderRadius='0'
 				width={navWidth ? navWidth : 'auto'}
+				transition='background 250ms, border 250ms'
 			>
 				<ChevronLeftIcon />
 				Exit

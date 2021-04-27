@@ -7,6 +7,8 @@ router
     .route('/')
     .get(countRoutes_1.getCounts)
     .post(countRoutes_1.addCount);
+router.route('/total')
+    .get(countRoutes_1.countTotals);
 router
     .route('/:id')
     .get(countRoutes_1.getCount)

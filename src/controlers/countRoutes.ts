@@ -41,6 +41,11 @@ function noFilter (query: any) {
 	return () => query
 }
 
+function repoFilter (query: any, repoId: number) {
+	console.log(repoId, typeof repoId)
+	return () => query.andWhere('repositoryId', repoId)
+}
+
 // const completeCount = {"bagged":{"pence_one":500,"pence_two":300,"pence_five":2000,"pence_ten":1000,"pence_twenty":7000,"pence_fifty":3000,"pound_one":18000,"pound_two":10000,"note_five":1000,"total":42800},"loose":{"pence_one":164,"pence_two":200,"pence_five":1425,"pence_ten":1370,"pence_twenty":600,"pence_fifty":2450,"pound_one":6100,"pound_two":400,"other":0,"total":12709},"notes":{"note_one":0,"note_five":7500,"note_ten":24000,"note_twenty":12000,"note_fifty":5000,"total":48500},"total":0}
 // const partialCount = {"bagged":{"pence_one":800,"pence_two":300,"pence_five":3500,"pence_ten":4500,"pence_twenty":1000,"pence_fifty":1000,"pound_one":12000,"pound_two":4000,"note_five":0,"total":27100},"loose":{"pence_one":0,"pence_two":0,"pence_five":0,"pence_ten":0,"pence_twenty":0,"pence_fifty":0,"pound_one":0,"pound_two":0,"other":0,"total":0},"notes":{"note_one":0,"note_five":0,"note_ten":0,"note_twenty":0,"note_fifty":5000,"total":5000},"total":0}
 // const incompleteCount = {"bagged":{"pence_one":0,"pence_two":300,"pence_five":3500,"pence_ten":0,"pence_twenty":0,"pence_fifty":1000,"pound_one":12000,"pound_two":4000,"note_five":0,"total":20800},"loose":{"pence_one":0,"pence_two":0,"pence_five":0,"pence_ten":0,"pence_twenty":0,"pence_fifty":0,"pound_one":0,"pound_two":0,"other":0,"total":0},"notes":{"note_one":0,"note_five":0,"note_ten":0,"note_twenty":0,"note_fifty":5000,"total":5000},"total":0}
@@ -105,10 +110,12 @@ export const getCounts = async (req: Request, res: Response) => {
 
 		let page: number = Number(req.query.page)
 		let deleted: string = String(req.query.deleted)
+		let repo: string | number = String(req.query.repository)
 
 		let applyDeleteFilter = deleteFilterActive
+		let applyRepoFilter: any = noFilter
 
-		if (deleted === 'undefeind' || deleted === '0' || deleted === 'false') {
+		if (deleted === 'undefined' || deleted === '0' || deleted === 'false') {
 			applyDeleteFilter = deleteFilterActive
 		}
 		if (deleted === 'true' || deleted === '1') {
@@ -118,14 +125,23 @@ export const getCounts = async (req: Request, res: Response) => {
 			applyDeleteFilter = noFilter
 		}
 
+		if (repo !== 'undefined' && repo !== 'all') {
+			repo = Number(repo)
+			applyRepoFilter = repoFilter
+		}
+
 		if (typeof page === 'number' || !isNaN(page)) {
 	
-			let pagelength: number = sanitiseNumberQuery(req.query.pagelength, 20)
+			let pagelength: number = sanitiseNumberQuery(req.query.pagelength, 10)
 	
 			const q = applyDeleteFilter(
-				Count.query()
-					.offset(page * pagelength)
-					.limit(pagelength)
+				applyRepoFilter(
+						Count.query()
+							.offset(page * pagelength)
+							.limit(pagelength)
+							.orderBy('timestamp', 'DESC')
+					, repo
+				)()
 			)
 
 			const counts = await q()
@@ -138,13 +154,13 @@ export const getCounts = async (req: Request, res: Response) => {
 			let limit: number = sanitiseNumberQuery(req.query.limit, 100)
 			let offset: number = sanitiseNumberQuery(req.query.offset, 0)
 				
-			const q = applyDeleteFilter(
+			const q = applyRepoFilter(applyDeleteFilter(
 				Count.query()
 					.andWhere('createdOn', '>=', fromdate)
 					.andWhere('createdOn', '<=', todate)
 					.limit(limit)
 					.offset(offset)
-			)
+			))
 
 			const counts = await q()
 		
@@ -721,3 +737,16 @@ export const deleteCount = async (req: Request, res: Response) => {
 	}
 }
 
+export const countTotals = async (req: Request, res: Response) => {
+	try {
+		const total = await Count.query()
+			.where('deleted', null)
+			.orWhere('deleted', 0)
+			.orWhere('deleted', false)
+			.count()
+
+		return respondWell(res, 200, 'Number of total counts in the database.', null, { total: total[0] })
+	} catch (error) {
+		return respondErr(res, 500, 'There was an issue processing your request.', null, { error })
+	}
+}

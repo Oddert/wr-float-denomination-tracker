@@ -3,16 +3,23 @@ import {
 	Grid,
 	Box,
 	Divider,
-	Text,
+	FormLabel,
 } from '@chakra-ui/react'
 
 import LooseCoinInput from './LooseCoinInput'
 import CountContext from '../utils/CountContext'
+import SubTotal from '../SubTotal'
 
 const LooseCoin: React.FC = () => {
 	const { state: { data: { loose: { total } } } } = useContext(CountContext)
 	return (
 		<>
+			<Divider />
+			<FormLabel
+				marginTop='10px'
+			>
+				Loose Coin
+			</FormLabel>
 			<Grid
 				templateColumns='1fr 1fr'
 				autoRows='auto'
@@ -73,13 +80,10 @@ const LooseCoin: React.FC = () => {
 					step={1}
 				/>
 			</Grid>
-			<Text
-				textAlign='right'
-				title='total loose coin (£)'
-			>
-				Total: { (total / 100).toFixed(2) }
-			</Text>
-			<Divider />
+			<SubTotal 
+				value={total} 
+				title={'total loose coin (£)'} 
+			/>
 		</>
 	)
 }

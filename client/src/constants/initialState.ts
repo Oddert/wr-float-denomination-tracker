@@ -3,6 +3,8 @@ const initialState = {
 	counts: {
 		data: [],
 		updated: null,
+		countsServerTotal: null,
+		pageLength: 3,
 	},
 	ui: {
 		flash: [
@@ -25,6 +27,7 @@ const initialState = {
 	repositories: {
 		repositoryList: [],
 		repositoryListUpdated: null,
+		repositoryServerTotal: null,
 	}
 }
 

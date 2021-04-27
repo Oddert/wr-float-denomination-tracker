@@ -35,10 +35,12 @@ const putOptions = (body: any) => ({
 	body,
 })
 
-export const countsDataWriteAll = () => async (dispatch: ThunkDispatch<any, any, any>) => {
-	const EXT = '/api/v1/count?deleted=false'
+export const countsDataWriteAll = (page?: number, pageLength?: number) => async (dispatch: ThunkDispatch<any, any, any>) => {
+	const EXT = `/api/v1/count?deleted=false&page=${page || 0}&pagelength=${pageLength || 10}`
+	console.log(EXT)
 	const res = await fetch(EXT, getOptions())
 	const data = await res.json()
+	console.log(data)
 	dispatch({
 		type: ActionTypes.COUNTS_DATA_WRITE_ALL,
 		payload: data.counts,
@@ -56,6 +58,19 @@ export const countsDataWriteSingle = (body: any) => async (dispatch: ThunkDispat
 	})
 }
 
+export const countsDataWriteMultiple = (page?: number, pageLength?: number, repo?: number | string) => async (dispatch: ThunkDispatch<any, any, any>) => {
+	let EXT = `/api/v1/count?deleted=false&page=${page || 0}&pagelength=${pageLength || 10}`
+	if (repo) EXT += `&repository=${repo}`
+	console.log(EXT)
+	const res = await fetch(EXT, getOptions())
+	const data = await res.json()
+	console.log(data)
+	dispatch({
+		type: ActionTypes.COUNTS_DATA_WRITE_MULTIPLE,
+		payload: data.counts,
+	})
+}
+
 export const countsDataUpdateSingle = (count: any) => async (dispatch: ThunkDispatch<any, any, any>) => {
 	const EXT = `/api/v1/count/${count._id}`
 	const res = await fetch(EXT, putOptions(count))
@@ -63,6 +78,16 @@ export const countsDataUpdateSingle = (count: any) => async (dispatch: ThunkDisp
 	dispatch({
 		type: ActionTypes.COUNTS_DATA_UPDATE_SINGLE,
 		payload: data.counts
+	})
+}
+
+export const countsServerTotalWrite = () => async (dispatch: ThunkDispatch<any, any, any>) => {
+	const EXT = `/api/v1/count/total`
+	const res = await fetch(EXT, getOptions())
+	const data = await res.json()
+	dispatch({
+		type: ActionTypes.COUNTS_SERVER_TOTAL_WRITE,
+		payload: data.total['count(*)']
 	})
 }
 
