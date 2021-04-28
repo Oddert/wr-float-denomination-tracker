@@ -43,7 +43,15 @@ function noFilter (query: any) {
 
 function repoFilter (query: any, repoId: number) {
 	console.log(repoId, typeof repoId)
-	return () => query.andWhere('repositoryId', repoId)
+	if (query.hasOwnProperty('andWhere')) {
+		return () => query.andWhere('repositoryId', repoId)
+	} else {
+		return () => query.where('repositoryId', repoId)
+	}
+}
+
+function floatFilter (query: any) {
+	return () => query.withGraphJoined('float')
 }
 
 // const completeCount = {"bagged":{"pence_one":500,"pence_two":300,"pence_five":2000,"pence_ten":1000,"pence_twenty":7000,"pence_fifty":3000,"pound_one":18000,"pound_two":10000,"note_five":1000,"total":42800},"loose":{"pence_one":164,"pence_two":200,"pence_five":1425,"pence_ten":1370,"pence_twenty":600,"pence_fifty":2450,"pound_one":6100,"pound_two":400,"other":0,"total":12709},"notes":{"note_one":0,"note_five":7500,"note_ten":24000,"note_twenty":12000,"note_fifty":5000,"total":48500},"total":0}
@@ -111,9 +119,11 @@ export const getCounts = async (req: Request, res: Response) => {
 		let page: number = Number(req.query.page)
 		let deleted: string = String(req.query.deleted)
 		let repo: string | number = String(req.query.repository)
+		let includeFloat: any = req.query.float
 
 		let applyDeleteFilter = deleteFilterActive
 		let applyRepoFilter: any = noFilter
+		let applyFloatFilter = noFilter
 
 		if (deleted === 'undefined' || deleted === '0' || deleted === 'false') {
 			applyDeleteFilter = deleteFilterActive
@@ -130,19 +140,25 @@ export const getCounts = async (req: Request, res: Response) => {
 			applyRepoFilter = repoFilter
 		}
 
-		if (typeof page === 'number' || !isNaN(page)) {
+		if (includeFloat) {
+			applyFloatFilter = floatFilter
+		}
+
+		if (!isNaN(page)) {
 	
 			let pagelength: number = sanitiseNumberQuery(req.query.pagelength, 10)
 	
 			const q = applyDeleteFilter(
-				applyRepoFilter(
+				applyFloatFilter(
+					applyRepoFilter(
 						Count.query()
 							.offset(page * pagelength)
 							.limit(pagelength)
 							.orderBy('timestamp', 'DESC')
-					, repo
-				)()
-			)
+						, repo
+						)()
+					)()
+				)
 
 			const counts = await q()
 	
@@ -153,14 +169,19 @@ export const getCounts = async (req: Request, res: Response) => {
 			let todate: number = sanitiseNumberQuery(req.query.todate, Date.now())
 			let limit: number = sanitiseNumberQuery(req.query.limit, 100)
 			let offset: number = sanitiseNumberQuery(req.query.offset, 0)
-				
-			const q = applyRepoFilter(applyDeleteFilter(
-				Count.query()
-					.andWhere('createdOn', '>=', fromdate)
-					.andWhere('createdOn', '<=', todate)
-					.limit(limit)
-					.offset(offset)
-			))
+			
+			const q = applyRepoFilter(
+				applyDeleteFilter(
+					applyFloatFilter(
+						Count.query()
+							.andWhere('createdOn', '>=', fromdate)
+							.andWhere('createdOn', '<=', todate)
+							.limit(limit)
+							.offset(offset)
+					)()
+				)()
+				, repo
+			)
 
 			const counts = await q()
 		

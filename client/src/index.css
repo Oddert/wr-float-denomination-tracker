@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+path {
+	fill: none;
+}
+
+.bagged-pound-five path {
+	stroke: rgb(139, 8, 8);
+}
+.bagged-pound-two path {
+	stroke: rgb(28, 105, 28);
+}
+.bagged-pound-one path {
+	stroke: rgb(11, 20, 145);
+}

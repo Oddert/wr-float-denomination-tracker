@@ -127,3 +127,43 @@ export interface ListCount {
 	deletedOn?: number
 	updatedOn?: number
 }
+
+export interface ServerCountType {
+	repositoryId?: number | null
+	timestamp?: number | null
+	counter?: string | null
+	counterId?: number | null
+	supervisor?: string | null
+	supervisorId?: number | null
+	float?: ServerFloatType | null
+}
+
+export interface ServerFloatType {
+	bagPence1?: number | null
+	bagPence2?: number | null
+	bagPence5?: number | null
+	bagPence10?: number | null
+	bagPence20?: number | null
+	bagPence50?: number | null
+	bagPound1?: number | null
+	bagPound2?: number | null
+	bagNote5?: number | null
+	bagTotal?: number | null
+	loosePence1?: number | null
+	loosePence2?: number | null
+	loosePence5?: number | null
+	loosePence10?: number | null
+	loosePence20?: number | null
+	loosePence50?: number | null
+	loosePound1?: number | null
+	loosePound2?: number | null
+	looseOther?: number | null
+	looseTotal?: number | null
+	note1?: number | null
+	note5?: number | null
+	note10?: number | null
+	note20?: number | null
+	note50?: number | null
+	noteTotal?: number | null
+	floatTotal?: number | null
+}

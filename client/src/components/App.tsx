@@ -16,6 +16,7 @@ import './ReactDatetime.css'
 import './App.scss'
 
 import 'react-datepicker/dist/react-datepicker.css'
+import VisTest1 from './VisTest1'
 
 const App: React.FC = () => {
 	const dispatch = useDispatch()
@@ -59,6 +60,11 @@ const App: React.FC = () => {
           <Route path='/repositories'>
             <PageWrapper>
 							<Dashboard />
+						</PageWrapper>
+          </Route>
+          <Route path='/vistest1'>
+            <PageWrapper title='Visualisation Test 1'>
+							<VisTest1 />
 						</PageWrapper>
           </Route>
           <Route path='/'>
