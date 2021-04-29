@@ -1,8 +1,12 @@
+
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { css } from '@emotion/react'
+import { css, jsx } from '@emotion/react'
 
-import { ServerCountType } from '../global'
+import { 
+	ServerCountType, 
+	// ServerFloatType,
+} from '../global'
 
 import initialState from '../constants/initialState'
 
@@ -14,12 +18,14 @@ import {
 	LineSeries,
 	MarkSeries,
 	Hint,
+	// ParallelCoordinates,
+	// Crosshair,
 } from 'react-vis'
 import Select from './base/Select'
 import DateInput from './base/DateInput'
 
 const styles = css`
-	fill: none;
+	color: red;
 `
 const ABS_START_DATE = '2021-03-30'
 
@@ -33,6 +39,10 @@ interface ParsedCountT {
 	bagPence5: ParsedCountT[],
 	bagPence2: ParsedCountT[],
 	bagPence1: ParsedCountT[],
+}
+
+interface ServerCountTypeWithAdjustment extends ServerCountType {
+	adjustment?: number | null
 }
 
 const VisTest1: React.FC = () => {
@@ -75,70 +85,148 @@ const VisTest1: React.FC = () => {
 	}, [repo, endTime, startTime])
 
 	useEffect(() => {
-		const parsedC = data.reduce((acc: ParsedCountT, each: ServerCountType, idx: number) => {
+		const adjustedC = data.map((each: any) => {
+			type BagTypes = 'bagNote5' | 'bagPound2' | 'bagPound1' | 'bagPence50' | 'bagPence20' | 'bagPence10' | 'bagPence5' | 'bagPence2' | 'bagPence1'
+			const bags: BagTypes[] = ['bagNote5', 'bagPound2', 'bagPound1', 'bagPence50', 'bagPence20', 'bagPence10', 'bagPence5', 'bagPence2', 'bagPence1']
+			const adjustments: any = {
+				bagNote5: (100 * 5),
+				bagPound2: (100 * 20),
+				bagPound1: (100 * 20),
+				bagPence50: (100 * 10),
+				bagPence20: (100 * 10),
+				bagPence10: (100 * 5),
+				bagPence5: (100 * 5),
+				bagPence2: (100 * 1),
+				bagPence1: (100 * 1),
+			}
+			const float = { ...each.float }
+			const record = bags.map((bag: BagTypes) => ({
+				label: bag,
+				value: each.float[bag]
+			}))
+			.sort((a, b) => a.value - b.value)
+			console.log(record)
+			const stack: any[] = []
+			// loop through each item
+			// 		- check item
+			//		- if last === null
+			//			- add this to stack, continue
+			//		- something in stack
+			//			- compare to last in stack
+			//				- are diffirent
+			//					- set all in stack stack
+			//					- push new value to stack
+			// 				- are same
+			//					- push new value to stack, continue
+			record.forEach((oneRecord: any) => {
+				if (stack.length === 0) {
+					stack.push(oneRecord)
+				} else {
+					if (oneRecord.value === stack[0].value) {
+						stack.push(oneRecord)
+					} else {
+						emptyStack(oneRecord)
+					}
+				}
+			})
+
+			function emptyStack (oneRecord: any) {
+				const stepSize: number = .1
+				// const stepSize: number = 100
+				const len: number = stack.length
+				const middle: number = Math.ceil(len / 2)
+				// const temp: BagTypes[] = []
+				// const temp: any = []
+				for (let i = 1 - middle, j = 0; i <= len - middle; i++, j++) {
+					// temp.push(i)
+					const label = stack[j].label
+					const value = stack[j].value
+					const multiplier: number = i * 	stepSize * adjustments[label] 
+					float[label] = value + multiplier
+					
+				}
+				stack.length = 0
+				stack.push(oneRecord)
+			}
+
+			if (each.id === 4) console.log(each.float, float)
+			return { ...each, float }
+		})
+		console.log({ adjustedC, data })
+
+		const parsedC = adjustedC.reduce((acc: ParsedCountT, each: ServerCountTypeWithAdjustment, idx: number) => {
 			const newAcc: any = { ...acc }
 			newAcc.bagNote5.push({ 
 				label: 'Bagged £5',
 				y: (each.float?.bagNote5 || 0) / (100 * 5), 
 				// @ts-ignore
 				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined
+				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
+				id: each.id
 			})
 			newAcc.bagPound2.push({ 
 				label: 'Bagged £2',
 				y: (each.float?.bagPound2 || 0) / (100 * 20), 
 				// @ts-ignore
 				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined
+				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
+				id: each.id
 			})
 			newAcc.bagPound1.push({ 
 				label: 'Bagged £1',
 				y: (each.float?.bagPound1 || 0) / (100 * 20), 
 				// @ts-ignore
 				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined
+				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
+				id: each.id
 			})
 			newAcc.bagPence50.push({ 
 				label: 'Bagged 50p',
 				y: (each.float?.bagPence50 || 0) / (100 * 10), 
 				// @ts-ignore
 				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined
+				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
+				id: each.id
 			})
 			newAcc.bagPence20.push({ 
 				label: 'Bagged 20p',
 				y: (each.float?.bagPence20 || 0) / (100 * 10), 
 				// @ts-ignore
 				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined
+				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
+				id: each.id
 			})
 			newAcc.bagPence10.push({ 
 				label: 'Bagged 10p',
 				y: (each.float?.bagPence10 || 0) / (100 * 5), 
 				// @ts-ignore
 				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined
+				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
+				id: each.id
 			})
 			newAcc.bagPence5.push({ 
 				label: 'Bagged 5p',
 				y: (each.float?.bagPence5 || 0) / (100 * 5), 
 				// @ts-ignore
 				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined
+				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
+				id: each.id
 			})
 			newAcc.bagPence2.push({ 
 				label: 'Bagged 2p',
 				y: (each.float?.bagPence2 || 0) / 100, 
 				// @ts-ignore
 				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined
+				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
+				id: each.id
 			})
 			newAcc.bagPence1.push({ 
 				label: 'Bagged 1p',
 				y: (each.float?.bagPence1 || 0) / 100,
 				// @ts-ignore
 				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined
+				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
+				id: each.id
 			})
 			return newAcc
 		}, {
@@ -166,9 +254,66 @@ const VisTest1: React.FC = () => {
 	// 	, timestamp: each.timestamp ? new Date(each.timestamp) : undefined
 	// }))
 
+	// const d = [
+	// 	{
+	// 		name: 'Honda',
+	// 		mileage: 8,
+	// 		price: 6,
+	// 		safety: 9,
+	// 		performance: 6,
+	// 		interior: 3,
+	// 		warranty: 9,
+	// 		style: {
+	// 			strokeWidth: 3,
+	// 			strokeDasharray: '2, 2'
+	// 		}
+	// 	},
+	// 	{
+	// 		name: 'Honda',
+	// 		mileage: 8,
+	// 		price: 6,
+	// 		safety: 9,
+	// 		performance: 6,
+	// 		interior: 3,
+	// 		warranty: 9,
+	// 		style: {
+	// 			strokeWidth: 3,
+	// 			strokeDasharray: '2, 2'
+	// 		}
+	// 	},
+	// 	{
+	// 		name: 'Honda',
+	// 		mileage: 8,
+	// 		price: 6,
+	// 		safety: 9,
+	// 		performance: 6,
+	// 		interior: 3,
+	// 		warranty: 9,
+	// 		style: {
+	// 			strokeWidth: 3,
+	// 			strokeDasharray: '2, 2'
+	// 		}
+	// 	},
+	// 	{
+	// 		name: 'Honda',
+	// 		mileage: 8,
+	// 		price: 6,
+	// 		safety: 9,
+	// 		performance: 6,
+	// 		interior: 3,
+	// 		warranty: 9,
+	// 		style: {
+	// 			strokeWidth: 3,
+	// 			strokeDasharray: '2, 2'
+	// 		}
+	// 	}
+	// ]
+
 	return (
 		<div
-			
+			style={{
+				background: '#fff'
+			}}
 		>
 			<Select
 				onChange={handleRepoChange}
@@ -210,11 +355,33 @@ const VisTest1: React.FC = () => {
 			<XYPlot
 				width={1000}
 				height={400}
+				yPadding={20}
 				style={{
 					position: 'relative'
 				}}
 			>
+				{/* <ParallelCoordinates 
+					data={d} 
+					style={{
+						axes: {
+							line: {},
+							ticks: {},
+							text: {}
+						},
+						labels: {
+							fontSize: 10
+						},
+						line: {
+							strokeOpacity: 1
+						},
+						deselectedLineStyle: {
+							strokeOpacity: 0.1
+						}
+					}}
+				/> */}
 				<HorizontalGridLines />
+				<XAxis />
+				<YAxis />
 				{/* <LineSeries 
 					fill='none'
 					// @ts-ignore
@@ -319,13 +486,27 @@ const VisTest1: React.FC = () => {
 					data={parsedCount.bagPence1}
 					onValueMouseOver={(v: any) => setInspecting(v)}
 				/>
-				<XAxis />
-				<YAxis />
+				{/* <ParallelCoordinates 
+					// @ts-ignore
+					data={parsedCount.bagPound2} 
+				/> */}
 				{ (inspecting !== null) && <Hint value={inspecting} /> }
+				{/* { (inspecting !== null) && <Crosshair value={[inspecting]} /> } */}
 			</XYPlot>
 			{
 				JSON.stringify(inspecting)
 			}
+			<ul
+			// @ts-ignore
+				className={css}
+			>
+				<li>Figgure out colours</li>
+				<li>How to </li>
+				<li>Why Emotion.js not working?</li>
+				<li>Cancel Hint on mouseout</li>
+				<li>Add Crosshair</li>
+				<li>Add series labels</li>
+			</ul>
 		</div>
 	)
 }
