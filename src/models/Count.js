@@ -32,6 +32,12 @@ class Count extends Model {
 			}
 		}
 	}
+
+	// static modifiers = {
+	// 	readableTimestamp (query) {
+
+	// 	}
+	// }
 	
 	static get relationMappings () {
 		const Float = __dirname + '/Float.js' //require('./Float')

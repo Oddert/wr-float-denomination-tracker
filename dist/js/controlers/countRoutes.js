@@ -158,21 +158,21 @@ var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 return [4 /*yield*/, q()];
             case 1:
                 counts = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, null, null, 'List of all counts.', { counts: counts })];
+                return [2 /*return*/, utils_1.respondWell(res, null, null, 'List of all counts.', { counts: counts.map(function (e) { return (__assign(__assign({}, e), { readableTimestamp: new Date(e.timestamp) })); }) })];
             case 2:
                 fromdate = utils_1.sanitiseNumberQuery(req.query.fromdate, 0);
                 todate = utils_1.sanitiseNumberQuery(req.query.todate, Date.now());
                 limit = utils_1.sanitiseNumberQuery(req.query.limit, 100);
                 offset = utils_1.sanitiseNumberQuery(req.query.offset, 0);
                 q = applyRepoFilter(applyDeleteFilter(applyFloatFilter(Count_1.default.query()
-                    .andWhere('createdOn', '>=', fromdate)
-                    .andWhere('createdOn', '<=', todate)
+                    .andWhere('timestamp', '>=', fromdate)
+                    .andWhere('timestamp', '<=', todate)
                     .limit(limit)
                     .offset(offset))())(), repo);
                 return [4 /*yield*/, q()];
             case 3:
                 counts = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, null, null, 'List of all counts.', { counts: counts })];
+                return [2 /*return*/, utils_1.respondWell(res, null, null, 'List of all counts.', { counts: counts.map(function (e) { return (__assign(__assign({}, e), { readableTimestamp: new Date(e.timestamp) })); }) })];
             case 4: return [3 /*break*/, 6];
             case 5:
                 error_1 = _a.sent();
@@ -327,7 +327,7 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     authenticatorId: 0,
                     counterId: counterId,
                     supervisorId: supervisorId,
-                    timestamp: req.body.count.timestamp,
+                    timestamp: new Date(req.body.count.timestamp).getTime(),
                     comment: req.body.count.comment || null,
                 };
                 return [4 /*yield*/, Count_1.default.query().insert(createCount)];

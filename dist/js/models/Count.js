@@ -57,6 +57,10 @@ var Count = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(Count, "relationMappings", {
+        // static modifiers = {
+        // 	readableTimestamp (query) {
+        // 	}
+        // }
         get: function () {
             var Float = __dirname + '/Float.js'; //require('./Float')
             var Repository = __dirname + '/Repository.js'; //require('./Repository')

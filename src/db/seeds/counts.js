@@ -18,6 +18,9 @@ exports.seed = function(knex) {
 				{ floatId: 11, repositoryId: 3, completionStatus: 'unverified', timestamp: 1616093172738 - 862635424, createdOn: 1616094172738 - 862635424, updatedOn: 1616094172738 - 862635424, verified: false, authenticatorId: 3, counterId: 1, supervisorId: 2, }, // unverifiedCount
 				{ floatId: 12, repositoryId: 2, completionStatus: 'complete', timestamp: 1616093172738 - 89234245, createdOn: 1616094172738 - 89234245, updatedOn: 1616094172738 - 89234245, verified: true, authenticatorId: 3, counterId: 1, supervisorId: 2, }, // incompleteCount
 			])
+			// return knex('counts').insert([
+			// 	{ floatId: 1, repositoryId: 1,  }
+			// ])
     })
 }
 

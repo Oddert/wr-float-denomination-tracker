@@ -3,13 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { css, jsx } from '@emotion/react'
 
-import { 
-	ServerCountType, 
-	// ServerFloatType,
-} from '../global'
-
-import initialState from '../constants/initialState'
-
 import {
 	XYPlot,
 	HorizontalGridLines,
@@ -21,6 +14,22 @@ import {
 	// ParallelCoordinates,
 	// Crosshair,
 } from 'react-vis'
+
+import { 
+	ServerCountType, 
+	// ServerFloatType,
+} from '../global'
+
+import initialState from '../constants/initialState'
+
+import {
+	Button,
+	Slider,
+	SliderTrack,
+	SliderFilledTrack,
+	SliderThumb,
+	Flex,
+} from '@chakra-ui/react'
 import Select from './base/Select'
 import DateInput from './base/DateInput'
 
@@ -28,6 +37,25 @@ const styles = css`
 	color: red;
 `
 const ABS_START_DATE = '2021-03-30'
+const WIDTH: number = 1200
+const HEIGHT: number = 500
+const Y_PADDING: number = 20
+
+const COLOURS = {
+	liveRed: '#db0032',
+	red: '#ca6d6d',
+	orange: '#ff883a',
+	yellow: '#bed800',
+	green: '#598d00',
+	blue: '#365075',
+	purple: '#6e70a8',
+	black: '#333333',
+	white: '#f3f3f3',
+	brown: '#9f9b15',
+	teal: '#3db8b5',
+	tealGreen: '#03ae99',
+	gold: '#f8b018',
+}
 
 interface ParsedCountT {
 	bagNote5: ParsedCountT[],
@@ -53,7 +81,9 @@ const VisTest1: React.FC = () => {
 	const baseDate = new Date(ABS_START_DATE)
 	const [startTime, setStartTime] = useState(new Date(baseDate.getTime() - 1000 * 60 * 60 * 24 * 7 * 5))
 	const [endTime, setEndTime] = useState(baseDate)
+	const [useAdjustments, setUseAdjustments] = useState(false)
 	const [data, setData]: [ServerCountType[], any] = useState([])
+	const [adjustmentStepSize, setAdjustmentStepSize] = useState(.2)
 	const [inspecting, setInspecting]: [any, any] = useState(null)
 	const [parsedCount, setParsedCount]: [ParsedCountT, any] = useState({
 		bagNote5: [],
@@ -105,7 +135,7 @@ const VisTest1: React.FC = () => {
 				value: each.float[bag]
 			}))
 			.sort((a, b) => a.value - b.value)
-			console.log(record)
+			// console.log(record)
 			const stack: any[] = []
 			// loop through each item
 			// 		- check item
@@ -131,7 +161,7 @@ const VisTest1: React.FC = () => {
 			})
 
 			function emptyStack (oneRecord: any) {
-				const stepSize: number = .1
+				// const stepSize: number = .2
 				// const stepSize: number = 100
 				const len: number = stack.length
 				const middle: number = Math.ceil(len / 2)
@@ -141,7 +171,9 @@ const VisTest1: React.FC = () => {
 					// temp.push(i)
 					const label = stack[j].label
 					const value = stack[j].value
-					const multiplier: number = i * 	stepSize * adjustments[label] 
+					const multiplier: number = useAdjustments 
+						? i * 	adjustmentStepSize * adjustments[label] 
+						: i
 					float[label] = value + multiplier
 					
 				}
@@ -149,10 +181,10 @@ const VisTest1: React.FC = () => {
 				stack.push(oneRecord)
 			}
 
-			if (each.id === 4) console.log(each.float, float)
+			// if (each.id === 4) console.log(each.float, float)
 			return { ...each, float }
 		})
-		console.log({ adjustedC, data })
+		// console.log({ adjustedC, data })
 
 		const parsedC = adjustedC.reduce((acc: ParsedCountT, each: ServerCountTypeWithAdjustment, idx: number) => {
 			const newAcc: any = { ...acc }
@@ -240,11 +272,20 @@ const VisTest1: React.FC = () => {
 			bagPence2: [],
 			bagPence1: [],
 		})
+		// console.log('setParsedCount')
 		setParsedCount(parsedC)
-	}, [data])
+	}, [
+		data, 
+		useAdjustments, 
+		adjustmentStepSize
+	])
 
 	const handleRepoChange = (e: any) => {
 		setRepo(e.target.value)
+	}
+
+	const toggleAdjustments = () => {
+		setUseAdjustments(!useAdjustments)
 	}
 
 	// const poundTwo = data.map((each: ServerCountType, idx: number) => ({ 
@@ -254,60 +295,6 @@ const VisTest1: React.FC = () => {
 	// 	, timestamp: each.timestamp ? new Date(each.timestamp) : undefined
 	// }))
 
-	// const d = [
-	// 	{
-	// 		name: 'Honda',
-	// 		mileage: 8,
-	// 		price: 6,
-	// 		safety: 9,
-	// 		performance: 6,
-	// 		interior: 3,
-	// 		warranty: 9,
-	// 		style: {
-	// 			strokeWidth: 3,
-	// 			strokeDasharray: '2, 2'
-	// 		}
-	// 	},
-	// 	{
-	// 		name: 'Honda',
-	// 		mileage: 8,
-	// 		price: 6,
-	// 		safety: 9,
-	// 		performance: 6,
-	// 		interior: 3,
-	// 		warranty: 9,
-	// 		style: {
-	// 			strokeWidth: 3,
-	// 			strokeDasharray: '2, 2'
-	// 		}
-	// 	},
-	// 	{
-	// 		name: 'Honda',
-	// 		mileage: 8,
-	// 		price: 6,
-	// 		safety: 9,
-	// 		performance: 6,
-	// 		interior: 3,
-	// 		warranty: 9,
-	// 		style: {
-	// 			strokeWidth: 3,
-	// 			strokeDasharray: '2, 2'
-	// 		}
-	// 	},
-	// 	{
-	// 		name: 'Honda',
-	// 		mileage: 8,
-	// 		price: 6,
-	// 		safety: 9,
-	// 		performance: 6,
-	// 		interior: 3,
-	// 		warranty: 9,
-	// 		style: {
-	// 			strokeWidth: 3,
-	// 			strokeDasharray: '2, 2'
-	// 		}
-	// 	}
-	// ]
 
 	return (
 		<div
@@ -332,30 +319,54 @@ const VisTest1: React.FC = () => {
 					)
 				}
 			</Select>
-			<DateInput 
-				flex='1' 
-				selected={startTime}
-				onChange={(d: any) => setStartTime(d)}
-				name='Date Start'
-				locale='gb'
-				timeFormat='HH:mm'
-				timeCaption='time input'
-				dateFormat='dd/MM/yyyy'
-			/>
-			<DateInput 
-				flex='1' 
-				selected={endTime}
-				onChange={(d: any) => setEndTime(d)}
-				name='Date Start'
-				locale='gb'
-				timeFormat='HH:mm'
-				timeCaption='time input'
-				dateFormat='dd/MM/yyyy'
-			/>
+			<Flex>
+				<DateInput 
+					flex='1' 
+					selected={startTime}
+					onChange={(d: any) => setStartTime(d)}
+					name='Date Start'
+					locale='gb'
+					timeFormat='HH:mm'
+					timeCaption='time input'
+					dateFormat='dd/MM/yyyy'
+				/>
+				<DateInput 
+					flex='1' 
+					selected={endTime}
+					onChange={(d: any) => setEndTime(d)}
+					name='Date Start'
+					locale='gb'
+					timeFormat='HH:mm'
+					timeCaption='time input'
+					dateFormat='dd/MM/yyyy'
+				/>
+				<Button
+					onClick={toggleAdjustments}
+					variant='ui'
+				>
+					Adjustments: {useAdjustments ? 'ON' : 'OFF'}
+				</Button>
+				<Slider
+					min={0.05}
+					max={.8}
+					step={0.01}
+					value={adjustmentStepSize}
+					onChange={(v: any) => setAdjustmentStepSize(v)}
+					// onChangeEnd={(v: any) => setAdjustmentStepSize(v)}
+					width={'200px'}
+				>
+					<SliderTrack>
+						<SliderFilledTrack />
+					</SliderTrack>
+					<SliderThumb />
+				</Slider>
+			</Flex>
 			<XYPlot
-				width={1000}
-				height={400}
-				yPadding={20}
+				width={WIDTH}
+				height={HEIGHT}
+				yPadding={Y_PADDING}
+				onMouseLeave={() => setInspecting(null)}
+				animation={true}
 				style={{
 					position: 'relative'
 				}}
@@ -391,100 +402,120 @@ const VisTest1: React.FC = () => {
 					fill='none'
 					// @ts-ignore
 					data={parsedCount.bagNote5}
+					color={COLOURS.red}
 				/>
 				<LineSeries 
 					fill='none'
 					// @ts-ignore
 					data={parsedCount.bagPound2}
+					color={COLOURS.green}
 				/>
 				<LineSeries 
 					fill='none'
 					// @ts-ignore
 					data={parsedCount.bagPound1}
+					color={COLOURS.blue}
 				/>
 				<LineSeries 
 					fill='none'
 					// @ts-ignore
 					data={parsedCount.bagPence50}
+					color={COLOURS.orange}
 				/>
 				<LineSeries 
 					fill='none'
 					// @ts-ignore
 					data={parsedCount.bagPence20}
+					color={COLOURS.yellow}
 				/>
 				<LineSeries 
 					fill='none'
 					// @ts-ignore
 					data={parsedCount.bagPence10}
+					color={COLOURS.teal}
 				/>
 				<LineSeries 
 					fill='none'
 					// @ts-ignore
 					data={parsedCount.bagPence5}
+					color={COLOURS.black}
 				/>
 				<LineSeries 
 					fill='none'
 					// @ts-ignore
 					data={parsedCount.bagPence2}
+					color={COLOURS.gold}
 				/>
 				<LineSeries 
 					fill='none'
 					// @ts-ignore
 					data={parsedCount.bagPence1}
+					color={COLOURS.liveRed}
 				/>
+
+
 				<MarkSeries 
 					className='bagged-note-five'
 					// @ts-ignore
 					data={parsedCount.bagNote5}
 					onValueMouseOver={(v: any) => setInspecting(v)}
+					color={COLOURS.red}
 				/>
 				<MarkSeries 
 					className='bagged-pound-two'
 					// @ts-ignore
 					data={parsedCount.bagPound2}
 					onValueMouseOver={(v: any) => setInspecting(v)}
+					color={COLOURS.green}
 				/>
 				<MarkSeries 
 					className='bagged-pound-one'
 					// @ts-ignore
 					data={parsedCount.bagPound1}
 					onValueMouseOver={(v: any) => setInspecting(v)}
+					color={COLOURS.blue}
 				/>
 				<MarkSeries 
 					className='bagged-pence-fifty'
 					// @ts-ignore
 					data={parsedCount.bagPence50}
 					onValueMouseOver={(v: any) => setInspecting(v)}
+					color={COLOURS.orange}
 				/>
 				<MarkSeries 
 					className='bagged-pence-twenty'
 					// @ts-ignore
 					data={parsedCount.bagPence20}
 					onValueMouseOver={(v: any) => setInspecting(v)}
+					color={COLOURS.yellow}
 				/>
 				<MarkSeries 
 					className='bagged-pence-ten'
 					// @ts-ignore
 					data={parsedCount.bagPence10}
 					onValueMouseOver={(v: any) => setInspecting(v)}
+					color={COLOURS.teal}
 				/>
 				<MarkSeries 
 					className='bagged-pence-five'
 					// @ts-ignore
 					data={parsedCount.bagPence5}
 					onValueMouseOver={(v: any) => setInspecting(v)}
+					color={COLOURS.black}
 				/>
 				<MarkSeries 
 					className='bagged-pence-two'
 					// @ts-ignore
 					data={parsedCount.bagPence2}
 					onValueMouseOver={(v: any) => setInspecting(v)}
+					color={COLOURS.gold}
 				/>
 				<MarkSeries 
 					className='bagged-pence-one'
 					// @ts-ignore
 					data={parsedCount.bagPence1}
 					onValueMouseOver={(v: any) => setInspecting(v)}
+					color={COLOURS.liveRed}
 				/>
 				{/* <ParallelCoordinates 
 					// @ts-ignore

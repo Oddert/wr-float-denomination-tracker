@@ -162,7 +162,10 @@ export const getCounts = async (req: Request, res: Response) => {
 
 			const counts = await q()
 	
-			return respondWell(res, null, null, 'List of all counts.', { counts })
+			return respondWell(res, null, null, 'List of all counts.', { counts: counts.map((e: any) => ({
+				...e,
+				readableTimestamp: new Date(e.timestamp)
+			})) })
 	
 		} else {
 			let fromdate: number = sanitiseNumberQuery(req.query.fromdate, 0)
@@ -174,8 +177,8 @@ export const getCounts = async (req: Request, res: Response) => {
 				applyDeleteFilter(
 					applyFloatFilter(
 						Count.query()
-							.andWhere('createdOn', '>=', fromdate)
-							.andWhere('createdOn', '<=', todate)
+							.andWhere('timestamp', '>=', fromdate)
+							.andWhere('timestamp', '<=', todate)
 							.limit(limit)
 							.offset(offset)
 					)()
@@ -185,7 +188,10 @@ export const getCounts = async (req: Request, res: Response) => {
 
 			const counts = await q()
 		
-			return respondWell(res, null, null, 'List of all counts.', { counts })
+			return respondWell(res, null, null, 'List of all counts.', { counts: counts.map((e: any) => ({
+				...e,
+				readableTimestamp: new Date(e.timestamp)
+			})) })
 		}
 	} catch (error) {
 		return respondErr(res, 500, 'There was a server error, please try again.', null, { error })
@@ -367,7 +373,7 @@ export const addCount = async (req: Request, res: Response) => {
 			authenticatorId: 0, 
 			counterId,
 			supervisorId,
-			timestamp: req.body.count.timestamp,
+			timestamp: new Date(req.body.count.timestamp).getTime(),
 			comment: req.body.count.comment || null,
 		}
 
