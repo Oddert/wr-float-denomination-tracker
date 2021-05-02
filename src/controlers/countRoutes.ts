@@ -23,17 +23,16 @@ import {
 
 // @ts-ignore
 function deleteFilterActive (query: any) {
-	return () => query
-	.where('deleted', null)
-	.orWhere('deleted', 0)
-	.orWhere('deleted', false)
+	// console.log('deleteFilterActive')
+	return () => query.andWhere('deleted', false)
+		// .andWhere('deleted', null)
+	// .orWhere('deleted', 0)
 }
 
 // @ts-ignore
 function deleteFilterInactive (query: any) {
-	return () => query
-	.where('deleted', true)
-	.orWhere('deleted', 1)
+	// console.log('deleteFilterInactive')
+	return () => query.andWhere('deleted', true)
 }
 
 // @ts-ignore
@@ -42,12 +41,8 @@ function noFilter (query: any) {
 }
 
 function repoFilter (query: any, repoId: number) {
-	console.log(repoId, typeof repoId)
-	if (query.hasOwnProperty('andWhere')) {
-		return () => query.andWhere('repositoryId', repoId)
-	} else {
-		return () => query.where('repositoryId', repoId)
-	}
+	// console.log(repoId, typeof repoId)
+	return () => query.andWhere('repositoryId', repoId)
 }
 
 function floatFilter (query: any) {
@@ -172,7 +167,11 @@ export const getCounts = async (req: Request, res: Response) => {
 			let todate: number = sanitiseNumberQuery(req.query.todate, Date.now())
 			let limit: number = sanitiseNumberQuery(req.query.limit, 100)
 			let offset: number = sanitiseNumberQuery(req.query.offset, 0)
-			
+			console.log('C:')
+			console.log(applyRepoFilter)
+			console.log(applyDeleteFilter)
+			console.log(applyFloatFilter)
+
 			const q = applyRepoFilter(
 				applyDeleteFilter(
 					applyFloatFilter(

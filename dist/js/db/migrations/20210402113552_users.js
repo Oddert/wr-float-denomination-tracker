@@ -12,7 +12,7 @@ exports.up = function (knex) {
         t.string('readableName');
         t.date('createdOn');
         t.date('updatedOn');
-        t.boolean('deleted');
+        t.boolean('deleted').notNullable().defaultTo(false);
         t.date('deletedOn');
     });
 };

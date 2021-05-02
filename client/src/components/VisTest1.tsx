@@ -81,7 +81,7 @@ const VisTest1: React.FC = () => {
 	const baseDate = new Date(ABS_START_DATE)
 	const [startTime, setStartTime] = useState(new Date(baseDate.getTime() - 1000 * 60 * 60 * 24 * 7 * 5))
 	const [endTime, setEndTime] = useState(baseDate)
-	const [useAdjustments, setUseAdjustments] = useState(false)
+	const [useAdjustments, setUseAdjustments] = useState(true)
 	const [data, setData]: [ServerCountType[], any] = useState([])
 	const [adjustmentStepSize, setAdjustmentStepSize] = useState(.2)
 	const [inspecting, setInspecting]: [any, any] = useState(null)
@@ -288,6 +288,10 @@ const VisTest1: React.FC = () => {
 		setUseAdjustments(!useAdjustments)
 	}
 
+	const handleMarkMouseOver = (e: any) => {
+		setInspecting(e)
+	}
+
 	// const poundTwo = data.map((each: ServerCountType, idx: number) => ({ 
 	// 	y: (each.float?.bagPound2 || 0) / 100, 
 	// 	// @ts-ignore
@@ -302,24 +306,27 @@ const VisTest1: React.FC = () => {
 				background: '#fff'
 			}}
 		>
-			<Select
-				onChange={handleRepoChange}
-				value={repo}
+			<Flex
+				alignItems='center'
 			>
-				{
-					repoList.map((each: any) => 
-						<option
-							key={each.id}
-							value={each.id}
-						>
-							{
-								each.name
-							}
-						</option>
-					)
-				}
-			</Select>
-			<Flex>
+				<Select
+					onChange={handleRepoChange}
+					value={repo}
+					w='250px'
+				>
+					{
+						repoList.map((each: any) => 
+							<option
+								key={each.id}
+								value={each.id}
+							>
+								{
+									each.name
+								}
+							</option>
+						)
+					}
+				</Select>
 				<DateInput 
 					flex='1' 
 					selected={startTime}
@@ -366,7 +373,7 @@ const VisTest1: React.FC = () => {
 				height={HEIGHT}
 				yPadding={Y_PADDING}
 				onMouseLeave={() => setInspecting(null)}
-				animation={true}
+				// animation={true}
 				style={{
 					position: 'relative'
 				}}
@@ -398,12 +405,12 @@ const VisTest1: React.FC = () => {
 					// @ts-ignore
 					data={poundTwo}
 				/> */}
-				<LineSeries 
+				{/* <LineSeries 
 					fill='none'
 					// @ts-ignore
 					data={parsedCount.bagNote5}
 					color={COLOURS.red}
-				/>
+				/> */}
 				<LineSeries 
 					fill='none'
 					// @ts-ignore
@@ -451,70 +458,72 @@ const VisTest1: React.FC = () => {
 					// @ts-ignore
 					data={parsedCount.bagPence1}
 					color={COLOURS.liveRed}
+					onSeriesMouseOver={() => console.log(Date.now())}
 				/>
 
 
-				<MarkSeries 
+				{/* <MarkSeries 
 					className='bagged-note-five'
 					// @ts-ignore
 					data={parsedCount.bagNote5}
 					onValueMouseOver={(v: any) => setInspecting(v)}
 					color={COLOURS.red}
-				/>
+				/> */}
 				<MarkSeries 
 					className='bagged-pound-two'
 					// @ts-ignore
 					data={parsedCount.bagPound2}
-					onValueMouseOver={(v: any) => setInspecting(v)}
+					onValueMouseOver={handleMarkMouseOver}
 					color={COLOURS.green}
 				/>
 				<MarkSeries 
 					className='bagged-pound-one'
 					// @ts-ignore
 					data={parsedCount.bagPound1}
-					onValueMouseOver={(v: any) => setInspecting(v)}
+					onValueMouseOver={handleMarkMouseOver}
 					color={COLOURS.blue}
 				/>
 				<MarkSeries 
 					className='bagged-pence-fifty'
 					// @ts-ignore
 					data={parsedCount.bagPence50}
-					onValueMouseOver={(v: any) => setInspecting(v)}
+					onValueMouseOver={handleMarkMouseOver}
 					color={COLOURS.orange}
 				/>
 				<MarkSeries 
 					className='bagged-pence-twenty'
 					// @ts-ignore
 					data={parsedCount.bagPence20}
-					onValueMouseOver={(v: any) => setInspecting(v)}
+					onValueMouseOver={handleMarkMouseOver}
 					color={COLOURS.yellow}
 				/>
 				<MarkSeries 
 					className='bagged-pence-ten'
 					// @ts-ignore
 					data={parsedCount.bagPence10}
-					onValueMouseOver={(v: any) => setInspecting(v)}
+					onValueMouseOver={handleMarkMouseOver}
 					color={COLOURS.teal}
 				/>
 				<MarkSeries 
 					className='bagged-pence-five'
 					// @ts-ignore
 					data={parsedCount.bagPence5}
-					onValueMouseOver={(v: any) => setInspecting(v)}
+					onValueMouseOver={handleMarkMouseOver}
 					color={COLOURS.black}
+
 				/>
 				<MarkSeries 
 					className='bagged-pence-two'
 					// @ts-ignore
 					data={parsedCount.bagPence2}
-					onValueMouseOver={(v: any) => setInspecting(v)}
+					onValueMouseOver={handleMarkMouseOver}
 					color={COLOURS.gold}
 				/>
 				<MarkSeries 
 					className='bagged-pence-one'
 					// @ts-ignore
 					data={parsedCount.bagPence1}
-					onValueMouseOver={(v: any) => setInspecting(v)}
+					onValueMouseOver={handleMarkMouseOver}
 					color={COLOURS.liveRed}
 				/>
 				{/* <ParallelCoordinates 
@@ -529,10 +538,10 @@ const VisTest1: React.FC = () => {
 			}
 			<ul
 			// @ts-ignore
-				className={css}
+				// className={css}
 			>
-				<li>Figgure out colours</li>
-				<li>How to </li>
+				<li>Toggle individual series</li>
+				<li>How to emphasis on hover</li>
 				<li>Why Emotion.js not working?</li>
 				<li>Cancel Hint on mouseout</li>
 				<li>Add Crosshair</li>

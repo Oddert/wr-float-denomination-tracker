@@ -25,9 +25,9 @@ exports.up = function(knex) {
 		t.string('name')
 		t.string('description')
 		t.date('updatedOn')
-		t.boolean('activated')
+		t.boolean('activated').notNullable().defaultTo(false)
 		t.date('activatedOn')
-		t.boolean('deleted')
+		t.boolean('deleted').notNullable().defaultTo(false)
 		t.date('deletedOn')
 	})
 };

@@ -60,29 +60,23 @@ var utils_1 = require("./utils");
 // Higher-order mixins to query builders
 // @ts-ignore
 function deleteFilterActive(query) {
-    return function () { return query
-        .where('deleted', null)
-        .orWhere('deleted', 0)
-        .orWhere('deleted', false); };
+    // console.log('deleteFilterActive')
+    return function () { return query.andWhere('deleted', false); };
+    // .andWhere('deleted', null)
+    // .orWhere('deleted', 0)
 }
 // @ts-ignore
 function deleteFilterInactive(query) {
-    return function () { return query
-        .where('deleted', true)
-        .orWhere('deleted', 1); };
+    // console.log('deleteFilterInactive')
+    return function () { return query.andWhere('deleted', true); };
 }
 // @ts-ignore
 function noFilter(query) {
     return function () { return query; };
 }
 function repoFilter(query, repoId) {
-    console.log(repoId, typeof repoId);
-    if (query.hasOwnProperty('andWhere')) {
-        return function () { return query.andWhere('repositoryId', repoId); };
-    }
-    else {
-        return function () { return query.where('repositoryId', repoId); };
-    }
+    // console.log(repoId, typeof repoId)
+    return function () { return query.andWhere('repositoryId', repoId); };
 }
 function floatFilter(query) {
     return function () { return query.withGraphJoined('float'); };
@@ -164,6 +158,10 @@ var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 todate = utils_1.sanitiseNumberQuery(req.query.todate, Date.now());
                 limit = utils_1.sanitiseNumberQuery(req.query.limit, 100);
                 offset = utils_1.sanitiseNumberQuery(req.query.offset, 0);
+                console.log('C:');
+                console.log(applyRepoFilter);
+                console.log(applyDeleteFilter);
+                console.log(applyFloatFilter);
                 q = applyRepoFilter(applyDeleteFilter(applyFloatFilter(Count_1.default.query()
                     .andWhere('timestamp', '>=', fromdate)
                     .andWhere('timestamp', '<=', todate)

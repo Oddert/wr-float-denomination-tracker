@@ -16,6 +16,11 @@ path {
 	fill: none;
 }
 
+/* path:hover {
+	z-index: 100;
+	stroke-width: 10px;
+} */
+
 .bagged-pound-five path {
 	stroke: rgb(139, 8, 8);
 }

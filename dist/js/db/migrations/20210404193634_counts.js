@@ -30,8 +30,8 @@ exports.up = function (knex) {
         // from repo to count??? 
         t.string('completionStatus');
         t.date('createdOn');
-        t.boolean('verified');
-        t.boolean('deleted');
+        t.boolean('verified').notNullable().defaultTo(false);
+        t.boolean('deleted').notNullable().defaultTo(false);
         t.date('deletedOn');
         t.date('updatedOn');
         t.date('timestamp');
