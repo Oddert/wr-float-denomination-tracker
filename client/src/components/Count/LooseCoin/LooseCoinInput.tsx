@@ -38,12 +38,17 @@ const Denomination: React.FC<Props> = ({
 
 	function handleChange (v: any): void {
 		console.log(typeof v, v)
-		const valueAsNumber = Math.floor(Number(v) * 100)
-		console.log(valueAsNumber)
-		const val = (v === '' || v === null || v === undefined) ? null : valueAsNumber
-
-		// console.log('setting internal val', v)
 		setValue(v)
+	}
+
+	const handleFocusLeave = (e: any) => {
+		const v = e.target.value
+		// console.log('focusLeve', new Date().toLocaleTimeString())
+		
+		const valueAsNumber = Math.floor(Number(v) * 100)
+		// console.log({ valueAsNumber, inVal })
+		if (valueAsNumber === inVal) return
+		const val = (v === '' || v === null || v === undefined) ? null : valueAsNumber
 
 		const minimumValueTest = valueAsNumber % 1
 		const nanTest = isNaN(valueAsNumber)
@@ -69,29 +74,26 @@ const Denomination: React.FC<Props> = ({
 		const payload = {
 			[denomination]: val
 		}
+		console.log('dispatching', payload)
 		setError(null)
 		dispatch({
 			type: CountActions.UPDATE_LOOSE,
 			payload,
 		})
-	}
-
-	const handleFocusLeave = (e: any) => {
-		const val: number = Number(e.target.value)
-		if (isNaN(val)) {
-			return
-		} else if (!error) {
-			const fixedVal = val.toFixed(2)
-			setValue(fixedVal)
-			// console.log(typeof fixedVal, fixedVal)
-			// const payload = {
-			// 	[denomination]: fixedVal
-			// }
-			// dispatch({
-			// 	type: CountActions.UPDATE_LOOSE,
-			// 	payload,
-			// })
-		}
+		// if (isNaN(val)) {
+		// 	return
+		// } else if (!error) {
+		// 	const fixedVal = val.toFixed(2)
+		// 	setValue(fixedVal)
+		// 	// console.log(typeof fixedVal, fixedVal)
+		// 	// const payload = {
+		// 	// 	[denomination]: fixedVal
+		// 	// }
+		// 	// dispatch({
+		// 	// 	type: CountActions.UPDATE_LOOSE,
+		// 	// 	payload,
+		// 	// })
+		// }
 	}
 	
 	const sideColumns = '3fr'
