@@ -1,12 +1,16 @@
 import express, { Express, json, urlencoded } from 'express'
+import session from 'express-session'
+import flash from 'express-flash'
 import path from 'path'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import morgan from 'morgan'
 import Knex from 'knex'
 import { Model } from 'objection'
+import cookieParser from 'cookie-parser'
 // import * as knex from 'knex'
 
+import passport from './config/auth'
 import config from './knexfile'
 
 import coreRoutes from './routes/coreRoutes'
@@ -29,9 +33,19 @@ Model.knex(knexConfig)
 
 app.use(express.static(path.join(__dirname, '../build')))
 app.use(json())
+app.use(cookieParser())
 app.use(urlencoded({ extended: true }))
 app.use(cors())
-app.use(morgan('tiny'))
+app.use(morgan('dev'))
+
+app.use(session({
+	secret: process.env.SECRET as string,
+	resave: false,
+	saveUninitialized: true,
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(flash())
 
 app.get('/test', (req, res) => {
 	const input = req.query.t
@@ -57,6 +71,7 @@ app.use('/api/v1/partner', partnerRoutes)
 app.use('/api/v1/repository', repositoryRoutes)
 app.use('/api/v1/user', userRoutes)
 
-const confirmStart: any = () => console.log(`${new Date().toLocaleTimeString()}: Server initialised on PORT ${PORT}`)
+const confirmMessage: string = `${new Date().toLocaleTimeString()}: Server initialised on PORT ${PORT}`
+const confirmStart: () => void = () => console.log(confirmMessage)
 
 app.listen(PORT, confirmStart)

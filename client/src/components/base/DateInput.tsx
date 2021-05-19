@@ -26,6 +26,7 @@ const DateInput: React.FC<any> = (props: any) => (
 		/> */}
 		<DatePicker
 			{...props}
+			
 		/>
 		<CalendarIcon />
 	</Box>
