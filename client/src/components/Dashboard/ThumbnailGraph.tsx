@@ -20,6 +20,10 @@ import {
 	ReduxStateType,
 	ServerCountType,
 } from '../../global'
+import { 
+	Flex, 
+	Heading, 
+} from '@chakra-ui/layout'
 
 interface Props {
 	width: number
@@ -204,9 +208,25 @@ const ThumbnailGraph: React.FC<Props> = ({
 		setFocused(null)
 	}
 
-	if (!counts) {
+	if (!counts.length) {
 		return (
-			<div></div>
+			<div
+				style={{
+					position: 'relative'
+				}}
+			>
+				<Flex
+					height={height}
+					alignItems='center'
+					justifyContent='center'
+				>
+					<Heading
+						as='h4'
+					>
+						No Data
+					</Heading>
+				</Flex>
+			</div>
 		)
 	}
 
