@@ -170,7 +170,9 @@ var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 return [4 /*yield*/, q()];
             case 3:
                 counts = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, null, null, 'List of all counts.', { counts: counts.map(function (e) { return (__assign(__assign({}, e), { readableTimestamp: new Date(e.timestamp) })); }) })];
+                return [2 /*return*/, utils_1.respondWell(res, null, null, 'List of all counts.', {
+                        counts: counts.map(function (e) { return (__assign(__assign({}, e), { readableTimestamp: new Date(e.timestamp) })); })
+                    })];
             case 4: return [3 /*break*/, 6];
             case 5:
                 error_1 = _a.sent();

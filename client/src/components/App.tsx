@@ -6,7 +6,7 @@ import { authUsersWriteAll, repositoriesWriteAll, authPartnersWriteAll } from '.
 
 import PageWrapper from './PageWrapper'
 import Login from './Login'
-import Dashboard from './Dashboard'
+import Dashboard from './Dashboard/'
 import Counts from './Counts/'
 import Count from './Count/'
 
@@ -58,7 +58,7 @@ const App: React.FC = () => {
 						</PageWrapper>
           </Route>
           <Route path='/repositories'>
-            <PageWrapper>
+            <PageWrapper title='All Repositories'>
 							<Dashboard />
 						</PageWrapper>
           </Route>

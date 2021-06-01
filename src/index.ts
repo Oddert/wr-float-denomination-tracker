@@ -74,4 +74,5 @@ app.use('/api/v1/user', userRoutes)
 const confirmMessage: string = `${new Date().toLocaleTimeString()}: Server initialised on PORT ${PORT}`
 const confirmStart: () => void = () => console.log(confirmMessage)
 
-app.listen(PORT, confirmStart)
+const server = app.listen(PORT, confirmStart)
+export default server

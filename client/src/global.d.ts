@@ -12,6 +12,7 @@ declare global {
 		title?: string
 		description?: string
 		catt?: string
+		id: string
 	}
 }
 
@@ -167,4 +168,47 @@ export interface ServerFloatType {
 	note50?: number | null
 	noteTotal?: number | null
 	floatTotal?: number | null
+}
+
+export interface ColourSet {
+	liveRed: string
+	red: string
+	orange: string
+	yellow: string
+	green: string
+	blue: string
+	purple: string
+	black: string
+	white: string
+	brown: string
+	teal: string
+	tealGreen: string
+	gold: string
+}
+
+// WARNING: remove any, sychronise server and client API types, propigate down
+export interface ReduxStateType {
+	main: {}
+	counts: {
+		data: ServerCountType[]
+		updated: number | null
+		countsServerTotal: number | null
+		pageLength: number
+	}
+	ui: {
+		flash: Flash[],
+		coloursets: ColourSet[],
+		colours: ColourSet
+	}
+	auth: {
+		userList: any[]
+		userListUpdated: number | null
+		partnerList: Partner[]
+		partnerListUpdated: number | null
+	}
+	repositories: {
+		repositoryList: Repository[]
+		repositoryListUpdated: number | null
+		repositoryServerTotal: number | null
+	}
 }

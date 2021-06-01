@@ -187,10 +187,14 @@ export const getCounts = async (req: Request, res: Response) => {
 
 			const counts = await q()
 		
-			return respondWell(res, null, null, 'List of all counts.', { counts: counts.map((e: any) => ({
-				...e,
-				readableTimestamp: new Date(e.timestamp)
-			})) })
+			return respondWell(res, null, null, 'List of all counts.', 
+				{ 
+					counts: counts.map((e: any) => ({
+						...e,
+						readableTimestamp: new Date(e.timestamp)
+					})) 
+				}
+			)
 		}
 	} catch (error) {
 		return respondErr(res, 500, 'There was a server error, please try again.', null, { error })

@@ -1,7 +1,8 @@
-
+/** @ jsxRuntime classic */
+/** @ jsx jsx */
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { css, jsx } from '@emotion/react'
+// import { css, jsx } from '@emotion/react'
 
 import {
 	XYPlot,
@@ -16,6 +17,7 @@ import {
 } from 'react-vis'
 
 import { 
+	ReduxStateType,
 	ServerCountType, 
 	// ServerFloatType,
 } from '../global'
@@ -33,29 +35,13 @@ import {
 import Select from './base/Select'
 import DateInput from './base/DateInput'
 
-const styles = css`
-	color: red;
-`
+// const styles = css`
+// 	color: red;
+// `
 const ABS_START_DATE = '2021-03-30'
 const WIDTH: number = 1200
 const HEIGHT: number = 500
 const Y_PADDING: number = 20
-
-const COLOURS = {
-	liveRed: '#db0032',
-	red: '#ca6d6d',
-	orange: '#ff883a',
-	yellow: '#bed800',
-	green: '#598d00',
-	blue: '#365075',
-	purple: '#6e70a8',
-	black: '#333333',
-	white: '#f3f3f3',
-	brown: '#9f9b15',
-	teal: '#3db8b5',
-	tealGreen: '#03ae99',
-	gold: '#f8b018',
-}
 
 interface ParsedCountT {
 	bagNote5: ParsedCountT[],
@@ -85,6 +71,7 @@ const VisTest1: React.FC = () => {
 	const [data, setData]: [ServerCountType[], any] = useState([])
 	const [adjustmentStepSize, setAdjustmentStepSize] = useState(.2)
 	const [inspecting, setInspecting]: [any, any] = useState(null)
+	const COLOURS = useSelector((state: ReduxStateType) => state.ui.colours)
 	const [parsedCount, setParsedCount]: [ParsedCountT, any] = useState({
 		bagNote5: [],
 		bagPound2: [],

@@ -1,11 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
+var authRoutes_1 = require("../controlers/authRoutes");
 var router = express_1.Router();
 router
     .route('/')
-    .get(function (req, res) {
-    res.send('authRoutes is not implamented yet');
-});
+    .get(authRoutes_1.getAuth);
+router
+    .route('/register')
+    .post(authRoutes_1.registerUser);
 exports.default = router;
 //# sourceMappingURL=authRoutes.js.map

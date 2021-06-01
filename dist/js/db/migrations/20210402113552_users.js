@@ -7,8 +7,8 @@ exports.up = function (knex) {
         t.foreign('privilegeId')
             .references('id')
             .inTable('privileges');
-        t.string('username');
-        t.string('password');
+        t.string('username').unique().notNullable();
+        t.string('password').notNullable();
         t.string('readableName');
         t.date('createdOn');
         t.date('updatedOn');

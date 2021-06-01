@@ -23,13 +23,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importStar(require("express"));
+var express_session_1 = __importDefault(require("express-session"));
+var express_flash_1 = __importDefault(require("express-flash"));
 var path_1 = __importDefault(require("path"));
 var cors_1 = __importDefault(require("cors"));
 var dotenv_1 = __importDefault(require("dotenv"));
 var morgan_1 = __importDefault(require("morgan"));
 var knex_1 = __importDefault(require("knex"));
 var objection_1 = require("objection");
+var cookie_parser_1 = __importDefault(require("cookie-parser"));
 // import * as knex from 'knex'
+var auth_1 = __importDefault(require("./config/auth"));
 var knexfile_1 = __importDefault(require("./knexfile"));
 var coreRoutes_1 = __importDefault(require("./routes/coreRoutes"));
 var authRoutes_1 = __importDefault(require("./routes/authRoutes"));
@@ -45,9 +49,18 @@ var knexConfig = knex_1.default(knexfile_1.default.development);
 objection_1.Model.knex(knexConfig);
 app.use(express_1.default.static(path_1.default.join(__dirname, '../build')));
 app.use(express_1.json());
+app.use(cookie_parser_1.default());
 app.use(express_1.urlencoded({ extended: true }));
 app.use(cors_1.default());
-app.use(morgan_1.default('tiny'));
+app.use(morgan_1.default('dev'));
+app.use(express_session_1.default({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+}));
+app.use(auth_1.default.initialize());
+app.use(auth_1.default.session());
+app.use(express_flash_1.default());
 app.get('/test', function (req, res) {
     var input = req.query.t;
     res.json({
@@ -70,6 +83,8 @@ app.use('/api/v1/float', floatRoutes_1.default);
 app.use('/api/v1/partner', partnerRoutes_1.default);
 app.use('/api/v1/repository', repositoryRoutes_1.default);
 app.use('/api/v1/user', userRoutes_1.default);
-var confirmStart = function () { return console.log(new Date().toLocaleTimeString() + ": Server initialised on PORT " + PORT); };
-app.listen(PORT, confirmStart);
+var confirmMessage = new Date().toLocaleTimeString() + ": Server initialised on PORT " + PORT;
+var confirmStart = function () { return console.log(confirmMessage); };
+var server = app.listen(PORT, confirmStart);
+exports.default = server;
 //# sourceMappingURL=index.js.map
