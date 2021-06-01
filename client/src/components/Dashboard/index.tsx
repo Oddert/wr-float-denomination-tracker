@@ -39,7 +39,8 @@ const Dashboard: React.FC = () => {
 						<Box
 							w='100%'
 							// h='100%'
-							bgColor='#c4c4c4'
+							// bgColor='#c4c4c4'
+							bgColor='#fff'
 							position='relative'
 							display='flex'
 							flexDirection='column'

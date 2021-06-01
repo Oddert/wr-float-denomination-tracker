@@ -21,6 +21,9 @@ const Nav: React.FC<Props> = () => {
 			bgColor='waitrose.primary'
 			h='100%'
 			textAlign='left'
+			// w='100%'
+			// border='1px solid'
+			// borderColor='red'
 		>
       <nav>
         <UnorderedList

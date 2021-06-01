@@ -40,15 +40,15 @@ interface DataPoint {
 }
 
 interface LinearDataState {
-	bagNote5: any[]
-	bagPound2: any[]
-	bagPound1: any[]
-	bagPence50: any[]
-	bagPence20: any[]
-	bagPence10: any[]
-	bagPence5: any[]
-	bagPence2: any[]
-	bagPence1: any[]
+	bagNote5: DataPoint[]
+	bagPound2: DataPoint[]
+	bagPound1: DataPoint[]
+	bagPence50: DataPoint[]
+	bagPence20: DataPoint[]
+	bagPence10: DataPoint[]
+	bagPence5: DataPoint[]
+	bagPence2: DataPoint[]
+	bagPence1: DataPoint[]
 }
 
 const linearDataInitialState: LinearDataState = {
@@ -171,7 +171,7 @@ const ThumbnailGraph: React.FC<Props> = ({
 			id,
 		})
 
-		const parsedC = adjustedC.reduce((acc: LinearDataState, each: any, idx: number) => {
+		const parsedC: LinearDataState = adjustedC.reduce((acc: LinearDataState, each: any, idx: number) => {
 			const newAcc: any = { ...acc }
 			newAcc.bagNote5.push(addOnePoint(new Date(each.timestamp).toLocaleString('en-GB'), (each.float?.bagNote5 || 0) / (100 * 5), idx, each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined, each.id))
 			newAcc.bagPound2.push(addOnePoint(new Date(each.timestamp).toLocaleString('en-GB'), (each.float?.bagPound2 || 0) / (100 * 20), idx, each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined, each.id))
@@ -194,6 +194,10 @@ const ThumbnailGraph: React.FC<Props> = ({
 			bagPence2: [],
 			bagPence1: [],
 		})
+
+		// const m: number[] = [...Object.values(parsedC)].map(e => e.y)
+		// const maxVal = Math.max(...m)
+		// console.log(maxVal)
 
 		setParsedData(parsedC)
 	}, [
@@ -243,7 +247,9 @@ const ThumbnailGraph: React.FC<Props> = ({
 				onMouseLeave={handleGraphMouseLeave}
 			>
 				<XAxis />
-				<YAxis />
+				<YAxis 
+					
+				/>
 				{
 					bags.map((bag: BagTypes) => 
 						<LineSeries 
