@@ -58,13 +58,13 @@ const users = [
 
 export const getUsers = async (req: Request, res: Response) => {
 	try {
-		let limit: number = sanitiseNumberQuery(req.query.limit, 500)
-		let offset: number = sanitiseNumberQuery(req.query.offset, 0)
-			
+		const limit: number = sanitiseNumberQuery(req.query.limit, 500)
+		const offset: number = sanitiseNumberQuery(req.query.offset, 0)
+
 		const users = await User.query()
 			.limit(limit)
 			.offset(offset)
-	
+
 		return respondWell(res, 200, null, 'List of all users.', { users })
 
 	} catch (error) {
@@ -88,22 +88,22 @@ export const getUser = async (req: Request, res: Response) => {
 			if (!multiUser || typeof multiUser === undefined) {
 				return respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?user=2,3,4"', null, null)
 			}
-			
+
 			if (Array.isArray(multiUser)) {
-				
+
 				const users = await User.query()
 					.whereIn('users.id', multiUser)
 
 				return respondWell(res, 200, null, 'Details for provided id.', { users })
-				
+
 			} else if (/,/gi.test(multiUser) || /[0-9]/gi.test(multiUser)) {
-				
+
 				const splitMultiUser = multiUser.split(',')
 				const users = await User.query()
 					.whereIn('users.id', splitMultiUser)
 
 				return respondWell(res, 200, null, 'Details for provided id.', { users })
-				
+
 			} else {
 
 				return respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?user=2,3,4"', null, null)
@@ -115,7 +115,7 @@ export const getUser = async (req: Request, res: Response) => {
 				.where('users.id', Number(id))
 
 			return respondWell(res, 200, null, 'Details for provided id.', { user })
-		
+
 		}
 	} catch (error) {
 		return respondErr(res, 500, 'There was an issue processing your request.', null, { error })

@@ -1,7 +1,7 @@
 import chai from 'chai'
 import chaitHttp from 'chai-http'
 
-import knex from '../../db/knex' 
+import knex from '../../db/knex'
 import server from '../../index'
 
 process.env.MODE_ENV = 'test'

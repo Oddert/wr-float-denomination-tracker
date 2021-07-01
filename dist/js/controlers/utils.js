@@ -318,10 +318,10 @@ var validateCount = function (count) {
     // if partial return partial
     function callChecks() {
         var tests = [
-            // isVerifiedCheck, 
+            // isVerifiedCheck,
             missingDataCheck,
             propsCheck,
-            // checkAuthor, 
+            // checkAuthor,
             baggedCompleteCheck,
             looseCompleteCheck,
             notesCompleteCheck,
@@ -512,10 +512,10 @@ var validateFloat = function (float) {
     // if partial return partial
     function callChecks() {
         var tests = [
-            // isVerifiedCheck, 
+            // isVerifiedCheck,
             missingDataCheck,
-            // propsCheck, 
-            // checkAuthor, 
+            // propsCheck,
+            // checkAuthor,
             baggedCompleteCheck,
             looseCompleteCheck,
             notesCompleteCheck,

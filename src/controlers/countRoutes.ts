@@ -7,12 +7,12 @@ import Count from '../models/Count'
 import Partner from '../models/Partner'
 import Float from '../models/Float'
 
-import { 
-	respondErr, 
-	respondWell, 
-	// CountType, 
-	respondBadRequest, 
-	// validateCount, 
+import {
+	respondErr,
+	respondWell,
+	// CountType,
+	respondBadRequest,
+	// validateCount,
 	PartnerServerType,
 	sanitiseNumberQuery,
 	validateFloat,
@@ -67,7 +67,7 @@ function floatFilter (query: any) {
 // 	{ repository: 'lotto', status: 'complete', timestamp: 1616094172738 - 552635424, _id: '3rx394w5xh34xt43g34gq', data: completeCount, counter: "Robyn F H Veitch", supervisor: "Mr Robot", verified: false },
 // 	{ repository: 'lotto', status: 'unverified', timestamp: 1616094172738 - 862635424, _id: 'eg9crw1g8rw6tb24r9t84', data: unverifiedCount, counter: "", supervisor: "", verified: true },
 // 	{ repository: '403', status: 'complete', timestamp: 1616094172738 - 89234245, _id: 'fj9839g34tmc0h4thcg03', data: incompleteCount, counter: "Robyn F H Veitch", supervisor: "Mr Robot", verified: false },
-// ]  
+// ]
 
 // const createId = () => {
 // 	const one = () => {
@@ -89,10 +89,10 @@ function floatFilter (query: any) {
 export const getCounts = async (req: Request, res: Response) => {
 
 	// PAGINATION:
-	//	-by page
-	//	-by index range
+	// 	-by page
+	// 	-by index range
 	// 	-by date range
-	//	-as array
+	// 	-as array
 
 	// ?page=3
 	// ?fromdate=?????
@@ -101,20 +101,20 @@ export const getCounts = async (req: Request, res: Response) => {
 	// ?offset=20
 
 	// deleted === 'undefined' || deleted === 'false' || deleted === '0'
-	//		- where Not deleted = 1
-	
+	// 		- where Not deleted = 1
+
 	// deleted === 'true' || deleted === '1'
-	//		- where deleted = 1
+	// 		- where deleted = 1
 
 	// deleted === 'include'
 	// 		- (no extra command)
 
 	try {
 
-		let page: number = Number(req.query.page)
-		let deleted: string = String(req.query.deleted)
+		const page: number = Number(req.query.page)
+		const deleted: string = String(req.query.deleted)
 		let repo: string | number = String(req.query.repository)
-		let includeFloat: any = req.query.float
+		const includeFloat: any = req.query.float
 
 		let applyDeleteFilter = deleteFilterActive
 		let applyRepoFilter: any = noFilter
@@ -140,9 +140,9 @@ export const getCounts = async (req: Request, res: Response) => {
 		}
 
 		if (!isNaN(page)) {
-	
-			let pagelength: number = sanitiseNumberQuery(req.query.pagelength, 10)
-	
+
+			const pagelength: number = sanitiseNumberQuery(req.query.pagelength, 10)
+
 			const q = applyDeleteFilter(
 				applyFloatFilter(
 					applyRepoFilter(
@@ -156,17 +156,17 @@ export const getCounts = async (req: Request, res: Response) => {
 				)
 
 			const counts = await q()
-	
+
 			return respondWell(res, null, null, 'List of all counts.', { counts: counts.map((e: any) => ({
 				...e,
 				readableTimestamp: new Date(e.timestamp)
 			})) })
-	
+
 		} else {
-			let fromdate: number = sanitiseNumberQuery(req.query.fromdate, 0)
-			let todate: number = sanitiseNumberQuery(req.query.todate, Date.now())
-			let limit: number = sanitiseNumberQuery(req.query.limit, 100)
-			let offset: number = sanitiseNumberQuery(req.query.offset, 0)
+			const fromdate: number = sanitiseNumberQuery(req.query.fromdate, 0)
+			const todate: number = sanitiseNumberQuery(req.query.todate, Date.now())
+			const limit: number = sanitiseNumberQuery(req.query.limit, 100)
+			const offset: number = sanitiseNumberQuery(req.query.offset, 0)
 			console.log('C:')
 			console.log(applyRepoFilter)
 			console.log(applyDeleteFilter)
@@ -186,13 +186,13 @@ export const getCounts = async (req: Request, res: Response) => {
 			)
 
 			const counts = await q()
-		
-			return respondWell(res, null, null, 'List of all counts.', 
-				{ 
+
+			return respondWell(res, null, null, 'List of all counts.',
+				{
 					counts: counts.map((e: any) => ({
 						...e,
 						readableTimestamp: new Date(e.timestamp)
-					})) 
+					}))
 				}
 			)
 		}
@@ -216,10 +216,10 @@ export const addCount = async (req: Request, res: Response) => {
 
 		if (typeof repositoryId !== 'number' || isNaN(repositoryId)) {
 			return respondBadRequest(
-				res, 
-				400, 
-				'[NaN check]: Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', 
-				null, 
+				res,
+				400,
+				'[NaN check]: Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.',
+				null,
 				{ repositoryId }
 			)
 		}
@@ -228,14 +228,14 @@ export const addCount = async (req: Request, res: Response) => {
 			// .select('id')
 			.skipUndefined()
 			.where('id', repositoryId)
-			
+
 		console.log({ repository })
 
 		if (repository === null || repository === undefined || repository.length === 0) {
 			return respondBadRequest(
-				res, 
-				400, 
-				'[Repository DB Query 404]: Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', 
+				res,
+				400,
+				'[Repository DB Query 404]: Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.',
 				null,
 				{ repository, repositoryId }
 			)
@@ -266,17 +266,19 @@ export const addCount = async (req: Request, res: Response) => {
 			if (counter && /[a-zA-Z]+/gi.test(counter) && counter !== undefined && counter !== null) {
 				console.log('joing to make a new user')
 
+				// NOTE: tslint rule no-shadowed-variable turned off due to this pattern (defining timestamp close to actual save)
+				// considder refactoring and re-enabling rule later
 				const now = Date.now()
 				const preferredName: string = (/[a-zA-Z]+/gi.test(counter) && counter !== undefined && counter !== null) ? counter : 'Unknown Partner'
 
 				const createCounter: Omit<PartnerServerType, 'id'> = {
-					preferredName, 
-					firstName: '', 
-					middleNames: '', 
-					lastName: '', 
-					pending: true, 
-					createdOn: now, 
-					updatedOn: now, 
+					preferredName,
+					firstName: '',
+					middleNames: '',
+					lastName: '',
+					pending: true,
+					createdOn: now,
+					updatedOn: now,
 					tillNumber: '',
 				}
 				// @ts-ignore
@@ -308,13 +310,13 @@ export const addCount = async (req: Request, res: Response) => {
 				const preferredName: string = supervisor
 
 				const createSupervisor: Omit<PartnerServerType, 'id'> = {
-					preferredName, 
-					firstName: '', 
-					middleNames: '', 
-					lastName: '', 
-					pending: true, 
-					createdOn: now, 
-					updatedOn: now, 
+					preferredName,
+					firstName: '',
+					middleNames: '',
+					lastName: '',
+					pending: true,
+					createdOn: now,
+					updatedOn: now,
 					tillNumber: ''
 				}
 				// @ts-ignore
@@ -323,14 +325,14 @@ export const addCount = async (req: Request, res: Response) => {
 				console.log({ createdSupervisor }, createdSupervisor.id)
 				// @ts-ignore
 				if (createdSupervisor && createdSupervisor.id) {
-					// @ts-ignore			
+					// @ts-ignore
 					supervisorId = createdSupervisor.id
 				}
 			} else {
 				supervisorId = null
 			}
 		}
-		
+
 		if (counterId === supervisorId) supervisorId = null
 		console.log('Partner check done')
 
@@ -347,7 +349,7 @@ export const addCount = async (req: Request, res: Response) => {
 		}
 
 		const bagTotal = flattenCountData([f.bagPence1, f.bagPence2, f.bagPence5, f.bagPence10, f.bagPence20, f.bagPence50, f.bagPound1, f.bagPound2, f.bagNote5])
-		const looseTotal = flattenCountData([f.loosePence1, f.loosePence2, f.loosePence5, f.loosePence10, f.loosePence20, f.loosePence50, f.loosePound1, f.loosePound2, f.looseOther]) 
+		const looseTotal = flattenCountData([f.loosePence1, f.loosePence2, f.loosePence5, f.loosePence10, f.loosePence20, f.loosePence50, f.loosePound1, f.loosePound2, f.looseOther])
 		const noteTotal = flattenCountData([f.note1, f.note5, f.note10, f.note20, f.note50])
 
 		const createFloat = {
@@ -359,7 +361,7 @@ export const addCount = async (req: Request, res: Response) => {
 		}
 
 		console.log({ f, createFloat })
-		
+
 		// @ts-ignore
 		const createdFloat: any = await Float.query().insert(createFloat)
 
@@ -367,13 +369,13 @@ export const addCount = async (req: Request, res: Response) => {
 		const now = Date.now()
 
 		const createCount = {
-			floatId: createdFloat.id, 
-			repositoryId, 
-			completionStatus: validation.code, 
-			createdOn: now, 
-			updatedOn: now, 
-			verified: true, 
-			authenticatorId: 0, 
+			floatId: createdFloat.id,
+			repositoryId,
+			completionStatus: validation.code,
+			createdOn: now,
+			updatedOn: now,
+			verified: true,
+			authenticatorId: 0,
 			counterId,
 			supervisorId,
 			timestamp: new Date(req.body.count.timestamp).getTime(),
@@ -414,7 +416,7 @@ export const getCount = async (req: Request, res: Response) => {
 		if (!multiCount || typeof multiCount === undefined) {
 			return respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?count=2,3,4"', null, null)
 		}
-		
+
 		if (Array.isArray(multiCount)) {
 
 			const count = await Count.query()
@@ -452,7 +454,7 @@ export const getCount = async (req: Request, res: Response) => {
 			.where('counts.id', Number(id))
 
 		return respondWell(res, 200, null, 'Details for provided id including float amount.', { count })
-	
+
 	}
 }
 
@@ -470,10 +472,10 @@ export const updateCount = async (req: Request, res: Response) => {
 
 			if (typeof repositoryId !== 'number' || isNaN(repositoryId)) {
 				return respondBadRequest(
-					res, 
-					400, 
-					'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', 
-					null, 
+					res,
+					400,
+					'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.',
+					null,
 					{ repositoryId }
 				)
 			}
@@ -483,16 +485,16 @@ export const updateCount = async (req: Request, res: Response) => {
 				.where('id', req.body.count.repositoryId)
 			if (repository === null || repository === undefined || repository.length === 0) {
 				return respondBadRequest(
-					res, 
-					400, 
-					'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', 
-					null, 
+					res,
+					400,
+					'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.',
+					null,
 					{ repository, repositoryId }
 				)
 			}
 		}
 
-		// 
+		//
 		const oldCount: any = await Count.query().findById(req.params.id)
 		const oldFloat: any = await Float.query().findById(oldCount.floatId)
 
@@ -513,27 +515,27 @@ export const updateCount = async (req: Request, res: Response) => {
 			// could be 2, "2", null
 			const counter = req.body.count.counter
 			// could be "Ben sisko", "", null
-	
+
 			const counterQuery: any = await Partner.query()
 				.select('id')
 				.skipUndefined()
 				.where('id', counterId)
-	
+
 			// No counterId or counterId is not found in partners table
 			if (!counterId || isNaN(Number(counterId)) || !counterQuery || counterQuery.length === 0) {
 				res.json('joing to make a new user')
-	
+
 				const now = Date.now()
 				const preferredName: string = (/[a-zA-Z]+/gi.test(counter) && counter !== undefined) ? counter : 'Unknown Partner'
-	
+
 				const createCounter: Omit<PartnerServerType, 'id'> = {
-					preferredName, 
-					firstName: '', 
-					middleNames: '', 
-					lastName: '', 
-					pending: true, 
-					createdOn: now, 
-					updatedOn: now, 
+					preferredName,
+					firstName: '',
+					middleNames: '',
+					lastName: '',
+					pending: true,
+					createdOn: now,
+					updatedOn: now,
 					tillNumber: ''
 				}
 				// @ts-ignore
@@ -542,7 +544,7 @@ export const updateCount = async (req: Request, res: Response) => {
 				console.log({ createdCounter }, createdCounter.id)
 				// @ts-ignore
 				if (createdCounter && createdCounter.id) {
-					// @ts-ignore			
+					// @ts-ignore
 					counterId = createdCounter.id
 				}
 			}
@@ -552,28 +554,28 @@ export const updateCount = async (req: Request, res: Response) => {
 		if (req.body.supervisorId || req.body.supervisor) {
 			supervisorId = req.body.count.supervisorId
 			const supervisor = req.body.count.supervisor
-	
+
 			const supervisorQuery: any = await Partner.query()
 				.select('id')
 				.skipUndefined()
 				.where('id', supervisorId)
-				
+
 			// No supervisorId or supervisorId is not found in partners table
 			if (!supervisorId || isNaN(Number(supervisorId)) || !supervisorQuery || supervisorQuery.length === 0) {
 				if (supervisor && /[a-zA-Z]+/gi.test(supervisor) && supervisor !== undefined) {
 					res.json('joing to make a new user')
-	
+
 					const now = Date.now()
 					const preferredName: string = supervisor
-	
+
 					const createSupervisor: Omit<PartnerServerType, 'id'> = {
-						preferredName, 
-						firstName: '', 
-						middleNames: '', 
-						lastName: '', 
-						pending: true, 
-						createdOn: now, 
-						updatedOn: now, 
+						preferredName,
+						firstName: '',
+						middleNames: '',
+						lastName: '',
+						pending: true,
+						createdOn: now,
+						updatedOn: now,
 						tillNumber: ''
 					}
 					// @ts-ignore
@@ -582,7 +584,7 @@ export const updateCount = async (req: Request, res: Response) => {
 					console.log({ createdSupervisor }, createdSupervisor.id)
 					// @ts-ignore
 					if (createdSupervisor && createdSupervisor.id) {
-						// @ts-ignore			
+						// @ts-ignore
 						supervisorId = createdSupervisor.id
 					}
 				} else {
@@ -590,7 +592,7 @@ export const updateCount = async (req: Request, res: Response) => {
 				}
 			}
 		}
-		
+
 		// Nullify the supervisor signature if the user has signed their own name twice
 		if (counterId === supervisorId) supervisorId = null
 
@@ -601,7 +603,7 @@ export const updateCount = async (req: Request, res: Response) => {
 
 			const f = req.body.count.float
 
-			let createFloat: any = {}
+			const createFloat: any = {}
 
 			if (f.hasOwnProperty('bagPence1')) createFloat.bagPence1 = f.bagPence1
 			if (f.hasOwnProperty('bagPence2')) createFloat.bagPence2 = f.bagPence2
@@ -613,7 +615,7 @@ export const updateCount = async (req: Request, res: Response) => {
 			if (f.hasOwnProperty('bagPound2')) createFloat.bagPound2 = f.bagPound2
 			if (f.hasOwnProperty('bagNote5')) createFloat.bagNote5 = f.bagNote5
 			if (f.hasOwnProperty('bagTotal')) createFloat.bagTotal = f.bagTotal
-			
+
 			if (f.hasOwnProperty('loosePence1')) createFloat.loosePence1 = f.loosePence1
 			if (f.hasOwnProperty('loosePence2')) createFloat.loosePence2 = f.loosePence2
 			if (f.hasOwnProperty('loosePence5')) createFloat.loosePence5 = f.loosePence5
@@ -624,14 +626,14 @@ export const updateCount = async (req: Request, res: Response) => {
 			if (f.hasOwnProperty('loosePound2')) createFloat.loosePound2 = f.loosePound2
 			if (f.hasOwnProperty('looseOther')) createFloat.looseOther = f.looseOther
 			if (f.hasOwnProperty('looseTotal')) createFloat.looseTotal = f.looseTotal
-			
+
 			if (f.hasOwnProperty('note1')) createFloat.note1 = f.note1
 			if (f.hasOwnProperty('note5')) createFloat.note5 = f.note5
 			if (f.hasOwnProperty('note10')) createFloat.note10 = f.note10
 			if (f.hasOwnProperty('note20')) createFloat.note20 = f.note20
 			if (f.hasOwnProperty('note50')) createFloat.note50 = f.note50
 			if (f.hasOwnProperty('noteTotal')) createFloat.noteTotal = f.noteTotal
-	
+
 			const flattenCountData = (division: any) => {
 				const keys = Object.keys(division)
 				const total = keys.reduce((acc, each) => {
@@ -640,7 +642,7 @@ export const updateCount = async (req: Request, res: Response) => {
 				}, 0)
 				return total
 			}
-	
+
 			float = {
 				...float,
 				...createFloat
@@ -656,7 +658,7 @@ export const updateCount = async (req: Request, res: Response) => {
 				bagPound1: f.bagPound1,
 				bagPound2: f.bagPound2,
 				bagNote5: f.bagNote5,
-			}) 
+			})
 			const looseTotal = flattenCountData({
 				loosePence1: f.loosePence1,
 				loosePence2: f.loosePence2,
@@ -667,7 +669,7 @@ export const updateCount = async (req: Request, res: Response) => {
 				loosePound1: f.loosePound1,
 				loosePound2: f.loosePound2,
 				looseOther: f.looseOther,
-			}) 
+			})
 			const noteTotal = flattenCountData({
 				note1: f.note1,
 				note5: f.note5,
@@ -686,10 +688,10 @@ export const updateCount = async (req: Request, res: Response) => {
 		const now: number = Date.now()
 
 		console.log({
-			// repositoryId, 
-			updatedOn: now, 
-			// verified: true, 
-			// authenticatorId: 0, 
+			// repositoryId,
+			updatedOn: now,
+			// verified: true,
+			// authenticatorId: 0,
 			counterId,
 			supervisorId,
 			float,
@@ -697,17 +699,17 @@ export const updateCount = async (req: Request, res: Response) => {
 		})
 		// console.log({ float })
 		// return res.json({ plarb: 'ok' })
-		
+
 		delete float.id
 		// @ts-ignore
 		const updatedFloat = await Float.query()
 			.patchAndFetchById(oldFloat.id, float)
 
 		const updateCount: any = {
-			// repositoryId, 
-			updatedOn: now, 
-			// verified: true, 
-			// authenticatorId: 0, 
+			// repositoryId,
+			updatedOn: now,
+			// verified: true,
+			// authenticatorId: 0,
 			counterId,
 			supervisorId,
 			comment,

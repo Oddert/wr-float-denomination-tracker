@@ -4,7 +4,7 @@ import User from '../models/User'
 export default function () {
 
 	passport.serializeUser((user, done) => {
-		//@ts-ignore
+		// @ts-ignore
 		done(null, user.id)
 	})
 

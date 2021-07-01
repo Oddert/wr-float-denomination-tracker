@@ -7,7 +7,7 @@ var passport_1 = __importDefault(require("passport"));
 var User_1 = __importDefault(require("../models/User"));
 function default_1() {
     passport_1.default.serializeUser(function (user, done) {
-        //@ts-ignore
+        // @ts-ignore
         done(null, user.id);
     });
     passport_1.default.deserializeUser(function (id, done) {

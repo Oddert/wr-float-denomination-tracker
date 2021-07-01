@@ -98,7 +98,7 @@ function floatFilter(query) {
 // 	{ repository: 'lotto', status: 'complete', timestamp: 1616094172738 - 552635424, _id: '3rx394w5xh34xt43g34gq', data: completeCount, counter: "Robyn F H Veitch", supervisor: "Mr Robot", verified: false },
 // 	{ repository: 'lotto', status: 'unverified', timestamp: 1616094172738 - 862635424, _id: 'eg9crw1g8rw6tb24r9t84', data: unverifiedCount, counter: "", supervisor: "", verified: true },
 // 	{ repository: '403', status: 'complete', timestamp: 1616094172738 - 89234245, _id: 'fj9839g34tmc0h4thcg03', data: incompleteCount, counter: "Robyn F H Veitch", supervisor: "Mr Robot", verified: false },
-// ]  
+// ]
 // const createId = () => {
 // 	const one = () => {
 // 		const lower = () => String.fromCharCode(Math.floor((Math.random() * 26) + 97))
@@ -285,7 +285,7 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 console.log({ createdSupervisor: createdSupervisor }, createdSupervisor.id);
                 // @ts-ignore
                 if (createdSupervisor && createdSupervisor.id) {
-                    // @ts-ignore			
+                    // @ts-ignore
                     supervisorId = createdSupervisor.id;
                 }
                 return [3 /*break*/, 8];
@@ -487,7 +487,7 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 console.log({ createdCounter: createdCounter }, createdCounter.id);
                 // @ts-ignore
                 if (createdCounter && createdCounter.id) {
-                    // @ts-ignore			
+                    // @ts-ignore
                     counterId = createdCounter.id;
                 }
                 _a.label = 8;
@@ -527,7 +527,7 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 console.log({ createdSupervisor: createdSupervisor }, createdSupervisor.id);
                 // @ts-ignore
                 if (createdSupervisor && createdSupervisor.id) {
-                    // @ts-ignore			
+                    // @ts-ignore
                     supervisorId = createdSupervisor.id;
                 }
                 return [3 /*break*/, 12];
@@ -642,10 +642,10 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 }
                 now = Date.now();
                 console.log({
-                    // repositoryId, 
+                    // repositoryId,
                     updatedOn: now,
-                    // verified: true, 
-                    // authenticatorId: 0, 
+                    // verified: true,
+                    // authenticatorId: 0,
                     counterId: counterId,
                     supervisorId: supervisorId,
                     float: float,
@@ -659,10 +659,10 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 13:
                 updatedFloat = _a.sent();
                 updateCount_1 = {
-                    // repositoryId, 
+                    // repositoryId,
                     updatedOn: now,
-                    // verified: true, 
-                    // authenticatorId: 0, 
+                    // verified: true,
+                    // authenticatorId: 0,
                     counterId: counterId,
                     supervisorId: supervisorId,
                     comment: comment,

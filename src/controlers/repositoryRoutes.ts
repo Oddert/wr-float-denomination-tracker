@@ -1,7 +1,7 @@
 
 import { Request, Response } from 'express'
 
-import { 
+import {
 	respondWell,
 	respondBadRequest,
 	respondErr,
@@ -12,15 +12,15 @@ import Repository from '../models/Repository'
 
 export const getRepositories = async (req: Request, res: Response) => {
 	try {
-		let limit: number = sanitiseNumberQuery(req.query.limit, 500)
-		let offset: number = sanitiseNumberQuery(req.query.offset, 0)
+		const limit: number = sanitiseNumberQuery(req.query.limit, 500)
+		const offset: number = sanitiseNumberQuery(req.query.offset, 0)
 		// let activated: any = req.query.hasOwnProperty('activated') ? req.query.activated : null
-			
+
 		const repositories = await Repository.query()
 			// .withGraphJoined('float')
 			// .limit(limit)
 			// .offset(offset)
-	
+
 		return respondWell(res, 200, null, 'List of all repositories.', { repositories })
 
 	}  catch (error) {
@@ -53,7 +53,7 @@ export const addRepository = async (req: Request, res: Response) => {
 			createdOn: now,
 			updatedOn: now,
 		}
-		
+
 		if (b.activated) {
 			createRepo.activated = true
 			createRepo.activatedById = 1
@@ -87,21 +87,21 @@ export const getRepository = async (req: Request, res: Response) => {
 			if (!multiRepository || typeof multiRepository === undefined) {
 				return respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)
 			}
-			
+
 			if (Array.isArray(multiRepository)) {
-				
+
 				const repositories = await Repository.query()
 					.whereIn('repositories.id', multiRepository)
 				return respondWell(res, 200, null, 'Details for provided id.', { repositories })
-				
+
 			} else if (/,/gi.test(multiRepository) || /[0-9]/gi.test(multiRepository)) {
-				
+
 				const splitMultiRepository = multiRepository.split(',')
 				const repositories = await Repository.query()
 					.whereIn('repositories.id', splitMultiRepository)
 
 				return respondWell(res, 200, null, 'Details for provided id.', { repositories })
-				
+
 			} else {
 
 				return respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)
@@ -113,7 +113,7 @@ export const getRepository = async (req: Request, res: Response) => {
 				.where('repositories.id', Number(id))
 
 			return respondWell(res, 200, null, 'Details for provided id.', { repository })
-		
+
 		}
 	} catch (error) {
 		return respondErr(res, 500, 'There was an issue processing your request.', null, { error })
@@ -135,7 +135,7 @@ export const updateRepository = async (req: Request, res: Response) => {
 		}
 
 		const now = Date.now()
-		
+
 		const createRepo: {
 			name: string
 			description: string | null,
@@ -150,7 +150,7 @@ export const updateRepository = async (req: Request, res: Response) => {
 			description: b.description || oldRepo.description,
 			updatedOn: now,
 		}
-		
+
 		if (b.activated) {
 			createRepo.activated = true
 			createRepo.activatedById = 1

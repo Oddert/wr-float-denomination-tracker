@@ -12,8 +12,9 @@ import {
 	MarkSeries,
 	XAxis,
 	YAxis,
-	Crosshair,
 	MarkSeriesPoint,
+	HorizontalGridLines,
+	Crosshair,
 } from 'react-vis'
 
 import {
@@ -24,6 +25,7 @@ import {
 	Flex, 
 	Heading, 
 } from '@chakra-ui/layout'
+import DashCrosshair from './DashCrosshair'
 
 interface Props {
 	width: number
@@ -74,6 +76,7 @@ const ThumbnailGraph: React.FC<Props> = ({
 	const [counts, setCounts]: [ServerCountType[], any] = useState([])
 	const [parsedData, setParsedData]: [LinearDataState, any] = useState(linearDataInitialState)
 	const [focused, setFocused]: [MarkSeriesPoint | null, any] = useState(null)
+	const [yAxisRange, setYAxisRange]: [number[], any] = useState(Array.from({ length: 10 }, (x, i) => i))
 	const COLOURS = useSelector((state: ReduxStateType) => state.ui.colours)
 
 	const colourMap = {
@@ -195,10 +198,19 @@ const ThumbnailGraph: React.FC<Props> = ({
 			bagPence1: [],
 		})
 
-		// const m: number[] = [...Object.values(parsedC)].map(e => e.y)
-		// const maxVal = Math.max(...m)
-		// console.log(maxVal)
+		const allMaxValues: number[] = []
+		const allMinValues: number[] = []
+		Object.values(parsedC).forEach((each: DataPoint[]) => {
+			const vals = each.map((e: DataPoint) => e.y)
+			allMaxValues.push(Math.max(...vals))
+			allMinValues.push(Math.min(...vals))
+		})
+		const maxVal = Math.max(...allMaxValues) + 1
+		const minVal = Math.min(...allMinValues)
 
+		const range = Array.from({ length: maxVal - minVal }, (x, i) => i + minVal)
+
+		setYAxisRange(range)
 		setParsedData(parsedC)
 	}, [
 		counts
@@ -248,8 +260,9 @@ const ThumbnailGraph: React.FC<Props> = ({
 			>
 				<XAxis />
 				<YAxis 
-					
+					tickValues={yAxisRange}
 				/>
+				<HorizontalGridLines />
 				{
 					bags.map((bag: BagTypes) => 
 						<LineSeries 
@@ -270,12 +283,12 @@ const ThumbnailGraph: React.FC<Props> = ({
 					)
 				}
 				{
-					focused !== undefined && focused !== null 
+					focused !== null && focused !== undefined
 						? <Crosshair 
 								values={[focused]}
 							>
 								<div
-									style={{
+									css={css({
 										textAlign: 'left',
 										fontSize: '12px',
 										padding: '6px',
@@ -288,15 +301,16 @@ const ThumbnailGraph: React.FC<Props> = ({
 										transform: 'translateY(-100%)',
 										display: 'flex',
 										flexDirection: 'column',
-									}}
+									})}
 								>
 									{/* @ts-ignore */}
 									<p>{focused.label}</p>
 								</div>
-							</Crosshair> 
+							</Crosshair>
 						: undefined
 				}
 			</XYPlot>
+			<div>{JSON.stringify(focused)}</div>
 		</div>
 	)
 }

@@ -69,7 +69,7 @@ export interface StateType {
 }
 
 
-export const respondWell = 
+export const respondWell =
 	(res: Response, status: number | null, errorMessage: string | null, responseMessage: string | null, other: any): Response => {
 		console.log('Respond Well: ', {
 			status: status || 200,
@@ -86,7 +86,7 @@ export const respondWell =
 		})
 }
 
-export const respondBadRequest = 
+export const respondBadRequest =
 	(res: Response, status: number | null, errorMessage: string | null, responseMessage: string | null, other: any): Response => {
 	console.log('Bad Request: ', {
 		status: status || 400,
@@ -104,7 +104,7 @@ export const respondBadRequest =
 		})
 }
 
-export const respondErr = 
+export const respondErr =
 	(res: Response, status: number | null, errorMessage: string | null, responseMessage: string | null, other: any): Response => {
 	console.log('Server Error', {
 		status: status || 500,
@@ -198,7 +198,7 @@ export const validateCount = (count: any) => {
 	}
 
 	let response: any
-	let verified: boolean = true
+	const verified: boolean = true
 	let baggedCheckPass: boolean = false
 	let looseCheckPass: boolean = false
 	let notesCheckPass: boolean = false
@@ -260,7 +260,7 @@ export const validateCount = (count: any) => {
 	// check is null data
 	// check level 1 properties exist
 	// for data.bagged .loose .notes check all attrs exist
-	
+
 	// # Partial count Check
 	// for each prop in bagged - check has non NaN value
 
@@ -268,7 +268,7 @@ export const validateCount = (count: any) => {
 	// for loose each value check non NaN value
 	// for notes each value check non NaN value
 
-	
+
 	function propsCheck () {
 		if (!count.hasOwnProperty('data')) {
 			return failMissingData('Object count has no such property "data".')
@@ -377,7 +377,7 @@ export const validateCount = (count: any) => {
 					code: 'complete',
 					message: 'all values found',
 					verified,
-				}	
+				}
 			} else if (looseCheckPass) {
 				return partial('notes have missing values')
 			} else if (notesCheckPass) {
@@ -390,7 +390,7 @@ export const validateCount = (count: any) => {
 				code: 'incomplete',
 				message: 'bagged coin has missing values',
 				verified,
-			}	
+			}
 		}
 	}
 
@@ -401,28 +401,28 @@ export const validateCount = (count: any) => {
 	// missingDataCheck()
 	// propsCheck()
 	// checkAuthor()
-	
+
 	// # Partial type checks
 	// baggedCompleteCheck
-	
+
 	// # Complete type checks
 	// looseCompleteCheck
 	// noteCompleteCheck
 
 	// assignPartialOrComplete
-	
+
 	// if complete return complete
 	// if partial return partial
 
 	function callChecks () {
 		const tests = [
-			// isVerifiedCheck, 
-			missingDataCheck, 
-			propsCheck, 
-			// checkAuthor, 
-			baggedCompleteCheck, 
-			looseCompleteCheck, 
-			notesCompleteCheck, 
+			// isVerifiedCheck,
+			missingDataCheck,
+			propsCheck,
+			// checkAuthor,
+			baggedCompleteCheck,
+			looseCompleteCheck,
+			notesCompleteCheck,
 			assignPartialOrComplete
 		]
 		tests.forEach((each) => {
@@ -456,7 +456,7 @@ export const validateFloat = (float: any) => {
 	if (float === undefined) failMissingData('float is not defined.')
 
 	let response: any
-	let verified: boolean = true
+	const verified: boolean = true
 	let baggedCheckPass: boolean = false
 	let looseCheckPass: boolean = false
 	let notesCheckPass: boolean = false
@@ -474,7 +474,7 @@ export const validateFloat = (float: any) => {
 	}
 
 	// Half finished, was used to fail on props missing, not suitable for server side updates
-	
+
 	// function propsCheck () {
 	// 	if (!count.hasOwnProperty('float')) {
 	// 		return failMissingData('Object count has no such property "float".')
@@ -577,7 +577,7 @@ export const validateFloat = (float: any) => {
 					code: 'complete',
 					message: 'all values found',
 					verified,
-				}	
+				}
 			} else if (looseCheckPass) {
 				return partial('notes have missing values')
 			} else if (notesCheckPass) {
@@ -590,7 +590,7 @@ export const validateFloat = (float: any) => {
 				code: 'incomplete',
 				message: 'bagged coin has missing values',
 				verified,
-			}	
+			}
 		}
 	}
 
@@ -601,28 +601,28 @@ export const validateFloat = (float: any) => {
 	// missingDataCheck()
 	// propsCheck()
 	// checkAuthor()
-	
+
 	// # Partial type checks
 	// baggedCompleteCheck
-	
+
 	// # Complete type checks
 	// looseCompleteCheck
 	// noteCompleteCheck
 
 	// assignPartialOrComplete
-	
+
 	// if complete return complete
 	// if partial return partial
 
 	function callChecks () {
 		const tests = [
-			// isVerifiedCheck, 
-			missingDataCheck, 
-			// propsCheck, 
-			// checkAuthor, 
-			baggedCompleteCheck, 
-			looseCompleteCheck, 
-			notesCompleteCheck, 
+			// isVerifiedCheck,
+			missingDataCheck,
+			// propsCheck,
+			// checkAuthor,
+			baggedCompleteCheck,
+			looseCompleteCheck,
+			notesCompleteCheck,
 			assignPartialOrComplete
 		]
 		tests.forEach((each) => {

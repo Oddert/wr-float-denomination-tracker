@@ -3,7 +3,7 @@ import session from 'express-session'
 import flash from 'express-flash'
 import path from 'path'
 import cors from 'cors'
-import dotenv from 'dotenv'
+import * as dotenv from 'dotenv'
 import morgan from 'morgan'
 import Knex from 'knex'
 import { Model } from 'objection'
@@ -21,7 +21,9 @@ import partnerRoutes from './routes/partnerRoutes'
 import repositoryRoutes from './routes/repositoryRoutes'
 import userRoutes from './routes/userRoutes'
 
-dotenv.config()
+// import 'dotenv/config'
+
+const env = dotenv.config()
 
 const app: Express = express()
 
@@ -36,10 +38,14 @@ app.use(json())
 app.use(cookieParser())
 app.use(urlencoded({ extended: true }))
 app.use(cors())
-app.use(morgan('dev'))
 
+if (process.env.MODE === "development") {
+	app.use(morgan('dev'))
+}
+
+console.log(process.env.SESSION_SECRET)
 app.use(session({
-	secret: process.env.SECRET as string,
+	secret: process.env.SESSION_SECRET as string,
 	resave: false,
 	saveUninitialized: true,
 }))
