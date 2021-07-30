@@ -9,6 +9,7 @@ import Login from './Login'
 import Dashboard from './Dashboard/'
 import Counts from './Counts/'
 import Count from './Count/'
+import InspectOneRepo from './InspectOneRepo/'
 
 import './Carbon.css'
 import './Carbon-alterations.css'
@@ -60,6 +61,11 @@ const App: React.FC = () => {
           <Route path='/repositories'>
             <PageWrapper title='All Repositories'>
 							<Dashboard />
+						</PageWrapper>
+          </Route>
+          <Route path='/repo/:id'>
+            <PageWrapper title='All Repositories'>
+							<InspectOneRepo />
 						</PageWrapper>
           </Route>
           <Route path='/vistest1'>

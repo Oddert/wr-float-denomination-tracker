@@ -43,7 +43,6 @@ if (process.env.MODE === "development") {
 	app.use(morgan('dev'))
 }
 
-console.log(process.env.SESSION_SECRET)
 app.use(session({
 	secret: process.env.SESSION_SECRET as string,
 	resave: false,
@@ -52,6 +51,8 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(flash())
+
+console.log(`ENV file has been loaded: ${process.env.ENV_CONFIRM_LOADED || false}`)
 
 app.get('/test', (req, res) => {
 	const input = req.query.t
@@ -77,7 +78,7 @@ app.use('/api/v1/partner', partnerRoutes)
 app.use('/api/v1/repository', repositoryRoutes)
 app.use('/api/v1/user', userRoutes)
 
-const confirmMessage: string = `${new Date().toLocaleTimeString()}: Server initialised on PORT ${PORT}`
+const confirmMessage: string = `${new Date().toLocaleTimeString()}: Server initialised on PORT ${PORT}...`
 const confirmStart: () => void = () => console.log(confirmMessage)
 
 const server = app.listen(PORT, confirmStart)

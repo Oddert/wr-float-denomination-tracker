@@ -30,6 +30,8 @@ interface BaggedType {
 	total: number
 }
 
+type BagTypeReadableLabels = 'Bagged £5' | 'Bagged £2' | 'Bagged £1' | 'Bagged 50p' | 'Bagged 20p' | 'Bagged 10p' | 'Bagged 5p' | 'Bagged 2p' | 'Bagged 1p'
+
 interface LooseType {
 	pence_one: number
 	pence_two: number

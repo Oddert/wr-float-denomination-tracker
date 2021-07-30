@@ -56,7 +56,6 @@ app.use(cors_1.default());
 if (process.env.MODE === "development") {
     app.use(morgan_1.default('dev'));
 }
-console.log(process.env.SESSION_SECRET);
 app.use(express_session_1.default({
     secret: process.env.SESSION_SECRET,
     resave: false,
@@ -65,6 +64,7 @@ app.use(express_session_1.default({
 app.use(auth_1.default.initialize());
 app.use(auth_1.default.session());
 app.use(express_flash_1.default());
+console.log("ENV file has been loaded: " + (process.env.ENV_CONFIRM_LOADED || false));
 app.get('/test', function (req, res) {
     var input = req.query.t;
     res.json({
@@ -87,7 +87,7 @@ app.use('/api/v1/float', floatRoutes_1.default);
 app.use('/api/v1/partner', partnerRoutes_1.default);
 app.use('/api/v1/repository', repositoryRoutes_1.default);
 app.use('/api/v1/user', userRoutes_1.default);
-var confirmMessage = new Date().toLocaleTimeString() + ": Server initialised on PORT " + PORT;
+var confirmMessage = new Date().toLocaleTimeString() + ": Server initialised on PORT " + PORT + "...";
 var confirmStart = function () { return console.log(confirmMessage); };
 var server = app.listen(PORT, confirmStart);
 exports.default = server;

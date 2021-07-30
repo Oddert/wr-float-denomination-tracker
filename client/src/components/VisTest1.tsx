@@ -20,6 +20,7 @@ import {
 	ReduxStateType,
 	ServerCountType, 
 	// ServerFloatType,
+	BagTypeReadableLabels,
 } from '../global'
 
 import initialState from '../constants/initialState'
@@ -175,78 +176,38 @@ const VisTest1: React.FC = () => {
 
 		const parsedC = adjustedC.reduce((acc: ParsedCountT, each: ServerCountTypeWithAdjustment, idx: number) => {
 			const newAcc: any = { ...acc }
-			newAcc.bagNote5.push({ 
-				label: 'Bagged £5',
-				y: (each.float?.bagNote5 || 0) / (100 * 5), 
-				// @ts-ignore
-				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
-				id: each.id
-			})
-			newAcc.bagPound2.push({ 
-				label: 'Bagged £2',
-				y: (each.float?.bagPound2 || 0) / (100 * 20), 
-				// @ts-ignore
-				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
-				id: each.id
-			})
-			newAcc.bagPound1.push({ 
-				label: 'Bagged £1',
-				y: (each.float?.bagPound1 || 0) / (100 * 20), 
-				// @ts-ignore
-				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
-				id: each.id
-			})
-			newAcc.bagPence50.push({ 
-				label: 'Bagged 50p',
-				y: (each.float?.bagPence50 || 0) / (100 * 10), 
-				// @ts-ignore
-				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
-				id: each.id
-			})
-			newAcc.bagPence20.push({ 
-				label: 'Bagged 20p',
-				y: (each.float?.bagPence20 || 0) / (100 * 10), 
-				// @ts-ignore
-				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
-				id: each.id
-			})
-			newAcc.bagPence10.push({ 
-				label: 'Bagged 10p',
-				y: (each.float?.bagPence10 || 0) / (100 * 5), 
-				// @ts-ignore
-				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
-				id: each.id
-			})
-			newAcc.bagPence5.push({ 
-				label: 'Bagged 5p',
-				y: (each.float?.bagPence5 || 0) / (100 * 5), 
-				// @ts-ignore
-				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
-				id: each.id
-			})
-			newAcc.bagPence2.push({ 
-				label: 'Bagged 2p',
-				y: (each.float?.bagPence2 || 0) / 100, 
-				// @ts-ignore
-				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
-				id: each.id
-			})
-			newAcc.bagPence1.push({ 
-				label: 'Bagged 1p',
-				y: (each.float?.bagPence1 || 0) / 100,
-				// @ts-ignore
-				x: idx
-				, timestamp: each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined,
-				id: each.id
-			})
+
+			function pushToNewAcc (bagType: BagTypeReadableLabels) {
+				let y = 0
+				const timestamp = each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined
+				
+				switch (bagType) {
+					case 'Bagged £5': y = (each.float?.bagNote5 || 0) / (100 * 5); break;
+					case 'Bagged £2': y = (each.float?.bagPound2 || 0) / (100 * 20); break;
+					case 'Bagged £1': y = (each.float?.bagPound1 || 0) / (100 * 20); break;
+					case 'Bagged 50p': y = (each.float?.bagPence50 || 0) / (100 * 10); break;
+					case 'Bagged 20p': y = (each.float?.bagPence20 || 0) / (100 * 10); break;
+					case 'Bagged 10p': y = (each.float?.bagPence10 || 0) / (100 * 5); break;
+					case 'Bagged 5p': y = (each.float?.bagPence5 || 0) / (100 * 5); break;
+					case 'Bagged 2p': y = (each.float?.bagPence2 || 0) / 100; break;
+					case 'Bagged 1p': y = (each.float?.bagPence1 || 0) / 100; break;
+				}
+
+				return { 
+					// @ts-ignore
+					label: bagType, y, x: idx, timestamp, id: each.id			
+				}
+			}
+			
+			newAcc.bagNote5.push(pushToNewAcc('Bagged £5'))
+			newAcc.bagPound2.push(pushToNewAcc('Bagged £2'))
+			newAcc.bagPound1.push(pushToNewAcc('Bagged £1'))
+			newAcc.bagPence50.push(pushToNewAcc('Bagged 50p'))
+			newAcc.bagPence20.push(pushToNewAcc('Bagged 20p'))
+			newAcc.bagPence10.push(pushToNewAcc('Bagged 10p'))
+			newAcc.bagPence5.push(pushToNewAcc('Bagged 5p'))
+			newAcc.bagPence2.push(pushToNewAcc('Bagged 2p'))
+			newAcc.bagPence1.push(pushToNewAcc('Bagged 1p'))
 			return newAcc
 		}, {
 			bagNote5: [],
