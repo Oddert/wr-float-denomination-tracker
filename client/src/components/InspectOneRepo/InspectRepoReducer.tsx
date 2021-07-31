@@ -3,14 +3,20 @@ import {
 	InspectRepoActionTypes,
 	InspectRepoInitialStateT,
 	InspectRepoAction,
-} from './Utils'
+} from './types'
 
 const InspectRepoReducer = (state: InspectRepoInitialStateT, action: InspectRepoAction) => {
+	// console.log(action)
 	switch (action.type) {
 		case InspectRepoActionTypes.REPO_SET: return reduceRepoSet(state, action)
 		case InspectRepoActionTypes.START_DATE_SET: return reduceStartDateSet(state, action)
 		case InspectRepoActionTypes.END_DATE_SET: return reduceEndDateSet(state, action)
-		case InspectRepoActionTypes.USE_ADJUSTMENTS_SET: return reduceAdjustmentUseSet(state, action)
+		case InspectRepoActionTypes.ADJUSTMENTS_USE_SET: return reduceAdjustmentUseSet(state, action)
+		case InspectRepoActionTypes.ADJUSTMENT_STEP_SIZE_SET: return reduceAdjustmentStepSizeSet(state, action)
+		case InspectRepoActionTypes.INSPECTING_SET: return reduceInspectingSet(state, action)
+		case InspectRepoActionTypes.INSPECTING_CLEAR: return reduceInspectingClear(state)
+		case InspectRepoActionTypes.DATA_SET: return reduceDataSet(state, action)
+		case InspectRepoActionTypes.PARSED_DATA_BAGS_SET: return reduceParsedDataBagsSet(state, action)
 		default: return state
 	}
 }
@@ -40,6 +46,41 @@ function reduceAdjustmentUseSet (state: InspectRepoInitialStateT, action: Inspec
 	return {
 		...state,
 		useAdjustments: action.payload
+	}
+}
+
+function reduceAdjustmentStepSizeSet (state: InspectRepoInitialStateT, action: InspectRepoAction): InspectRepoInitialStateT {
+	return {
+		...state,
+		adjustmentStepSize: action.payload
+	}
+}
+
+function reduceInspectingSet (state: InspectRepoInitialStateT, action: InspectRepoAction): InspectRepoInitialStateT {
+	return {
+		...state,
+		inspecting: action.payload
+	}
+}
+
+function reduceInspectingClear (state: InspectRepoInitialStateT): InspectRepoInitialStateT {
+	return {
+		...state,
+		inspecting: null
+	}
+}
+
+function reduceDataSet (state: InspectRepoInitialStateT, action: InspectRepoAction): InspectRepoInitialStateT {
+	return {
+		...state,
+		data: action.payload
+	}
+}
+
+function reduceParsedDataBagsSet (state: InspectRepoInitialStateT, action: InspectRepoAction): InspectRepoInitialStateT {
+	return {
+		...state,
+		parsedCountBags: action.payload
 	}
 }
 

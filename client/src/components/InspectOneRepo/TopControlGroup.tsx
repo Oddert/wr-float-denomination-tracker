@@ -15,24 +15,21 @@ import {
 	startDateSet, 
 	endDateSet, 
 	adjustmentUseSet,
+	adjustmentStepSizeSet,
 } from './InspectRepoActions'
 import { InspectRepoContext } from './Utils'
 
 interface Props {
-	adjustmentStepSize: number
-	setAdjustmentStepSize: (v: any) => void
 }
 
-const TopControlGroup: React.FC<Props> = ({
-	adjustmentStepSize,
-	setAdjustmentStepSize,
-}) => {
+const TopControlGroup: React.FC<Props> = () => {
 	const { contextState, contextDispatch } = useContext(InspectRepoContext)
 
 	const { 
 		startTime, 
 		endTime, 
 		useAdjustments,
+		adjustmentStepSize,
 	} = contextState
 
 	return (
@@ -72,7 +69,7 @@ const TopControlGroup: React.FC<Props> = ({
 				max={.8}
 				step={0.01}
 				value={adjustmentStepSize}
-				onChange={(v: any) => setAdjustmentStepSize(v)}
+				onChange={(v: any) => contextDispatch(adjustmentStepSizeSet(v))}
 				// onChangeEnd={(v: any) => setAdjustmentStepSize(v)}
 				width={'200px'}
 			>

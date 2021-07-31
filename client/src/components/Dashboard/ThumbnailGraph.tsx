@@ -25,7 +25,7 @@ import {
 	Flex, 
 	Heading, 
 } from '@chakra-ui/layout'
-import DashCrosshair from './DashCrosshair'
+// import DashCrosshair from './DashCrosshair'
 
 interface Props {
 	width: number
