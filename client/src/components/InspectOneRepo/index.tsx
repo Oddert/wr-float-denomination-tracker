@@ -68,6 +68,7 @@ const InspectOneRepo: React.FC = () => {
 	// 		- Uses the data object to create the parsedData oject
 	// 		- pasrsedData "rotates" the data to use series based on denomination, instead of per count record
 	useEffect(() => {
+		// is actually ServerCountType
 		const adjustedC = data.map((each: any) => {
 			type BagTypes = 'bagNote5' | 'bagPound2' | 'bagPound1' | 'bagPence50' | 'bagPence20' | 'bagPence10' | 'bagPence5' | 'bagPence2' | 'bagPence1'
 			const bags: BagTypes[] = ['bagNote5', 'bagPound2', 'bagPound1', 'bagPence50', 'bagPence20', 'bagPence10', 'bagPence5', 'bagPence2', 'bagPence1']
@@ -85,7 +86,7 @@ const InspectOneRepo: React.FC = () => {
 			const float = { ...each.float }
 			const record = bags.map((bag: BagTypes) => ({
 				label: bag,
-				value: each.float[bag]
+				value: each.float[bag] || 0
 			}))
 			.sort((a, b) => a.value - b.value)
 
@@ -124,8 +125,14 @@ const InspectOneRepo: React.FC = () => {
 		})
 		// console.log({ adjustedC, data })
 
+		// const newxAxisLabels: {
+		// 	[x: number]: string
+		// } = {}
+
 		const parsedC = adjustedC.reduce((acc: ParsedCountBagsT, each: ServerCountTypeWithAdjustment, idx: number) => {
 			const newAcc: any = { ...acc }
+
+			// newxAxisLabels[idx] = `${idx}`
 
 			function pushToNewAcc (bagType: BagTypeReadableLabels) {
 				let y = 0
@@ -143,6 +150,7 @@ const InspectOneRepo: React.FC = () => {
 					case 'Bagged 1p': y = (each.float?.bagPence1 || 0) / 100; break;
 				}
 
+				// console.log({ newxAxisLabels })
 				return { 
 					// @ts-ignore
 					label: bagType, y, x: idx, timestamp, id: each.id			
@@ -170,7 +178,7 @@ const InspectOneRepo: React.FC = () => {
 			bagPence2: [],
 			bagPence1: [],
 		})
-		// console.log('setparsedCountBags')
+		console.log('parsedCountBagsSet', parsedC)
 		contextDispatch(parsedCountBagsSet(parsedC))
 	}, [
 		data, 
@@ -203,6 +211,8 @@ const InspectOneRepo: React.FC = () => {
 					<li>How to emphasis on hover</li>
 					<li>Add Crosshair</li>
 					<li>Add series labels</li>
+						<p>Crosshair Will require own data store + change handlers</p>
+						<p>also this font size isnt 12px its lieing</p>
 				</ul>
 			</div>
 		</InspectRepoContext.Provider>

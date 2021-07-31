@@ -2,6 +2,10 @@ import {
 	ServerCountType,
 } from '../../global'
 
+import {
+	MarkSeriesPoint,
+} from 'react-vis'
+
 export interface SingleParsedCountBagT { 
 	label: string, 
 	y: number
@@ -40,6 +44,9 @@ export enum InspectRepoActionTypes {
 	PARSED_DATA_BAGS_SET = 'PARSED_DATA_BAGS_SET',
 }
 
+export interface xAxisLabel {
+	[x: number]: string
+}
 
 export interface InspectRepoInitialStateT {
 	repo?: number
@@ -47,7 +54,7 @@ export interface InspectRepoInitialStateT {
 	endTime: Date
 	useAdjustments: boolean
 	adjustmentStepSize: number
-	inspecting?: any
+	inspecting?: MarkSeriesPoint
 	constants: {
 		WIDTH: number
 		HEIGHT: number
@@ -55,4 +62,5 @@ export interface InspectRepoInitialStateT {
 	},
 	data: ServerCountType[],
 	parsedCountBags: ParsedCountBagsT[],
+	xAxisLabels: xAxisLabel
 }

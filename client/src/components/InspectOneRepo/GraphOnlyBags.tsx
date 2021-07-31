@@ -1,5 +1,8 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React, { useContext } from 'react'
 import { useSelector } from 'react-redux'
+import { css, jsx } from '@emotion/react'
 
 import { ReduxStateType } from '../../global'
 
@@ -9,10 +12,13 @@ import {
 	XAxis,
 	YAxis,
 	Hint,
+	Crosshair,
 	// TODO: investigate...
 	// LineMarkSeries,
 	LineSeries,
 	MarkSeries,
+	RVTickFormat,
+	MarkSeriesPoint,
 } from 'react-vis'
 
 import {  
@@ -25,12 +31,29 @@ interface Props {
 
 }
 
+const tooltipStyle = css({
+	textAlign: 'left',
+	// fontSize: '12px',
+	fontSize: '8px',
+	padding: '6px',
+	borderRadius: '5px',
+	pointerEvents: 'none',
+	boxShadow: '5px 5px 5px rgba(0,0,0,.3)',
+	background: '#3A3A48',
+	margin: '5px',
+	boxSizing: 'border-box',
+})
+
+// const months_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const months_full = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'Septmber', 'October', 'November', 'December']
+
 const GraphOnlyBags: React.FC<Props> = () => {
 	const COLOURS = useSelector((state: ReduxStateType) => state.ui.colours)
 	const { contextState, contextDispatch } = useContext(InspectRepoContext)
 
 	const {
 		inspecting,
+		data,
 		constants: {
 			WIDTH,
 			HEIGHT,
@@ -39,8 +62,18 @@ const GraphOnlyBags: React.FC<Props> = () => {
 		parsedCountBags,
 	} = contextState
 
-	const handleMarkMouseOver = (e: any) => {
+	const handleMarkMouseOver = (e: MarkSeriesPoint) => {
 		contextDispatch(inspectingSet(e))
+		console.log('inspecting: ', e)
+	}
+
+	const handleFormatTicks = (e: RVTickFormat | undefined) => {
+		const idx = Number(e)
+		if (data && data[idx]) {
+			const d = new Date(data[idx].timestamp)
+			return `${d.getDate()} ${months_full[d.getMonth()]} - \n${d.toLocaleTimeString()}`
+		} 
+		return ''
 	}
 
 	return (
@@ -74,8 +107,15 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				}}
 			/> */}
 			<HorizontalGridLines />
-			<XAxis />
-			<YAxis />
+			<XAxis 
+				title='Days'
+				orientation='bottom'
+				tickFormat={handleFormatTicks}
+			/>
+			<YAxis 
+				title='Baggs'
+				orientation='left'
+			/>
 			{/* <LineSeries 
 				fill='none'
 				// @ts-ignore
@@ -203,11 +243,40 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				color={COLOURS.liveRed}
 			/>
 			{/* <ParallelCoordinates 
-				// @ts-ignore
+				// @ts-ignoreX
 				data={parsedCountBags.bagPound2} 
 			/> */}
-			{ (inspecting !== null) && <Hint value={inspecting} /> }
-			{/* { (inspecting !== null) && <Crosshair value={[inspecting]} /> } */}
+			{ 
+				(inspecting !== null && inspecting !== undefined) && 
+				<Hint 
+					value={inspecting}
+				>
+					<div
+						css={tooltipStyle}	
+					>
+						<p>{inspecting.timestamp}</p>
+						<p>{inspecting.label}</p>
+						<p>Quantity: {Math.round(inspecting.y)}</p>
+					</div>
+				</Hint> 
+			}
+			{ (inspecting !== null && inspecting !== undefined) && 
+				<Crosshair 
+					values={[{ x: inspecting.x }]}
+
+				>
+					<div
+						css={{
+							...tooltipStyle,
+							transform: 'translateY(-100%)',
+							display: 'flex',
+							flexDirection: 'column',
+						}}
+					>
+						<p>Crosshair Goes Here</p>
+					</div>
+				</Crosshair>
+			}
 		</XYPlot>
 	)
 }

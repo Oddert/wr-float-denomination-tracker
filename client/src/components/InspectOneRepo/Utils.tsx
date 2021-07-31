@@ -16,7 +16,7 @@ export const inspectRepoInitialState: InspectRepoInitialStateT = {
 	endTime: new Date(baseDate),
 	useAdjustments: false,
 	adjustmentStepSize: .2,
-	inspecting: null,
+	inspecting: undefined,
 	constants: {
 		WIDTH: 1200,
 		HEIGHT: 500,
@@ -24,5 +24,6 @@ export const inspectRepoInitialState: InspectRepoInitialStateT = {
 	},
 	data: [],
 	parsedCountBags: [],
+	xAxisLabels: [],
 }
 

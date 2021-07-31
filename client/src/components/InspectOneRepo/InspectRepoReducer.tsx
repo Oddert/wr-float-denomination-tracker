@@ -66,7 +66,7 @@ function reduceInspectingSet (state: InspectRepoInitialStateT, action: InspectRe
 function reduceInspectingClear (state: InspectRepoInitialStateT): InspectRepoInitialStateT {
 	return {
 		...state,
-		inspecting: null
+		inspecting: undefined
 	}
 }
 
