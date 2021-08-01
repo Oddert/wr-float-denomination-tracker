@@ -40,7 +40,7 @@ export const dataSet = (data: ServerCountType[]) => ({
 	payload: data
 })
 
-export const parsedCountBagsSet = (parsedCountBags: ParsedCountBagsT[]) => ({
+export const parsedCountBagsSet = (parsedCountBags: ParsedCountBagsT) => ({
 	type: InspectRepoActionTypes.PARSED_DATA_BAGS_SET,
 	payload: parsedCountBags
 })

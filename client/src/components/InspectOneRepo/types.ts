@@ -1,5 +1,5 @@
 import {
-	ServerCountType,
+	ServerCountTypeFloatConfirmed,
 } from '../../global'
 
 import {
@@ -10,7 +10,7 @@ export interface SingleParsedCountBagT {
 	label: string, 
 	y: number
 	x: number
-	timestamp: number
+	timestamp: number | string
 	id: number
 }
 
@@ -60,7 +60,7 @@ export interface InspectRepoInitialStateT {
 		HEIGHT: number
 		Y_PADDING: number
 	},
-	data: ServerCountType[],
-	parsedCountBags: ParsedCountBagsT[],
+	data: ServerCountTypeFloatConfirmed[],
+	parsedCountBags: ParsedCountBagsT,
 	xAxisLabels: xAxisLabel
 }

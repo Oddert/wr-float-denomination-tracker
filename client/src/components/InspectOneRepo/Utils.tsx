@@ -23,7 +23,17 @@ export const inspectRepoInitialState: InspectRepoInitialStateT = {
 		Y_PADDING: 20,
 	},
 	data: [],
-	parsedCountBags: [],
+	parsedCountBags: {
+		bagNote5: [],
+		bagPound2: [],
+		bagPound1: [],
+		bagPence50: [],
+		bagPence20: [],
+		bagPence10: [],
+		bagPence5: [],
+		bagPence2: [],
+		bagPence1: [],
+	},
 	xAxisLabels: [],
 }
 

@@ -5,6 +5,7 @@ import React, { useEffect, useReducer } from 'react'
 
 import { 
 	ServerCountType, 
+	ServerCountTypeFloatConfirmed,
 	BagTypeReadableLabels,
 } from '../../global'
 
@@ -14,6 +15,7 @@ import {
 
 import {
 	ParsedCountBagsT,
+	SingleParsedCountBagT,
 } from './types'
 
 import TopControlGroup from './TopControlGroup'
@@ -33,6 +35,7 @@ interface ServerCountTypeWithAdjustment extends ServerCountType {
 const InspectOneRepo: React.FC = () => {
 	const [contextState, contextDispatch] = useReducer(InspectRepoReducer, inspectRepoInitialState)
 
+	// TODO: change name of useAdjustments. use* syntax is React special syntax
 	const { 
 		startTime, 
 		endTime, 
@@ -43,9 +46,13 @@ const InspectOneRepo: React.FC = () => {
 		data,
 	} = contextState
 	
-	// ===============================
-	// # Use Effect 1/2
-	// 		- For the specified date range, pull count data for the select repository
+	/**
+	 * # Use Effect 1/2
+	 * - For the specified date range, pull count data for the select repository
+	 * 
+	 * @listens {repo, endTime, StartTime}
+	 * @dispatch {ServerCountType[]}
+	 */
 	useEffect(() => {
 		const EXT = `/api/v1/count?fromdate=${startTime.getTime()}&todate=${endTime.getTime()}&float=true&repository=${repo}`
 		console.log(EXT)
@@ -63,16 +70,34 @@ const InspectOneRepo: React.FC = () => {
 			})
 	}, [repo, endTime, startTime])
 
-	// ===============================
-	// # Use Effect 2/2
-	// 		- Uses the data object to create the parsedData oject
-	// 		- pasrsedData "rotates" the data to use series based on denomination, instead of per count record
+	/**
+	 * # Use Effect 2/2
+	 * - Uses the data object to create the parsedData object
+	 * - pasrsedData "rotates" the data to use series based on denomination, instead of per count record
+	 * 
+	 * @listens {data, useAdjustments, adjustmentStepSize}
+	 * @dispatch {ServerCountType[]}
+	 */
 	useEffect(() => {
-		// is actually ServerCountType
-		const adjustedC = data.map((each: any) => {
+		/**
+		 * 
+		 */
+		const adjustedCount = data.map((each: ServerCountTypeFloatConfirmed) => {
+			// Local types and lookup objects
 			type BagTypes = 'bagNote5' | 'bagPound2' | 'bagPound1' | 'bagPence50' | 'bagPence20' | 'bagPence10' | 'bagPence5' | 'bagPence2' | 'bagPence1'
 			const bags: BagTypes[] = ['bagNote5', 'bagPound2', 'bagPound1', 'bagPence50', 'bagPence20', 'bagPence10', 'bagPence5', 'bagPence2', 'bagPence1']
-			const adjustments: any = {
+			// Used with the 'adjustments' option. Scales diffirent denominations to be uniform.
+			const adjustments: {
+				bagNote5: number
+				bagPound2: number
+				bagPound1: number
+				bagPence50: number
+				bagPence20: number
+				bagPence10: number
+				bagPence5: number
+				bagPence2: number
+				bagPence1: number
+			} = {
 				bagNote5: (100 * 5),
 				bagPound2: (100 * 20),
 				bagPound1: (100 * 20),
@@ -83,16 +108,32 @@ const InspectOneRepo: React.FC = () => {
 				bagPence2: (100 * 1),
 				bagPence1: (100 * 1),
 			}
+
+			// Copy the float data. 
+			// Bag values will be overwritten later and used to render the graph series points.
 			const float = { ...each.float }
-			const record = bags.map((bag: BagTypes) => ({
+
+			interface RecordType {
+				label: BagTypes
+				value: number
+			}
+
+			// for each bag type (BagTypes[]) lookup the value and label
+			// create a new array of objects each containing this key. Sort into size order.
+			// [{label: 'bagNote5', value: 2}, {label: 'bagPound2', value: 6} ...{label: 'bagPence1', value: 3}]
+			const records: RecordType[] = bags.map((bag: BagTypes) => ({
 				label: bag,
-				value: each.float[bag] || 0
+				value: Number(each.float[bag]) || 0
 			}))
 			.sort((a, b) => a.value - b.value)
 
-			const stack: any[] = []
+			// A queue method is used to examine each value, grouping same values together
+			const stack: RecordType[] = []
 			
-			record.forEach((oneRecord: any) => {
+			// Each Record is compared to the existing stack value (for any items)
+			// If the stack is empty, it is the first loop
+			// If the current value is the same, add it, otherwise empty the stack.
+			records.forEach((oneRecord: RecordType) => {
 				if (stack.length === 0) {
 					stack.push(oneRecord)
 				} else {
@@ -105,38 +146,50 @@ const InspectOneRepo: React.FC = () => {
 			})
 
 			function emptyStack (oneRecord: any) {
+				// The stack size will be    0 < stack.length <= bagTypes.length 
 				const len: number = stack.length
 				const middle: number = Math.ceil(len / 2)
 				
+				/**
+				 * Looping over the stack, two indexes are used.
+				 * i is calculated such that the middle is 0. 
+				 * This ensures any sdjustments move items (almost) equally up the graph as down.
+				 * j counts loops, used for index access to the stack.
+				 */
 				for (let i = 1 - middle, j = 0; i <= len - middle; i++, j++) {
+					// Labels and values are extracted
 					const label = stack[j].label
 					const value = stack[j].value
+					// if adjustments are in use, offset each point by its relative diffirence
+					// NOTE: the fail claus of the tenary used to be i. Check why later
+					// TODO: Check functionality given 3 overlapping values. Seems to preference raising all 3 above the line
 					const multiplier: number = useAdjustments 
-						? i * 	adjustmentStepSize * adjustments[label] 
-						: i
+						? i * adjustmentStepSize * adjustments[label] 
+						: 0
+					// Lastly, the two values from Record are used to re-write the float values
 					float[label] = value + multiplier
-					
 				}
+				// clear the float, ready for the next BagType
 				stack.length = 0
 				stack.push(oneRecord)
 			}
 
 			return { ...each, float }
 		})
-		// console.log({ adjustedC, data })
 
-		// const newxAxisLabels: {
-		// 	[x: number]: string
-		// } = {}
+		/**
+		 * SingleParsedCountBagT is the objects that will be passed to the series and render each point.
+		 * Reduce over the adjusted counts previously created, push each of the bags to their own array
+		 * 
+		 * @return {ParsedCountBagsT}
+		 */
+		const parsedC: ParsedCountBagsT = adjustedCount.reduce((acc: ParsedCountBagsT, each: ServerCountTypeWithAdjustment, idx: number) => {
+			const newAcc: ParsedCountBagsT = { ...acc }
 
-		const parsedC = adjustedC.reduce((acc: ParsedCountBagsT, each: ServerCountTypeWithAdjustment, idx: number) => {
-			const newAcc: any = { ...acc }
-
-			// newxAxisLabels[idx] = `${idx}`
-
-			function pushToNewAcc (bagType: BagTypeReadableLabels) {
+			// create a SingleParsedCountBagT from a given readable label
+			function pushToNewAcc (bagType: BagTypeReadableLabels): SingleParsedCountBagT {
 				let y = 0
-				const timestamp = each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined
+				const timestamp = each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : ''
 				
 				switch (bagType) {
 					case 'Bagged £5': y = (each.float?.bagNote5 || 0) / (100 * 5); break;
@@ -150,10 +203,8 @@ const InspectOneRepo: React.FC = () => {
 					case 'Bagged 1p': y = (each.float?.bagPence1 || 0) / 100; break;
 				}
 
-				// console.log({ newxAxisLabels })
 				return { 
-					// @ts-ignore
-					label: bagType, y, x: idx, timestamp, id: each.id			
+					label: bagType, y, x: idx, timestamp, id: each.id || 0	
 				}
 			}
 			
@@ -178,7 +229,8 @@ const InspectOneRepo: React.FC = () => {
 			bagPence2: [],
 			bagPence1: [],
 		})
-		console.log('parsedCountBagsSet', parsedC)
+		// console.log('parsedCountBagsSet', parsedC)
+		// ParsedCountBagsT is now ready to render, dispatch a write action
 		contextDispatch(parsedCountBagsSet(parsedC))
 	}, [
 		data, 
@@ -203,10 +255,7 @@ const InspectOneRepo: React.FC = () => {
 				{
 					JSON.stringify(inspecting)
 				}
-				<ul
-				// @ts-ignore
-					// className={css}
-				>
+				<ul>
 					<li>Toggle individual series</li>
 					<li>How to emphasis on hover</li>
 					<li>Add Crosshair</li>

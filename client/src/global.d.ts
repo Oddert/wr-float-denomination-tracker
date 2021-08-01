@@ -132,7 +132,7 @@ export interface ListCount {
 }
 
 export interface ServerCountType {
-	id?: number | null
+	id: number | null
 	repositoryId?: number | null
 	timestamp?: number | null
 	counter?: string | null
@@ -140,6 +140,10 @@ export interface ServerCountType {
 	supervisor?: string | null
 	supervisorId?: number | null
 	float?: ServerFloatType | null
+}
+
+export interface ServerCountTypeFloatConfirmed extends ServerCountType {
+	float: ServerFloatType
 }
 
 export interface ServerFloatType {
