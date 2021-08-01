@@ -4,7 +4,10 @@ import React, { useContext } from 'react'
 import { useSelector } from 'react-redux'
 import { css, jsx } from '@emotion/react'
 
-import { ReduxStateType } from '../../global'
+import {
+	Box,
+	Text,
+} from '@chakra-ui/react'
 
 import {
 	XYPlot,
@@ -24,8 +27,21 @@ import {
 import {  
 	inspectingSet,
 	inspectingClear,
+	crosshairPositionSet,
+	crosshairWrite,
 } from './InspectRepoActions'
+
 import { InspectRepoContext } from './Utils'
+
+import { BagTypeReadableLabels, ReduxStateType } from '../../global'
+
+import { 
+	BagTypes,
+	// bagTypes, 
+	// BagTypes,
+	ContextCrosshair,
+	InspectRepoInitialStateT, 
+} from './types'
 
 interface Props {
 
@@ -42,6 +58,7 @@ const tooltipStyle = css({
 	background: '#3A3A48',
 	margin: '5px',
 	boxSizing: 'border-box',
+	color: '#fff'
 })
 
 // const months_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -49,7 +66,7 @@ const months_full = ['January', 'February', 'March', 'April', 'May', 'June', 'Ju
 
 const GraphOnlyBags: React.FC<Props> = () => {
 	const COLOURS = useSelector((state: ReduxStateType) => state.ui.colours)
-	const { contextState, contextDispatch } = useContext(InspectRepoContext)
+	const { contextState, contextDispatch }: { contextState: InspectRepoInitialStateT, contextDispatch: any } = useContext(InspectRepoContext)
 
 	const {
 		inspecting,
@@ -60,23 +77,90 @@ const GraphOnlyBags: React.FC<Props> = () => {
 			Y_PADDING,
 		},
 		parsedCountBags,
+		crosshair,
+		crosshairX,
 	} = contextState
 
 	const handleMarkMouseOver = (e: MarkSeriesPoint) => {
 		contextDispatch(inspectingSet(e))
-		console.log('inspecting: ', e)
+	}
+
+	const handleMarkMouseOut = () => {
+		contextDispatch(inspectingClear())
 	}
 
 	const handleFormatTicks = (e: RVTickFormat | undefined) => {
 		const idx = Number(e)
 		if (data && data[idx]) {
-			const d = new Date(data[idx].timestamp)
+			const rawCount = data[idx].timestamp
+			let d = new Date()
+			if (typeof rawCount === 'number') {
+				d = new Date(rawCount)
+			}
 			return `${d.getDate()} ${months_full[d.getMonth()]} - \n${d.toLocaleTimeString()}`
 		} 
 		return ''
 	}
 
+	const handleNearestX = (e: MarkSeriesPoint) => {
+		const x = Number(e.x)
+		const count = data[x]
+
+		contextDispatch(crosshairPositionSet(x))
+
+		if (crosshair && crosshair.countId === count.id) return
+
+		const timestamp = count.timestamp
+		const d = new Date(count.timestamp || '')
+		const createCrosshair: ContextCrosshair = {
+			countId: Number(count.id),
+			title: '',
+			time: d.toLocaleTimeString(),
+			date: d.toLocaleDateString(),
+			...count.float
+		}
+
+		contextDispatch(crosshairWrite(createCrosshair))
+	}
+
+	const colourRelation = (bagtype: BagTypes | BagTypeReadableLabels) => {
+		switch(bagtype) {
+			case 'Bagged £5':
+			case 'bagNote5': return COLOURS.red
+			case 'Bagged £2':
+			case 'bagPound2': return COLOURS.green
+			case 'Bagged £1':
+			case 'bagPound1': return COLOURS.blue
+			case 'Bagged 50p':
+			case 'bagPence50': return COLOURS.orange
+			case 'Bagged 20p':
+			case 'bagPence20': return COLOURS.yellow
+			case 'Bagged 10p':
+			case 'bagPence10': return COLOURS.teal
+			case 'Bagged 5p':
+			case 'bagPence5': return COLOURS.black
+			case 'Bagged 2p':
+			case 'bagPence2': return COLOURS.gold
+			case 'Bagged 1p':
+			case 'bagPence1': return COLOURS.liveRed
+			default: return COLOURS.purple
+		}
+	}
+
+	const tooltipFontSize = 12
+	const crosshairFontSize = 10
+	const tooltipTextSyle = {
+		fontSize: tooltipFontSize,
+		color: '#fff'
+	}
+	const crosshairStyle = {
+		fontSize: crosshairFontSize,	
+		color: '#fff'
+	}
+	const shadowMarkSize = 20
+
 	return (
+		<div>
 		<XYPlot
 			width={WIDTH}
 			height={HEIGHT}
@@ -118,132 +202,173 @@ const GraphOnlyBags: React.FC<Props> = () => {
 			/>
 			{/* <LineSeries 
 				fill='none'
-				// @ts-ignore
 				data={poundTwo}
 			/> */}
 			{/* <LineSeries 
 				fill='none'
-				// @ts-ignore
 				data={parsedCountBags.bagNote5}
-				color={COLOURS.red}
+				color={colourRelation('bagNote5')}
 			/> */}
 			<LineSeries 
-				fill='none'
-				// @ts-ignore
+				// fill='none'
 				data={parsedCountBags.bagPound2}
-				color={COLOURS.green}
+				fill={colourRelation('bagPound2')}
+				color={colourRelation('bagPound2')}
 			/>
 			<LineSeries 
 				fill='none'
-				// @ts-ignore
 				data={parsedCountBags.bagPound1}
-				color={COLOURS.blue}
+				color={colourRelation('bagPound1')}
 			/>
 			<LineSeries 
 				fill='none'
-				// @ts-ignore
 				data={parsedCountBags.bagPence50}
-				color={COLOURS.orange}
+				color={colourRelation('bagPence50')}
 			/>
 			<LineSeries 
 				fill='none'
-				// @ts-ignore
 				data={parsedCountBags.bagPence20}
-				color={COLOURS.yellow}
+				color={colourRelation('bagPence20')}
 			/>
 			<LineSeries 
 				fill='none'
-				// @ts-ignore
 				data={parsedCountBags.bagPence10}
-				color={COLOURS.teal}
+				color={colourRelation('bagPence10')}
 			/>
 			<LineSeries 
 				fill='none'
-				// @ts-ignore
 				data={parsedCountBags.bagPence5}
-				color={COLOURS.black}
+				color={colourRelation('bagPence5')}
 			/>
 			<LineSeries 
 				fill='none'
-				// @ts-ignore
 				data={parsedCountBags.bagPence2}
-				color={COLOURS.gold}
+				color={colourRelation('bagPence2')}
 			/>
 			<LineSeries 
 				fill='none'
-				// @ts-ignore
 				data={parsedCountBags.bagPence1}
-				color={COLOURS.liveRed}
-				onSeriesMouseOver={() => console.log(Date.now())}
+				color={colourRelation('bagPence1')}
+				// onSeriesMouseOver={() => console.log(Date.now())}
 			/>
 
 
 			{/* <MarkSeries 
 				className='bagged-note-five'
-				// @ts-ignore
 				data={parsedCountBags.bagNote5}
 				onValueMouseOver={(v: any) => setInspecting(v)}
 				color={COLOURS.red}
 			/> */}
 			<MarkSeries 
 				className='bagged-pound-two'
-				// @ts-ignore
 				data={parsedCountBags.bagPound2}
 				onValueMouseOver={handleMarkMouseOver}
-				color={COLOURS.green}
+				color={colourRelation('bagPound2')}
+				onNearestX={handleNearestX}
+			/>
+			{/* second mark series hidden to add larger mouse target area */}
+			<MarkSeries 
+				data={parsedCountBags.bagPound2}
+				onValueMouseOver={handleMarkMouseOver}
+				onValueMouseOut={handleMarkMouseOut}
+				color='rgba(0,0,0,0)'
+				_sizeValue={shadowMarkSize}
 			/>
 			<MarkSeries 
 				className='bagged-pound-one'
-				// @ts-ignore
 				data={parsedCountBags.bagPound1}
 				onValueMouseOver={handleMarkMouseOver}
-				color={COLOURS.blue}
+				color={colourRelation('bagPound1')}
+			/>
+			<MarkSeries 
+				data={parsedCountBags.bagPound1}
+				onValueMouseOver={handleMarkMouseOver}
+				onValueMouseOut={handleMarkMouseOut}
+				color='rgba(0,0,0,0)'
+				// color={COLOURS.blue}
+				_sizeValue={shadowMarkSize}
 			/>
 			<MarkSeries 
 				className='bagged-pence-fifty'
-				// @ts-ignore
 				data={parsedCountBags.bagPence50}
 				onValueMouseOver={handleMarkMouseOver}
-				color={COLOURS.orange}
+				color={colourRelation('bagPence50')}
+			/>
+			<MarkSeries 
+				data={parsedCountBags.bagPence50}
+				onValueMouseOver={handleMarkMouseOver}
+				onValueMouseOut={handleMarkMouseOut}
+				color='rgba(0,0,0,0)'
+				_sizeValue={shadowMarkSize}
 			/>
 			<MarkSeries 
 				className='bagged-pence-twenty'
-				// @ts-ignore
 				data={parsedCountBags.bagPence20}
 				onValueMouseOver={handleMarkMouseOver}
-				color={COLOURS.yellow}
+				color={colourRelation('bagPence20')}
+			/>
+			<MarkSeries 
+				data={parsedCountBags.bagPence20}
+				onValueMouseOver={handleMarkMouseOver}
+				onValueMouseOut={handleMarkMouseOut}
+				color='rgba(0,0,0,0)'
+				_sizeValue={shadowMarkSize}
 			/>
 			<MarkSeries 
 				className='bagged-pence-ten'
-				// @ts-ignore
 				data={parsedCountBags.bagPence10}
 				onValueMouseOver={handleMarkMouseOver}
-				color={COLOURS.teal}
+				color={colourRelation('bagPence10')}
+			/>
+			<MarkSeries 
+				data={parsedCountBags.bagPence10}
+				onValueMouseOver={handleMarkMouseOver}
+				onValueMouseOut={handleMarkMouseOut}
+				color='rgba(0,0,0,0)'
+				_sizeValue={shadowMarkSize}
 			/>
 			<MarkSeries 
 				className='bagged-pence-five'
-				// @ts-ignore
 				data={parsedCountBags.bagPence5}
 				onValueMouseOver={handleMarkMouseOver}
-				color={COLOURS.black}
+				color={colourRelation('bagPence5')}
 
 			/>
 			<MarkSeries 
+				data={parsedCountBags.bagPence5}
+				onValueMouseOver={handleMarkMouseOver}
+				onValueMouseOut={handleMarkMouseOut}
+				color='rgba(0,0,0,0)'
+				_sizeValue={shadowMarkSize}
+			/>
+			<MarkSeries 
 				className='bagged-pence-two'
-				// @ts-ignore
 				data={parsedCountBags.bagPence2}
 				onValueMouseOver={handleMarkMouseOver}
-				color={COLOURS.gold}
+				color={colourRelation('bagPence2')}
+			/>
+			<MarkSeries 
+				data={parsedCountBags.bagPence2}
+				onValueMouseOver={handleMarkMouseOver}
+				onValueMouseOut={handleMarkMouseOut}
+				color='rgba(0,0,0,0)'
+				_sizeValue={shadowMarkSize}
 			/>
 			<MarkSeries 
 				className='bagged-pence-one'
-				// @ts-ignore
 				data={parsedCountBags.bagPence1}
 				onValueMouseOver={handleMarkMouseOver}
-				color={COLOURS.liveRed}
+				color={colourRelation('bagPence1')}
 			/>
+			<MarkSeries 
+				data={parsedCountBags.bagPence1}
+				onValueMouseOver={handleMarkMouseOver}
+				onValueMouseOut={handleMarkMouseOut}
+				color='rgba(0,0,0,0)'
+				_sizeValue={shadowMarkSize}
+			/>
+
 			{/* <ParallelCoordinates 
-				// @ts-ignoreX
 				data={parsedCountBags.bagPound2} 
 			/> */}
 			{ 
@@ -251,33 +376,56 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				<Hint 
 					value={inspecting}
 				>
-					<div
-						css={tooltipStyle}	
+					<Box
+						css={tooltipStyle}
+						borderTop={`5px solid ${colourRelation(inspecting.label)}`}
 					>
-						<p>{inspecting.timestamp}</p>
-						<p>{inspecting.label}</p>
-						<p>Quantity: {Math.round(inspecting.y)}</p>
-					</div>
+						{/* <Text 
+							{...tooltipTextSyle}
+						>
+							{inspecting.timestamp}
+						</Text> */}
+						<Text 
+							{...tooltipTextSyle}
+						>
+							{inspecting.label}
+						</Text>
+						<Text 
+							{...tooltipTextSyle}
+						>
+							Quantity: {Math.round(Number(inspecting.y))}
+						</Text>
+					</Box>
 				</Hint> 
 			}
-			{ (inspecting !== null && inspecting !== undefined) && 
+			{ (crosshair !== null && crosshair !== undefined) && 
 				<Crosshair 
-					values={[{ x: inspecting.x }]}
-
+					values={[{ x: crosshairX }]}
 				>
-					<div
-						css={{
-							...tooltipStyle,
-							transform: 'translateY(-100%)',
-							display: 'flex',
-							flexDirection: 'column',
-						}}
+					<Box
+						css={tooltipStyle}
+						transform='translateY(-100%)'
 					>
-						<p>Crosshair Goes Here</p>
-					</div>
+						{
+							(crosshair.title && crosshair.title.length) &&
+							<Text 
+								{...crosshairStyle}
+							>
+								{crosshair.title}
+							</Text>
+						}
+						<Text
+							{...crosshairStyle}
+							whiteSpace='nowrap'
+						>
+							{crosshair.date}, {crosshair.time}
+						</Text>
+					</Box>
 				</Crosshair>
 			}
 		</XYPlot>
+		{crosshairX}
+		</div>
 	)
 }
 

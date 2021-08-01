@@ -1,5 +1,6 @@
 import {
 	ServerCountTypeFloatConfirmed,
+	ServerFloatType,
 } from '../../global'
 
 import {
@@ -13,6 +14,16 @@ export interface SingleParsedCountBagT {
 	timestamp: number | string
 	id: number
 }
+
+export interface ContextCrosshair extends ServerFloatType {
+	title: string
+	time: string
+	date: string
+	countId: number
+}
+
+export type BagTypes = 'bagNote5' | 'bagPound2' | 'bagPound1' | 'bagPence50' | 'bagPence20' | 'bagPence10' | 'bagPence5' | 'bagPence2' | 'bagPence1'
+export const bagTypes = ['bagNote5', 'bagPound2', 'bagPound1', 'bagPence50', 'bagPence20', 'bagPence10', 'bagPence5', 'bagPence2', 'bagPence1']
 
 // TODO: figgure out why this is self referential still
 export interface ParsedCountBagsT {
@@ -42,6 +53,9 @@ export enum InspectRepoActionTypes {
 	INSPECTING_CLEAR = 'INSPECTING_CLEAR',
 	DATA_SET = 'DATA_SET',
 	PARSED_DATA_BAGS_SET = 'PARSED_DATA_BAGS_SET',
+	CROSSHAIR_SET = 'CROSSHAIR_SET',
+	CROSSHAIR_CLEAR = 'CROSSHAIR_CLEAR',
+	CROSSHAIR_POSITION_SET = 'CROSSHAIR_POSITION_SET',
 }
 
 export interface xAxisLabel {
@@ -52,7 +66,7 @@ export interface InspectRepoInitialStateT {
 	repo?: number
 	startTime: Date
 	endTime: Date
-	useAdjustments: boolean
+	adjustYAxisRenderPosition: boolean
 	adjustmentStepSize: number
 	inspecting?: MarkSeriesPoint
 	constants: {
@@ -62,5 +76,7 @@ export interface InspectRepoInitialStateT {
 	},
 	data: ServerCountTypeFloatConfirmed[],
 	parsedCountBags: ParsedCountBagsT,
-	xAxisLabels: xAxisLabel
+	xAxisLabels: xAxisLabel,
+	crosshair?: ContextCrosshair,
+	crosshairX?: number
 }

@@ -14,7 +14,7 @@ export const inspectRepoInitialState: InspectRepoInitialStateT = {
 	repo: undefined,
 	startTime: new Date(baseDate.getTime() - 1000 * 60 * 60 * 24 * 7 * 5),
 	endTime: new Date(baseDate),
-	useAdjustments: false,
+	adjustYAxisRenderPosition: false,
 	adjustmentStepSize: .2,
 	inspecting: undefined,
 	constants: {
@@ -35,5 +35,7 @@ export const inspectRepoInitialState: InspectRepoInitialStateT = {
 		bagPence1: [],
 	},
 	xAxisLabels: [],
+	crosshair: undefined,
+	crosshairX: undefined,
 }
 

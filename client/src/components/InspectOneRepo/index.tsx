@@ -16,6 +16,7 @@ import {
 import {
 	ParsedCountBagsT,
 	SingleParsedCountBagT,
+	BagTypes,
 } from './types'
 
 import TopControlGroup from './TopControlGroup'
@@ -35,11 +36,11 @@ interface ServerCountTypeWithAdjustment extends ServerCountType {
 const InspectOneRepo: React.FC = () => {
 	const [contextState, contextDispatch] = useReducer(InspectRepoReducer, inspectRepoInitialState)
 
-	// TODO: change name of useAdjustments. use* syntax is React special syntax
+	// TODO: change name of adjustYAxisRenderPosition. use* syntax is React special syntax
 	const { 
 		startTime, 
 		endTime, 
-		useAdjustments, 
+		adjustYAxisRenderPosition, 
 		repo, 
 		adjustmentStepSize,
 		inspecting,
@@ -66,7 +67,13 @@ const InspectOneRepo: React.FC = () => {
 			.then(res => res.json())
 			.then(res => {
 				console.log(res)
-				contextDispatch(dataSet(res.counts.reverse()))
+				contextDispatch(dataSet(
+					res.counts.sort((a: ServerCountType, b: ServerCountType) => {
+						const timestampA = Number(a.timestamp)
+						const timestampB = Number(b.timestamp)
+						return timestampA - timestampB
+					})
+				))
 			})
 	}, [repo, endTime, startTime])
 
@@ -75,7 +82,7 @@ const InspectOneRepo: React.FC = () => {
 	 * - Uses the data object to create the parsedData object
 	 * - pasrsedData "rotates" the data to use series based on denomination, instead of per count record
 	 * 
-	 * @listens {data, useAdjustments, adjustmentStepSize}
+	 * @listens {data, adjustYAxisRenderPosition, adjustmentStepSize}
 	 * @dispatch {ServerCountType[]}
 	 */
 	useEffect(() => {
@@ -84,7 +91,6 @@ const InspectOneRepo: React.FC = () => {
 		 */
 		const adjustedCount = data.map((each: ServerCountTypeFloatConfirmed) => {
 			// Local types and lookup objects
-			type BagTypes = 'bagNote5' | 'bagPound2' | 'bagPound1' | 'bagPence50' | 'bagPence20' | 'bagPence10' | 'bagPence5' | 'bagPence2' | 'bagPence1'
 			const bags: BagTypes[] = ['bagNote5', 'bagPound2', 'bagPound1', 'bagPence50', 'bagPence20', 'bagPence10', 'bagPence5', 'bagPence2', 'bagPence1']
 			// Used with the 'adjustments' option. Scales diffirent denominations to be uniform.
 			const adjustments: {
@@ -163,7 +169,7 @@ const InspectOneRepo: React.FC = () => {
 					// if adjustments are in use, offset each point by its relative diffirence
 					// NOTE: the fail claus of the tenary used to be i. Check why later
 					// TODO: Check functionality given 3 overlapping values. Seems to preference raising all 3 above the line
-					const multiplier: number = useAdjustments 
+					const multiplier: number = adjustYAxisRenderPosition 
 						? i * adjustmentStepSize * adjustments[label] 
 						: 0
 					// Lastly, the two values from Record are used to re-write the float values
@@ -234,7 +240,7 @@ const InspectOneRepo: React.FC = () => {
 		contextDispatch(parsedCountBagsSet(parsedC))
 	}, [
 		data, 
-		useAdjustments, 
+		adjustYAxisRenderPosition, 
 		adjustmentStepSize
 	])
 
@@ -258,10 +264,8 @@ const InspectOneRepo: React.FC = () => {
 				<ul>
 					<li>Toggle individual series</li>
 					<li>How to emphasis on hover</li>
-					<li>Add Crosshair</li>
 					<li>Add series labels</li>
-						<p>Crosshair Will require own data store + change handlers</p>
-						<p>also this font size isnt 12px its lieing</p>
+					<p>Crosshair Will require own data store + change handlers</p>
 				</ul>
 			</div>
 		</InspectRepoContext.Provider>

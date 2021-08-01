@@ -17,6 +17,9 @@ const InspectRepoReducer = (state: InspectRepoInitialStateT, action: InspectRepo
 		case InspectRepoActionTypes.INSPECTING_CLEAR: return reduceInspectingClear(state)
 		case InspectRepoActionTypes.DATA_SET: return reduceDataSet(state, action)
 		case InspectRepoActionTypes.PARSED_DATA_BAGS_SET: return reduceParsedDataBagsSet(state, action)
+		case InspectRepoActionTypes.CROSSHAIR_SET: return reduceCrosshairSet(state, action)
+		case InspectRepoActionTypes.CROSSHAIR_POSITION_SET: return reduceCrosshairPositionSet(state, action)
+		case InspectRepoActionTypes.CROSSHAIR_CLEAR: return reduceCrosshairClear(state, action)
 		default: return state
 	}
 }
@@ -45,7 +48,7 @@ function reduceEndDateSet (state: InspectRepoInitialStateT, action: InspectRepoA
 function reduceAdjustmentUseSet (state: InspectRepoInitialStateT, action: InspectRepoAction): InspectRepoInitialStateT {
 	return {
 		...state,
-		useAdjustments: action.payload
+		adjustYAxisRenderPosition: action.payload
 	}
 }
 
@@ -81,6 +84,25 @@ function reduceParsedDataBagsSet (state: InspectRepoInitialStateT, action: Inspe
 	return {
 		...state,
 		parsedCountBags: action.payload
+	}
+}
+function reduceCrosshairSet (state: InspectRepoInitialStateT, action: InspectRepoAction): InspectRepoInitialStateT {
+	return {
+		...state,
+		crosshair: action.payload
+	}
+}
+function reduceCrosshairPositionSet (state: InspectRepoInitialStateT, action: InspectRepoAction): InspectRepoInitialStateT {
+	return {
+		...state,
+		crosshairX: action.payload
+	}
+}
+function reduceCrosshairClear (state: InspectRepoInitialStateT, action: InspectRepoAction): InspectRepoInitialStateT {
+	return {
+		...state,
+		crosshair: undefined,
+		crosshairX: undefined
 	}
 }
 

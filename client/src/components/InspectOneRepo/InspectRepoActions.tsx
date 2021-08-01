@@ -1,6 +1,8 @@
 
 import {
-	InspectRepoActionTypes, ParsedCountBagsT,
+	InspectRepoActionTypes, 
+	ContextCrosshair, 
+	ParsedCountBagsT,
 } from './types'
 
 import {
@@ -43,4 +45,15 @@ export const dataSet = (data: ServerCountType[]) => ({
 export const parsedCountBagsSet = (parsedCountBags: ParsedCountBagsT) => ({
 	type: InspectRepoActionTypes.PARSED_DATA_BAGS_SET,
 	payload: parsedCountBags
+})
+export const crosshairWrite = (crosshair: ContextCrosshair) => ({
+	type: InspectRepoActionTypes.CROSSHAIR_SET,
+	payload: crosshair
+})
+export const crosshairPositionSet = (x: number) => ({
+	type: InspectRepoActionTypes.CROSSHAIR_POSITION_SET,
+	payload: x
+})
+export const crosshairClear = () => ({
+	type: InspectRepoActionTypes.CROSSHAIR_CLEAR,
 })

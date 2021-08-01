@@ -133,8 +133,8 @@ export interface ListCount {
 
 export interface ServerCountType {
 	id: number | null
-	repositoryId?: number | null
-	timestamp?: number | null
+	repositoryId: number | null
+	timestamp: number | null
 	counter?: string | null
 	counterId?: number | null
 	supervisor?: string | null
