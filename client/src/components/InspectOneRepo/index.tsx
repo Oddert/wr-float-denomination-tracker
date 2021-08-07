@@ -265,7 +265,6 @@ const InspectOneRepo: React.FC = () => {
 					<li>Toggle individual series</li>
 					<li>How to emphasis on hover</li>
 					<li>Add series labels</li>
-					<p>Crosshair Will require own data store + change handlers</p>
 				</ul>
 			</div>
 		</InspectRepoContext.Provider>

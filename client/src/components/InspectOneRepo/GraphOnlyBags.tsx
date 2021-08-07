@@ -29,6 +29,8 @@ import {
 	inspectingClear,
 	crosshairPositionSet,
 	crosshairWrite,
+	seriesHoverSet,
+	seriesHoverClear,
 } from './InspectRepoActions'
 
 import { InspectRepoContext } from './Utils'
@@ -41,6 +43,7 @@ import {
 	// BagTypes,
 	ContextCrosshair,
 	InspectRepoInitialStateT, 
+	bagTypes as bts
 } from './types'
 
 interface Props {
@@ -79,6 +82,7 @@ const GraphOnlyBags: React.FC<Props> = () => {
 		parsedCountBags,
 		crosshair,
 		crosshairX,
+		hoverSeries,
 	} = contextState
 
 	const handleMarkMouseOver = (e: MarkSeriesPoint) => {
@@ -110,7 +114,6 @@ const GraphOnlyBags: React.FC<Props> = () => {
 
 		if (crosshair && crosshair.countId === count.id) return
 
-		const timestamp = count.timestamp
 		const d = new Date(count.timestamp || '')
 		const createCrosshair: ContextCrosshair = {
 			countId: Number(count.id),
@@ -121,6 +124,20 @@ const GraphOnlyBags: React.FC<Props> = () => {
 		}
 
 		contextDispatch(crosshairWrite(createCrosshair))
+	}
+
+	const handleSeriesMouseOver = (bagType: BagTypes) => {
+		console.log('seriesMouseOver', bagType)
+		contextDispatch(seriesHoverSet(bagType))
+	}
+
+	const handleSeriesMouseOut = (bagType: BagTypes) => {
+		console.log('seriesMouseOut', bagType)
+		contextDispatch(seriesHoverClear())
+	}
+
+	const handleSeriesClick = (bagType: BagTypes) => {
+		console.log('seriesClick', bagType)
 	}
 
 	const colourRelation = (bagtype: BagTypes | BagTypeReadableLabels) => {
@@ -158,6 +175,8 @@ const GraphOnlyBags: React.FC<Props> = () => {
 		color: '#fff'
 	}
 	const shadowMarkSize = 20
+
+	// https://github.com/uber/react-vis/blob/master/docs/interaction.md
 
 	return (
 		<div>
@@ -214,42 +233,77 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				data={parsedCountBags.bagPound2}
 				fill={colourRelation('bagPound2')}
 				color={colourRelation('bagPound2')}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPound2')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPound2')}
+				onSeriesClick={() => handleSeriesClick('bagPound2')}
+				style={(hoverSeries && hoverSeries === 'bagPound2') ? {
+					strokeWidth: 4
+				} : {
+					strokeWidth: 2
+				}}
 			/>
+			{/* Might work this time... */}
+			{/* {
+				bts.map((val: string, n: number, arr: string[]) => <LineSeries 
+
+				/>)
+			} */}
 			<LineSeries 
 				fill='none'
 				data={parsedCountBags.bagPound1}
 				color={colourRelation('bagPound1')}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPound1')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPound1')}
+				onSeriesClick={() => handleSeriesClick('bagPound1')}
 			/>
 			<LineSeries 
 				fill='none'
 				data={parsedCountBags.bagPence50}
 				color={colourRelation('bagPence50')}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPence50')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPence50')}
+				onSeriesClick={() => handleSeriesClick('bagPence50')}
 			/>
 			<LineSeries 
 				fill='none'
 				data={parsedCountBags.bagPence20}
 				color={colourRelation('bagPence20')}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPence20')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPence20')}
+				onSeriesClick={() => handleSeriesClick('bagPence20')}
 			/>
 			<LineSeries 
 				fill='none'
 				data={parsedCountBags.bagPence10}
 				color={colourRelation('bagPence10')}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPence10')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPence10')}
+				onSeriesClick={() => handleSeriesClick('bagPence10')}
 			/>
 			<LineSeries 
 				fill='none'
 				data={parsedCountBags.bagPence5}
 				color={colourRelation('bagPence5')}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPence5')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPence5')}
+				onSeriesClick={() => handleSeriesClick('bagPence5')}
 			/>
 			<LineSeries 
 				fill='none'
 				data={parsedCountBags.bagPence2}
 				color={colourRelation('bagPence2')}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPence2')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPence2')}
+				onSeriesClick={() => handleSeriesClick('bagPence2')}
 			/>
 			<LineSeries 
 				fill='none'
 				data={parsedCountBags.bagPence1}
 				color={colourRelation('bagPence1')}
 				// onSeriesMouseOver={() => console.log(Date.now())}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPence1')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPence1')}
+				onSeriesClick={() => handleSeriesClick('bagPence1')}
 			/>
 
 
@@ -259,14 +313,7 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				onValueMouseOver={(v: any) => setInspecting(v)}
 				color={COLOURS.red}
 			/> */}
-			<MarkSeries 
-				className='bagged-pound-two'
-				data={parsedCountBags.bagPound2}
-				onValueMouseOver={handleMarkMouseOver}
-				color={colourRelation('bagPound2')}
-				onNearestX={handleNearestX}
-			/>
-			{/* second mark series hidden to add larger mouse target area */}
+			{/* Duplicate mark series, hidden to add larger mouse target area */}
 			<MarkSeries 
 				data={parsedCountBags.bagPound2}
 				onValueMouseOver={handleMarkMouseOver}
@@ -275,10 +322,14 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				_sizeValue={shadowMarkSize}
 			/>
 			<MarkSeries 
-				className='bagged-pound-one'
-				data={parsedCountBags.bagPound1}
+				className='bagged-pound-two'
+				data={parsedCountBags.bagPound2}
 				onValueMouseOver={handleMarkMouseOver}
-				color={colourRelation('bagPound1')}
+				color={colourRelation('bagPound2')}
+				onNearestX={handleNearestX}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPound2')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPound2')}
+				onSeriesClick={() => handleSeriesClick('bagPound2')}
 			/>
 			<MarkSeries 
 				data={parsedCountBags.bagPound1}
@@ -289,13 +340,32 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				_sizeValue={shadowMarkSize}
 			/>
 			<MarkSeries 
+				className='bagged-pound-one'
+				data={parsedCountBags.bagPound1}
+				onValueMouseOver={handleMarkMouseOver}
+				color={colourRelation('bagPound1')}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPound1')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPound1')}
+				onSeriesClick={() => handleSeriesClick('bagPound1')}
+			/>
+			<MarkSeries 
+				data={parsedCountBags.bagPence50}
+				onValueMouseOver={handleMarkMouseOver}
+				onValueMouseOut={handleMarkMouseOut}
+				color='rgba(0,0,0,0)'
+				_sizeValue={shadowMarkSize}
+			/>
+			<MarkSeries 
 				className='bagged-pence-fifty'
 				data={parsedCountBags.bagPence50}
 				onValueMouseOver={handleMarkMouseOver}
 				color={colourRelation('bagPence50')}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPence50')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPence50')}
+				onSeriesClick={() => handleSeriesClick('bagPence50')}
 			/>
 			<MarkSeries 
-				data={parsedCountBags.bagPence50}
+				data={parsedCountBags.bagPence20}
 				onValueMouseOver={handleMarkMouseOver}
 				onValueMouseOut={handleMarkMouseOut}
 				color='rgba(0,0,0,0)'
@@ -306,9 +376,12 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				data={parsedCountBags.bagPence20}
 				onValueMouseOver={handleMarkMouseOver}
 				color={colourRelation('bagPence20')}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPence20')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPence20')}
+				onSeriesClick={() => handleSeriesClick('bagPence20')}
 			/>
 			<MarkSeries 
-				data={parsedCountBags.bagPence20}
+				data={parsedCountBags.bagPence10}
 				onValueMouseOver={handleMarkMouseOver}
 				onValueMouseOut={handleMarkMouseOut}
 				color='rgba(0,0,0,0)'
@@ -319,9 +392,12 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				data={parsedCountBags.bagPence10}
 				onValueMouseOver={handleMarkMouseOver}
 				color={colourRelation('bagPence10')}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPence10')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPence10')}
+				onSeriesClick={() => handleSeriesClick('bagPence10')}
 			/>
 			<MarkSeries 
-				data={parsedCountBags.bagPence10}
+				data={parsedCountBags.bagPence5}
 				onValueMouseOver={handleMarkMouseOver}
 				onValueMouseOut={handleMarkMouseOut}
 				color='rgba(0,0,0,0)'
@@ -332,10 +408,12 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				data={parsedCountBags.bagPence5}
 				onValueMouseOver={handleMarkMouseOver}
 				color={colourRelation('bagPence5')}
-
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPence5')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPence5')}
+				onSeriesClick={() => handleSeriesClick('bagPence5')}
 			/>
 			<MarkSeries 
-				data={parsedCountBags.bagPence5}
+				data={parsedCountBags.bagPence2}
 				onValueMouseOver={handleMarkMouseOver}
 				onValueMouseOut={handleMarkMouseOut}
 				color='rgba(0,0,0,0)'
@@ -346,9 +424,12 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				data={parsedCountBags.bagPence2}
 				onValueMouseOver={handleMarkMouseOver}
 				color={colourRelation('bagPence2')}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPence2')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPence2')}
+				onSeriesClick={() => handleSeriesClick('bagPence2')}
 			/>
 			<MarkSeries 
-				data={parsedCountBags.bagPence2}
+				data={parsedCountBags.bagPence1}
 				onValueMouseOver={handleMarkMouseOver}
 				onValueMouseOut={handleMarkMouseOut}
 				color='rgba(0,0,0,0)'
@@ -359,13 +440,9 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				data={parsedCountBags.bagPence1}
 				onValueMouseOver={handleMarkMouseOver}
 				color={colourRelation('bagPence1')}
-			/>
-			<MarkSeries 
-				data={parsedCountBags.bagPence1}
-				onValueMouseOver={handleMarkMouseOver}
-				onValueMouseOut={handleMarkMouseOut}
-				color='rgba(0,0,0,0)'
-				_sizeValue={shadowMarkSize}
+				onSeriesMouseOver={() => handleSeriesMouseOver('bagPence1')}
+				onSeriesMouseOut={() => handleSeriesMouseOut('bagPence1')}
+				onSeriesClick={() => handleSeriesClick('bagPence1')}
 			/>
 
 			{/* <ParallelCoordinates 
@@ -424,7 +501,7 @@ const GraphOnlyBags: React.FC<Props> = () => {
 				</Crosshair>
 			}
 		</XYPlot>
-		{crosshairX}
+		Whyyyyyyyyyyyyyyyyyyyyyy {hoverSeries}
 		</div>
 	)
 }

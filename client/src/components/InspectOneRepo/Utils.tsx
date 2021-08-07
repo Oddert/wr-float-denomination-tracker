@@ -37,5 +37,7 @@ export const inspectRepoInitialState: InspectRepoInitialStateT = {
 	xAxisLabels: [],
 	crosshair: undefined,
 	crosshairX: undefined,
+	focusedSeries: [],
+	hoverSeries: undefined,
 }
 

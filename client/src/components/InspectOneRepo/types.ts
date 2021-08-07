@@ -56,6 +56,8 @@ export enum InspectRepoActionTypes {
 	CROSSHAIR_SET = 'CROSSHAIR_SET',
 	CROSSHAIR_CLEAR = 'CROSSHAIR_CLEAR',
 	CROSSHAIR_POSITION_SET = 'CROSSHAIR_POSITION_SET',
+	SERIES_HOVER_SET = 'SERIES_HOVER_SET',
+	SERIES_HOVER_CLEAR = 'SERIES_HOVER_CLEAR',
 }
 
 export interface xAxisLabel {
@@ -74,9 +76,11 @@ export interface InspectRepoInitialStateT {
 		HEIGHT: number
 		Y_PADDING: number
 	},
-	data: ServerCountTypeFloatConfirmed[],
-	parsedCountBags: ParsedCountBagsT,
-	xAxisLabels: xAxisLabel,
-	crosshair?: ContextCrosshair,
+	data: ServerCountTypeFloatConfirmed[]
+	parsedCountBags: ParsedCountBagsT
+	xAxisLabels: xAxisLabel
+	crosshair?: ContextCrosshair
 	crosshairX?: number
+	focusedSeries: BagTypes[]
+	hoverSeries?: BagTypes
 }

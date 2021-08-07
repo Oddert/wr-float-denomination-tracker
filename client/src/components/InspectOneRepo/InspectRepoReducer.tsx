@@ -20,6 +20,8 @@ const InspectRepoReducer = (state: InspectRepoInitialStateT, action: InspectRepo
 		case InspectRepoActionTypes.CROSSHAIR_SET: return reduceCrosshairSet(state, action)
 		case InspectRepoActionTypes.CROSSHAIR_POSITION_SET: return reduceCrosshairPositionSet(state, action)
 		case InspectRepoActionTypes.CROSSHAIR_CLEAR: return reduceCrosshairClear(state, action)
+		case InspectRepoActionTypes.SERIES_HOVER_SET: return reduceSeriesHoverSet(state, action)
+		case InspectRepoActionTypes.SERIES_HOVER_CLEAR: return reduceSeriesHoverClear(state)
 		default: return state
 	}
 }
@@ -103,6 +105,18 @@ function reduceCrosshairClear (state: InspectRepoInitialStateT, action: InspectR
 		...state,
 		crosshair: undefined,
 		crosshairX: undefined
+	}
+}
+function reduceSeriesHoverSet (state: InspectRepoInitialStateT, action: InspectRepoAction): InspectRepoInitialStateT {
+	return {
+		...state,
+		hoverSeries: action.payload
+	}
+}
+function reduceSeriesHoverClear (state: InspectRepoInitialStateT): InspectRepoInitialStateT {
+	return {
+		...state,
+		hoverSeries: undefined
 	}
 }
 

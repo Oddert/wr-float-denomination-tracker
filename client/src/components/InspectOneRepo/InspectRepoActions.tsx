@@ -3,6 +3,7 @@ import {
 	InspectRepoActionTypes, 
 	ContextCrosshair, 
 	ParsedCountBagsT,
+	BagTypes,
 } from './types'
 
 import {
@@ -56,4 +57,12 @@ export const crosshairPositionSet = (x: number) => ({
 })
 export const crosshairClear = () => ({
 	type: InspectRepoActionTypes.CROSSHAIR_CLEAR,
+})
+
+export const seriesHoverSet = (bagType: BagTypes) => ({
+	type: InspectRepoActionTypes.SERIES_HOVER_SET,
+	payload: bagType
+})
+export const seriesHoverClear = () => ({
+	type: InspectRepoActionTypes.SERIES_HOVER_CLEAR
 })
