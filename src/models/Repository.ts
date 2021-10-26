@@ -4,7 +4,20 @@ import knex from '../db/knex'
 Model.knex(knex)
 
 class Repository extends Model {
-	
+	id?: number
+	name!: string
+	description?: string
+	createdOn?: number
+	updatedOn?: number
+	activated?: boolean
+	activatedOn?: number
+	deactivatedOn?: number
+	activatedById?: number
+	deactivatedById?: number
+	deleted?: boolean
+	deletedOn?: number
+	deletedById?: number
+
 	static get tableName () {
 		return 'repositories'
 	}

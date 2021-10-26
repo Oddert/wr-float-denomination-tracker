@@ -4,6 +4,17 @@ import knex from '../db/knex'
 Model.knex(knex)
 
 class Partner extends Model {
+	id?: number
+	preferredName?: string
+	firstName!: string
+	middleNames?: string
+	lastName?: string
+	pending?: boolean
+	createdOn?: number
+	updatedOn?: number
+	deleted?: boolean
+	deletedOn?: number
+	tillNumber!: string
 	
 	static get tableName () {
 		return 'partners'

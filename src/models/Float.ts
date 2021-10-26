@@ -4,6 +4,40 @@ import knex from '../db/knex'
 Model.knex(knex)
 
 class Float extends Model {
+	id?: number
+
+	countId?: number
+
+	note50?: number
+	note20?: number
+	note10?: number
+	note5?: number
+	note1?: number
+	noteTotal!: number 
+
+	bagNote5!: number
+	bagPound2!: number
+	bagPound1!: number
+	bagPence50!: number
+	bagPence20!: number
+	bagPence10!: number
+	bagPence5!: number
+	bagPence2!: number
+	bagPence1!: number
+	bagTotal!: number
+
+	loosePound2?: number
+	loosePound1?: number
+	loosePence50?: number
+	loosePence20?: number
+	loosePence10?: number
+	loosePence5?: number
+	loosePence2?: number
+	loosePence1?: number
+	looseOther?: number
+	looseTotal!: number
+
+	floatTotal?: number
 
 	static get tableName () {
 		return 'floats'

@@ -4,6 +4,31 @@ import knex from '../db/knex'
 Model.knex(knex)
 
 class Privilege extends Model {
+	userId?: number
+	description?: string
+	createdOn?: number
+	countReadList?: boolean
+	countReadIndividual?: boolean
+	countDeclare?: boolean
+	countCreate?: boolean
+	countUpdate?: boolean
+	countDestroy?: boolean
+	repositoryReadList?: boolean
+	repositoryReadIndividual?: boolean
+	repositoryActivate?: boolean
+	repositoryCreate?: boolean
+	repositoryUpdate?: boolean
+	repositoryDestroy?: boolean
+	partnerReadList?: boolean
+	partnerReadIndividual?: boolean
+	partnerRequest?: boolean
+	partnerCreate?: boolean
+	partnerUpdateBasic?: boolean
+	partnerUpdateDetails?: boolean
+	partnerUpdatePrivileges?: boolean
+	partnerDelete?: boolean
+	partnerDeletePermanent?: boolean
+
 	static get tableName () {
 		return 'privileges'
 	}

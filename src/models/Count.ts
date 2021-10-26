@@ -4,6 +4,21 @@ import knex from '../db/knex'
 Model.knex(knex)
 
 class Count extends Model {
+	id?: 'integer'
+	floatId!: 'integer'
+	comment?: string
+	repositoryId!: number
+	deletedById?: number
+	counterId?: number
+	supervisorId?: number
+	authenticatorId?: number
+	completionStatus!: string
+	createdOn?: number
+	verified!: boolean
+	deleted?: boolean
+	deletedOn?: number
+	updatedOn?: number
+	timestamp!: number
 	
 	static get tableName () {
 		return 'counts'

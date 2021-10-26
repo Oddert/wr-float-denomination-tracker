@@ -5,12 +5,15 @@ import knex from '../db/knex'
 Model.knex(knex)
 
 class User extends Objection.Model {
-	privilegeId!: number
+	id?: number
+	privilegeId?: number
 	username!: string
 	password!: string
 	readableName!: string
-	createdOn!: number
-	updatedOn!: number
+	createOn?: number
+	updatedOn?: number
+	deleted?: boolean
+	deletedOn?: number
 
 	static get tableName () {
 		return 'users'
