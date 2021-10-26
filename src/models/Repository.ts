@@ -1,5 +1,5 @@
-const { Model } = require('objection')
-const knex = require('../db/knex')
+import { Model } from 'objection'
+import knex from '../db/knex'
 
 Model.knex(knex)
 
@@ -69,4 +69,4 @@ class Repository extends Model {
 
 }
 
-module.exports = Repository
+export default Repository

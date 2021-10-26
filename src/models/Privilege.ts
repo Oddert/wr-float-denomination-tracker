@@ -1,5 +1,5 @@
-const { Model } = require('objection')
-const knex = require('../db/knex')
+import { Model } from 'objection'
+import knex from '../db/knex'
 
 Model.knex(knex)
 
@@ -89,4 +89,4 @@ class Privilege extends Model {
 	}
 }
 
-module.exports = Privilege
+export default Privilege

@@ -1,16 +1,16 @@
-const Objection = require('objection')
-const { Model } = require('objection')
-const knex = require('../db/knex')
+import Objection from 'objection'
+import { Model } from 'objection'
+import knex from '../db/knex'
 
 Model.knex(knex)
 
 class User extends Objection.Model {
-	// privilegeId: number
-	// username: string
-	// password: string
-	// readableName: string
-	// createdOn: number
-	// updatedOn: number
+	privilegeId!: number
+	username!: string
+	password!: string
+	readableName!: string
+	createdOn!: number
+	updatedOn!: number
 
 	static get tableName () {
 		return 'users'
@@ -63,4 +63,4 @@ class User extends Objection.Model {
 
 }
 
-module.exports = User
+export default User

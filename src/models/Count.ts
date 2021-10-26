@@ -1,5 +1,5 @@
-const { Model } = require('objection')
-const knex = require('../db/knex')
+import { Model } from 'objection'
+import knex from '../db/knex'
 
 Model.knex(knex)
 
@@ -105,4 +105,4 @@ class Count extends Model {
 	}
 }
 
-module.exports = Count
+export default Count
