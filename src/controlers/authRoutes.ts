@@ -7,12 +7,14 @@ import passport from '../config/auth'
 
 import { respondErr, respondWell } from './utils'
 
+// GET /
 export const getAuth = async (req: Request, res: Response) => {
 	return res.json({
 		message: 'authRoutes is not implamented yet'
 	})
 }
 
+// POST /register
 export const registerUser = async (req: Request, res: Response) => {
 	try {
 		const salt = bcrypt.genSaltSync()

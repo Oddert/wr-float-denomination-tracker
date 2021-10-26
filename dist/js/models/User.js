@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var Objection = require('objection');
 var Model = require('objection').Model;
 var knex = require('../db/knex');
 Model.knex(knex);
@@ -23,6 +24,12 @@ var User = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(User, "tableName", {
+        // privilegeId: number
+        // username: string
+        // password: string
+        // readableName: string
+        // createdOn: number
+        // updatedOn: number
         get: function () {
             return 'users';
         },
@@ -77,6 +84,6 @@ var User = /** @class */ (function (_super) {
         configurable: true
     });
     return User;
-}(Model));
+}(Objection.Model));
 module.exports = User;
 //# sourceMappingURL=User.js.map

@@ -12,8 +12,10 @@ const options = {}
 
 init()
 
-passport.use(new LocalStrategy(options, (username, password, done) => {
-	User.query().where({ username }).first()
+passport.use(new LocalStrategy(options, (username: string, password: string, done) => {
+	User.query()
+		.where({ username })
+		.first()
 		.then((user: User) => {
 			if (!user) return done(null, false)
 			// @ts-ignore

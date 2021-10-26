@@ -1,9 +1,16 @@
+const Objection = require('objection')
 const { Model } = require('objection')
 const knex = require('../db/knex')
 
 Model.knex(knex)
 
-class User extends Model {
+class User extends Objection.Model {
+	// privilegeId: number
+	// username: string
+	// password: string
+	// readableName: string
+	// createdOn: number
+	// updatedOn: number
 
 	static get tableName () {
 		return 'users'

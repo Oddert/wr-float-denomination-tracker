@@ -1,4 +1,5 @@
 "use strict";
+var hashPwd = require('../../common/hashPwd').default;
 exports.seed = function (knex) {
     // Deletes ALL existing entries
     return knex('users').del()
@@ -6,8 +7,8 @@ exports.seed = function (knex) {
         // Inserts seed entries
         return knex('users').insert([
             { privilegeId: 1, username: 'wr619', password: '', readableName: 'Generic Unsupervised', createdOn: 1617995021013, updatedOn: 1617995021013, },
-            { privilegeId: 2, username: 'cash_partner', password: 'bbd9a27dbb7dde38b450cc35c5269814cf35b472acf63bb02d46b94c5980b498', readableName: 'Generic Unsupervised', createdOn: 1617995021013, updatedOn: 1617995021013, },
-            { privilegeId: 3, username: 'manager', password: 'e05d78f42fdce71109fcd1f3d2812ad2ef74c32cc2561898aba6764c6c53af00', readableName: 'Generic Unsupervised', createdOn: 1617995021013, updatedOn: 1617995021013, }, // pwd hfT9Vu9UTv79w1z3s3vo3
+            { privilegeId: 2, username: 'cash_partner', password: hashPwd('mypetGRas0n'), readableName: 'Generic Unsupervised', createdOn: 1617995021013, updatedOn: 1617995021013, },
+            { privilegeId: 3, username: 'manager', password: hashPwd('ItIsAWidelyAknowlagedFactMostPeopleCannotBeTrustedToChooseSecurePasswords'), readableName: 'Generic Unsupervised', createdOn: 1617995021013, updatedOn: 1617995021013, }, // pwd hfT9Vu9UTv79w1z3s3vo3
         ]);
     });
 };

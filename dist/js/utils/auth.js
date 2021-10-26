@@ -39,38 +39,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = exports.getAuth = void 0;
 var bcrypt_1 = __importDefault(require("bcrypt"));
 var User_1 = __importDefault(require("../models/User"));
-var utils_1 = require("./utils");
-// GET /
-var getAuth = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        return [2 /*return*/, res.json({
-                message: 'authRoutes is not implamented yet'
-            })];
+function createUser(req) {
+    return __awaiter(this, void 0, void 0, function () {
+        var salt, hash, username, user;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    salt = bcrypt_1.default.genSaltSync(12, "b");
+                    hash = bcrypt_1.default.hashSync(req.body.password, salt);
+                    username = req.body.username;
+                    return [4 /*yield*/, User_1.default.query()
+                            .insert({
+                            // @ts-ignore
+                            username: username,
+                            password: hash
+                        })];
+                case 1:
+                    user = _a.sent();
+                    return [2 /*return*/, user];
+            }
+        });
     });
-}); };
-exports.getAuth = getAuth;
-// POST /register
-var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var salt, hash, user, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                salt = bcrypt_1.default.genSaltSync();
-                hash = bcrypt_1.default.hashSync(req.body.password, salt);
-                return [4 /*yield*/, User_1.default.query().insert()];
-            case 1:
-                user = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'ok.', null)];
-            case 2:
-                error_1 = _a.sent();
-                return [2 /*return*/, utils_1.respondErr(res, null, 'Something went wrong, try again later.', null, null)];
-            case 3: return [2 /*return*/];
-        }
-    });
-}); };
-exports.registerUser = registerUser;
-//# sourceMappingURL=authRoutes.js.map
+}
+//# sourceMappingURL=auth.js.map

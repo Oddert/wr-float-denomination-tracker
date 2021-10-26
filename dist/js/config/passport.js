@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var passport_1 = __importDefault(require("passport"));
 var User_1 = __importDefault(require("../models/User"));
-function default_1() {
+function init() {
     passport_1.default.serializeUser(function (user, done) {
         // @ts-ignore
         done(null, user.id);
@@ -20,5 +20,5 @@ function default_1() {
         });
     });
 }
-exports.default = default_1;
+exports.default = init;
 //# sourceMappingURL=passport.js.map

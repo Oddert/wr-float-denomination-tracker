@@ -31,7 +31,9 @@ var LocalStrategy = passportLocal.Strategy;
 var options = {};
 passport_2.default();
 passport_1.default.use(new LocalStrategy(options, function (username, password, done) {
-    User_1.default.query().where({ username: username }).first()
+    User_1.default.query()
+        .where({ username: username })
+        .first()
         .then(function (user) {
         if (!user)
             return done(null, false);

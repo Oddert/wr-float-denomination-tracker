@@ -1,7 +1,7 @@
 import passport from 'passport'
 import User from '../models/User'
 
-export default function () {
+export default function init () {
 
 	passport.serializeUser((user, done) => {
 		// @ts-ignore
