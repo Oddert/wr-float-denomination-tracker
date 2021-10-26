@@ -64,10 +64,10 @@ var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0
                 return [4 /*yield*/, User_1.default.query().insert()];
             case 1:
                 user = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'ok.', null)];
+                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'ok.', null)];
             case 2:
                 error_1 = _a.sent();
-                return [2 /*return*/, utils_1.respondErr(res, null, 'Something went wrong, try again later.', null, null)];
+                return [2 /*return*/, (0, utils_1.respondErr)(res, null, 'Something went wrong, try again later.', null, null)];
             case 3: return [2 /*return*/];
         }
     });

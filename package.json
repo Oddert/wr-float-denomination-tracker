@@ -17,8 +17,9 @@
     "development": "concurrently \"npm run ts_watch\" \"npm run client_dev\"",
     "dev": "concurrently \"npm run ts_watch\" \"npm run server_auto_restart\" \"npm run client_dev\"",
 		"migrate:latest": "cd dist/js && knex migrate:latest",
+		"migrate:rollback": "cd dist/js && knex migrate:rollback",
 		"seed": "cd dist/js && knex seed:run",
-		"build_db": "npm run migrate:latest && npm run seed"
+		"build_db": "touch dist/js/db/wr-float-denomination-tracker.db3 && npm run migrate:latest && npm run seed"
   },
   "author": "Robyn Felicity Heather Veitch <robynfhveitch@gmail.com> (https://robynveitch.com/)",
   "license": "ISC",

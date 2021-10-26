@@ -144,7 +144,7 @@ var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                     applyFloatFilter = floatFilter;
                 }
                 if (!!isNaN(page)) return [3 /*break*/, 2];
-                pagelength = utils_1.sanitiseNumberQuery(req.query.pagelength, 10);
+                pagelength = (0, utils_1.sanitiseNumberQuery)(req.query.pagelength, 10);
                 q = applyDeleteFilter(applyFloatFilter(applyRepoFilter(Count_1.default.query()
                     .offset(page * pagelength)
                     .limit(pagelength)
@@ -152,12 +152,12 @@ var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 return [4 /*yield*/, q()];
             case 1:
                 counts = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, null, null, 'List of all counts.', { counts: counts.map(function (e) { return (__assign(__assign({}, e), { readableTimestamp: new Date(e.timestamp) })); }) })];
+                return [2 /*return*/, (0, utils_1.respondWell)(res, null, null, 'List of all counts.', { counts: counts.map(function (e) { return (__assign(__assign({}, e), { readableTimestamp: new Date(e.timestamp) })); }) })];
             case 2:
-                fromdate = utils_1.sanitiseNumberQuery(req.query.fromdate, 0);
-                todate = utils_1.sanitiseNumberQuery(req.query.todate, Date.now());
-                limit = utils_1.sanitiseNumberQuery(req.query.limit, 100);
-                offset = utils_1.sanitiseNumberQuery(req.query.offset, 0);
+                fromdate = (0, utils_1.sanitiseNumberQuery)(req.query.fromdate, 0);
+                todate = (0, utils_1.sanitiseNumberQuery)(req.query.todate, Date.now());
+                limit = (0, utils_1.sanitiseNumberQuery)(req.query.limit, 100);
+                offset = (0, utils_1.sanitiseNumberQuery)(req.query.offset, 0);
                 console.log('C:');
                 console.log(applyRepoFilter);
                 console.log(applyDeleteFilter);
@@ -170,13 +170,13 @@ var getCounts = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 return [4 /*yield*/, q()];
             case 3:
                 counts = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, null, null, 'List of all counts.', {
+                return [2 /*return*/, (0, utils_1.respondWell)(res, null, null, 'List of all counts.', {
                         counts: counts.map(function (e) { return (__assign(__assign({}, e), { readableTimestamp: new Date(e.timestamp) })); })
                     })];
             case 4: return [3 /*break*/, 6];
             case 5:
                 error_1 = _a.sent();
-                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was a server error, please try again.', null, { error: error_1 })];
+                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was a server error, please try again.', null, { error: error_1 })];
             case 6: return [2 /*return*/];
         }
     });
@@ -192,13 +192,13 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
             case 0:
                 _a.trys.push([0, 12, , 13]);
                 if (!req.body || !req.body.count)
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Error: no count provided?? What were you expecting? ??', null, { requestBody: req.body })];
+                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Error: no count provided?? What were you expecting? ??', null, { requestBody: req.body })];
                 if (!req.body.count.repositoryId)
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Error: Invalid repository ID provided', null, { repositoryId: req.body.count.repositoryId })];
+                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Error: Invalid repository ID provided', null, { repositoryId: req.body.count.repositoryId })];
                 repositoryId = Number(req.body.count.repositoryId);
                 console.log({ repositoryId: repositoryId });
                 if (typeof repositoryId !== 'number' || isNaN(repositoryId)) {
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, '[NaN check]: Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repositoryId: repositoryId })];
+                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, '[NaN check]: Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repositoryId: repositoryId })];
                 }
                 return [4 /*yield*/, Repository_1.default.query()
                         // .select('id')
@@ -208,12 +208,12 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 repository = _a.sent();
                 console.log({ repository: repository });
                 if (repository === null || repository === undefined || repository.length === 0) {
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, '[Repository DB Query 404]: Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repository: repository, repositoryId: repositoryId })];
+                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, '[Repository DB Query 404]: Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repository: repository, repositoryId: repositoryId })];
                 }
                 console.log('Repository checks done, moving on to validation');
-                validation = utils_1.validateFloat(req.body.count.float);
+                validation = (0, utils_1.validateFloat)(req.body.count.float);
                 if (validation.code === 'invalid') {
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid.', null, { validation: validation })];
+                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Bad request. The count provided was invalid.', null, { validation: validation })];
                 }
                 console.log('Validation Pass.');
                 counterId = req.body.count.counterId;
@@ -308,9 +308,7 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 bagTotal = flattenCountData([f.bagPence1, f.bagPence2, f.bagPence5, f.bagPence10, f.bagPence20, f.bagPence50, f.bagPound1, f.bagPound2, f.bagNote5]);
                 looseTotal = flattenCountData([f.loosePence1, f.loosePence2, f.loosePence5, f.loosePence10, f.loosePence20, f.loosePence50, f.loosePound1, f.loosePound2, f.looseOther]);
                 noteTotal = flattenCountData([f.note1, f.note5, f.note10, f.note20, f.note50]);
-                createFloat = __assign(__assign({}, f), { bagTotal: bagTotal,
-                    looseTotal: looseTotal,
-                    noteTotal: noteTotal, floatTotal: bagTotal + looseTotal + noteTotal });
+                createFloat = __assign(__assign({}, f), { bagTotal: bagTotal, looseTotal: looseTotal, noteTotal: noteTotal, floatTotal: bagTotal + looseTotal + noteTotal });
                 console.log({ f: f, createFloat: createFloat });
                 return [4 /*yield*/, Float_1.default.query().insert(createFloat)];
             case 9:
@@ -338,7 +336,7 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
             case 11:
                 count = _a.sent();
                 console.log('..count queried..responding');
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Count successfully created, see response for validation status.', { validation: validation, count: count[0] })
+                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Count successfully created, see response for validation status.', { validation: validation, count: count[0] })
                     // -lookup the counter and return its id is valid /
                     // -lookup the supervisor and return its id is valid /
                     // -check supervisor and counter are diffirent /
@@ -349,7 +347,7 @@ var addCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
             case 12:
                 error_2 = _a.sent();
                 // console.error(error)
-                return [2 /*return*/, utils_1.respondErr(res, 500, 'Something went wrong, please try again.', null, { error: error_2 })];
+                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'Something went wrong, please try again.', null, { error: error_2 })];
             case 13: return [2 /*return*/];
         }
     });
@@ -367,10 +365,10 @@ var getCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                 multiCount = req.query.count;
                 console.log({ id: id, multiCount: multiCount });
                 if (!id)
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)];
+                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)];
                 if (!(id === 'details' && multiCount)) return [3 /*break*/, 6];
                 if (!multiCount || typeof multiCount === undefined) {
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?count=2,3,4"', null, null)];
+                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?count=2,3,4"', null, null)];
                 }
                 if (!Array.isArray(multiCount)) return [3 /*break*/, 2];
                 return [4 /*yield*/, Count_1.default.query()
@@ -380,7 +378,7 @@ var getCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                         .whereIn('counts.id', multiCount)];
             case 1:
                 count = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id including float amount.', { count: count })];
+                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Details for provided id including float amount.', { count: count })];
             case 2:
                 if (!(/,/gi.test(multiCount) || /[0-9]/gi.test(multiCount))) return [3 /*break*/, 4];
                 splitMultiCount = multiCount.split(',');
@@ -391,8 +389,8 @@ var getCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                         .whereIn('counts.id', splitMultiCount)];
             case 3:
                 count = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id including float amount.', { count: count })];
-            case 4: return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?count=2,3,4"', null, null)];
+                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Details for provided id including float amount.', { count: count })];
+            case 4: return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?count=2,3,4"', null, null)];
             case 5: return [3 /*break*/, 8];
             case 6: return [4 /*yield*/, Count_1.default.query()
                     .skipUndefined()
@@ -402,7 +400,7 @@ var getCount = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
                     .where('counts.id', Number(id))];
             case 7:
                 count = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id including float amount.', { count: count })];
+                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Details for provided id including float amount.', { count: count })];
             case 8: return [2 /*return*/];
         }
     });
@@ -421,13 +419,13 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 1:
                 _a.trys.push([1, 16, , 17]);
                 if (!req.body || !req.body.count)
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Error: no count provided?? What were you expecting? ??', null, { requestBody: req.body })
+                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Error: no count provided?? What were you expecting? ??', null, { requestBody: req.body })
                         // Validate the validity of the repository ID if provided (all attrs are optional, saving as 'incomplete')
                     ];
                 if (!req.body.count.repositoryId) return [3 /*break*/, 3];
                 repositoryId = Number(req.body.count.repositoryId);
                 if (typeof repositoryId !== 'number' || isNaN(repositoryId)) {
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repositoryId: repositoryId })];
+                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repositoryId: repositoryId })];
                 }
                 return [4 /*yield*/, Repository_1.default.query()
                         .select('id')
@@ -436,7 +434,7 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 2:
                 repository = _a.sent();
                 if (repository === null || repository === undefined || repository.length === 0) {
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repository: repository, repositoryId: repositoryId })];
+                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Bad request. The count provided was invalid. Repository ID provided was missing or could not be matched to an existing repository.', null, { repository: repository, repositoryId: repositoryId })];
                 }
                 _a.label = 3;
             case 3: return [4 /*yield*/, Count_1.default.query().findById(req.params.id)];
@@ -673,9 +671,9 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                 ];
             case 14:
                 updatedCount = _a.sent();
-                validation = utils_1.validateFloat(updatedFloat);
+                validation = (0, utils_1.validateFloat)(updatedFloat);
                 if (validation.code === 'invalid') {
-                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Bad request. The count provided was invalid.', null, { validation: validation })];
+                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Bad request. The count provided was invalid.', null, { validation: validation })];
                 }
                 return [4 /*yield*/, Count_1.default.query()
                         .patchAndFetchById(updatedCount.id, {
@@ -685,7 +683,7 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 15:
                 count = _a.sent();
                 count.float = updatedFloat;
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Count successfully updated, see response for validation status.', { validation: validation, count: count })
+                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Count successfully updated, see response for validation status.', { validation: validation, count: count })
                     // -lookup the counter and return its id is valid /
                     // -lookup the supervisor and return its id is valid /
                     // -check supervisor and counter are diffirent /
@@ -696,7 +694,7 @@ var updateCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 16:
                 error_3 = _a.sent();
                 console.error(error_3);
-                return [2 /*return*/, utils_1.respondErr(res, 500, 'Something went wrong, please try again.', null, { error: error_3 })];
+                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'Something went wrong, please try again.', null, { error: error_3 })];
             case 17: return [2 /*return*/];
         }
     });
@@ -721,12 +719,12 @@ var deleteCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
             case 1:
                 count = _a.sent();
                 if (!count) {
-                    return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue deleting the count.', null, { count: count })];
+                    return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue deleting the count.', null, { count: count })];
                 }
-                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Count deleted successfully.', { count: count })];
+                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Count deleted successfully.', { count: count })];
             case 2:
                 error_4 = _a.sent();
-                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue deleting the count.', null, { error: error_4 })];
+                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue deleting the count.', null, { error: error_4 })];
             case 3: return [2 /*return*/];
         }
     });
@@ -745,10 +743,10 @@ var countTotals = function (req, res) { return __awaiter(void 0, void 0, void 0,
                         .count()];
             case 1:
                 total = _a.sent();
-                return [2 /*return*/, utils_1.respondWell(res, 200, 'Number of total counts in the database.', null, { total: total[0] })];
+                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, 'Number of total counts in the database.', null, { total: total[0] })];
             case 2:
                 error_5 = _a.sent();
-                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_5 })];
+                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error_5 })];
             case 3: return [2 /*return*/];
         }
     });
