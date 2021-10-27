@@ -40,8 +40,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerUser = exports.getAuth = void 0;
-var bcrypt_1 = __importDefault(require("bcrypt"));
-var User_1 = __importDefault(require("../models/User"));
+var auth_1 = __importDefault(require("../config/auth"));
+var auth_2 = require("../utils/auth");
 var utils_1 = require("./utils");
 // GET /
 var getAuth = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -53,20 +53,30 @@ var getAuth = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
 }); };
 exports.getAuth = getAuth;
 // POST /register
-var registerUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var salt, hash, user, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+var registerUser = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var createdUser, error_1;
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                salt = bcrypt_1.default.genSaltSync();
-                hash = bcrypt_1.default.hashSync(req.body.password, salt);
-                return [4 /*yield*/, User_1.default.query().insert()];
+                _b.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, (0, auth_2.createUser)(req, res)];
             case 1:
-                user = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'ok.', null)];
+                createdUser = _b.sent();
+                if (!createdUser) {
+                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, null, "Cannot read username of " + ((_a = req.body) === null || _a === void 0 ? void 0 : _a.username) + ", please ensure you supplied a valid username and password", null, null)];
+                }
+                else {
+                    auth_1.default.authenticate('local', function (err, user, info) {
+                        if (user)
+                            return (0, utils_1.respondWell)(res, 200, null, 'User created successfully', null);
+                        else
+                            return (0, utils_1.respondErr)(res, null, err, 'Something went wrong, try again later.', null);
+                    })(req, res, next);
+                }
+                return [3 /*break*/, 3];
             case 2:
-                error_1 = _a.sent();
+                error_1 = _b.sent();
                 return [2 /*return*/, (0, utils_1.respondErr)(res, null, 'Something went wrong, try again later.', null, null)];
             case 3: return [2 /*return*/];
         }

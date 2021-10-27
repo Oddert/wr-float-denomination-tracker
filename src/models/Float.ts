@@ -13,7 +13,7 @@ class Float extends Model {
 	note10?: number
 	note5?: number
 	note1?: number
-	noteTotal!: number 
+	noteTotal!: number
 
 	bagNote5!: number
 	bagPound2!: number
@@ -65,14 +65,14 @@ class Float extends Model {
 				id: { type: 'integer' },
 
 				countId: { type: 'integer' },
-		
+
 				note50: { type: ['integer', 'null'] },
 				note20: { type: ['integer', 'null'] },
 				note10: { type: ['integer', 'null'] },
 				note5: { type: ['integer', 'null'] },
 				note1: { type: ['integer', 'null'] },
-				noteTotal: { type: 'integer' }, 
-		
+				noteTotal: { type: 'integer' },
+
 				bagNote5: { type: ['integer', 'null'] },
 				bagPound2: { type: ['integer', 'null'] },
 				bagPound1: { type: ['integer', 'null'] },
@@ -83,7 +83,7 @@ class Float extends Model {
 				bagPence2: { type: ['integer', 'null'] },
 				bagPence1: { type: ['integer', 'null'] },
 				bagTotal: { type: ['integer', 'null'] },
-		
+
 				loosePound2: { type: ['integer', 'null'] },
 				loosePound1: { type: ['integer', 'null'] },
 				loosePence50: { type: ['float', 'integer', 'null'] },
@@ -94,17 +94,17 @@ class Float extends Model {
 				loosePence1: { type: ['float', 'integer', 'null'] },
 				looseOther: { type: ['float', 'integer', 'null'] },
 				looseTotal: { type: 'float' },
-		
+
 				floatTotal: { type: 'float' },
 			}
 		}
 	}
-	
+
 	static get relationMappings () {
-		const Count = __dirname + './Count' //require('./Count') 
-		
+		const Count = __dirname + './Count' // require('./Count')
+
 		return {
-			
+
 			count: {
 				relation: Model.HasOneRelation,
 				modelClass: Count,

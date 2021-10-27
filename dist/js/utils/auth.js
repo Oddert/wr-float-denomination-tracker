@@ -39,27 +39,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createUser = void 0;
 var bcrypt_1 = __importDefault(require("bcrypt"));
 var User_1 = __importDefault(require("../models/User"));
-function createUser(req) {
+function createUser(req, res) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var salt, hash, username, user;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var salt, hash, username, readableName, user;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     salt = bcrypt_1.default.genSaltSync(12, "b");
                     hash = bcrypt_1.default.hashSync(req.body.password, salt);
-                    username = req.body.username;
+                    username = (_a = req.body) === null || _a === void 0 ? void 0 : _a.username;
+                    readableName = ((_b = req.body) === null || _b === void 0 ? void 0 : _b.readableName) || username;
+                    if (!username)
+                        return [2 /*return*/, null];
                     return [4 /*yield*/, User_1.default.query()
                             .insert({
                             username: username,
-                            password: hash
-                        })];
+                            readableName: readableName,
+                            password: hash,
+                        })
+                        // .returning('*')
+                    ];
                 case 1:
-                    user = _a.sent();
+                    user = _c.sent();
+                    // .returning('*')
                     return [2 /*return*/, user];
             }
         });
     });
 }
+exports.createUser = createUser;
 //# sourceMappingURL=auth.js.map

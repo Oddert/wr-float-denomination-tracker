@@ -1,19 +1,25 @@
 
 import bcrypt from 'bcrypt'
-import { Request } from 'express'
+import { Request, Response } from 'express'
+import { respondBadRequest } from '../controlers/utils'
 import User from '../models/User'
 
-async function createUser (req: Request) {
+export async function createUser (req: Request, res: Response) {
 	const salt = bcrypt.genSaltSync(12, "b")
+
 	const hash = bcrypt.hashSync(req.body.password, salt)
 
-	const username: string = req.body.username
+	const username: string = req.body?.username
+	const readableName: string = req.body?.readableName || username
+
+	if (!username) return null
 
 	const user = await User.query()
-	.insert({
-		username,
-		password: hash
-	})
-
+		.insert({
+			username,
+			readableName,
+			password: hash,
+		})
+		// .returning('*')
 	return user
 }

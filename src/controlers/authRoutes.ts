@@ -1,11 +1,12 @@
-import { Request, Response } from 'express'
+import { Request, Response, NextFunction } from 'express'
 import bcrypt from 'bcrypt'
 
 import User from '../models/User'
 
 import passport from '../config/auth'
+import { createUser } from '../utils/auth'
 
-import { respondErr, respondWell } from './utils'
+import { respondBadRequest, respondErr, respondWell } from './utils'
 
 // GET /
 export const getAuth = async (req: Request, res: Response) => {
@@ -15,14 +16,24 @@ export const getAuth = async (req: Request, res: Response) => {
 }
 
 // POST /register
-export const registerUser = async (req: Request, res: Response) => {
+export const registerUser = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
 	try {
-		const salt = bcrypt.genSaltSync()
-		const hash = bcrypt.hashSync(req.body.password, salt)
+		const createdUser = await createUser(req, res)
 
-		const user = await User.query().insert()
+		if (!createdUser) {
+			return respondBadRequest(res, null, `Cannot read username of ${req.body?.username}, please ensure you supplied a valid username and password`, null, null)
+		}
+		else {
+			passport.authenticate('local', (err, user, info) => {
+				if (user) return respondWell(res, 200, null, 'User created successfully', null)
+				else return respondErr(res, null, err, 'Something went wrong, try again later.', null)
+			})(req, res, next)
+		}
 
-		return respondWell(res, 200, null, 'ok.', null)
 	} catch (error) {
 		return respondErr(res, null, 'Something went wrong, try again later.', null, null)
 	}

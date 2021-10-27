@@ -714,7 +714,7 @@ var deleteCount = function (req, res) { return __awaiter(void 0, void 0, void 0,
                         // @ts-ignore
                         deleted: true,
                         deletedOn: Date.now(),
-                        deletedBy: 0
+                        deletedById: 0
                     })];
             case 1:
                 count = _a.sent();

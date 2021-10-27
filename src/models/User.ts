@@ -24,7 +24,7 @@ class User extends Objection.Model {
 			type: 'object',
 			required: ['username', 'password', 'readableName'],
 			properties: {
-				id: { type: 'integer' },				
+				id: { type: 'integer' },
 				privilegeId: { type: ['integer', 'null'] },
 				username: { type: 'string' },
 				password: { type: 'string' },
@@ -38,8 +38,8 @@ class User extends Objection.Model {
 	}
 
 	static get relationMappings () {
-		const Privilege = __dirname + './Privilege' //require('./Privilege')
-		const Count = __dirname + './Count' //require('./Count')
+		const Privilege = __dirname + './Privilege' // require('./Privilege')
+		const Count = __dirname + './Count' // require('./Count')
 
 		return {
 

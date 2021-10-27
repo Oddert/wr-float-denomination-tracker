@@ -66,10 +66,10 @@ var Count = /** @class */ (function (_super) {
         // 	}
         // }
         get: function () {
-            var Float = __dirname + '/Float.js'; //require('./Float')
-            var Repository = __dirname + '/Repository.js'; //require('./Repository')
-            var Partner = __dirname + '/Partner.js'; //require('./Partner')
-            var User = __dirname + '/User.js'; //require('./User')
+            var Float = __dirname + '/Float.js'; // require('./Float')
+            var Repository = __dirname + '/Repository.js'; // require('./Repository')
+            var Partner = __dirname + '/Partner.js'; // require('./Partner')
+            var User = __dirname + '/User.js'; // require('./User')
             return {
                 float: {
                     relation: objection_1.Model.BelongsToOneRelation,

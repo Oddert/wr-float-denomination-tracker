@@ -58,8 +58,8 @@ var Partner = /** @class */ (function (_super) {
     });
     Object.defineProperty(Partner, "relationMappings", {
         get: function () {
-            var Repository = __dirname + './Repository'; //require('./Repository')
-            var Count = __dirname + './Count'; //require('./Count')
+            var Repository = __dirname + './Repository'; // require('./Repository')
+            var Count = __dirname + './Count'; // require('./Count')
             return {
                 repositoriesActivated: {
                     relation: objection_1.Model.HasManyRelation,

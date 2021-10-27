@@ -15,7 +15,7 @@ class Partner extends Model {
 	deleted?: boolean
 	deletedOn?: number
 	tillNumber!: string
-	
+
 	static get tableName () {
 		return 'partners'
 	}
@@ -39,10 +39,10 @@ class Partner extends Model {
 			}
 		}
 	}
-	
+
 	static get relationMappings () {
-		const Repository = __dirname + './Repository' //require('./Repository')
-		const Count = __dirname + './Count' //require('./Count')
+		const Repository = __dirname + './Repository' // require('./Repository')
+		const Count = __dirname + './Count' // require('./Count')
 
 		return {
 

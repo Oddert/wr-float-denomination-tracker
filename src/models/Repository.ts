@@ -43,11 +43,11 @@ class Repository extends Model {
 			}
 		}
 	}
-	
+
 	static get relationMappings () {
-		const Count = __dirname + './Count' //require('./Count')
-		const Partner = __dirname + './Partner' //require('./Partner')
-		
+		const Count = __dirname + './Count' // require('./Count')
+		const Partner = __dirname + './Partner' // require('./Partner')
+
 		return {
 
 			counts: {

@@ -19,7 +19,7 @@ class Count extends Model {
 	deletedOn?: number
 	updatedOn?: number
 	timestamp!: number
-	
+
 	static get tableName () {
 		return 'counts'
 	}
@@ -53,12 +53,12 @@ class Count extends Model {
 
 	// 	}
 	// }
-	
+
 	static get relationMappings () {
-		const Float = __dirname + '/Float.js' //require('./Float')
-		const Repository = __dirname + '/Repository.js' //require('./Repository')
-		const Partner = __dirname + '/Partner.js' //require('./Partner')
-		const User = __dirname + '/User.js' //require('./User')
+		const Float = __dirname + '/Float.js' // require('./Float')
+		const Repository = __dirname + '/Repository.js' // require('./Repository')
+		const Partner = __dirname + '/Partner.js' // require('./Partner')
+		const User = __dirname + '/User.js' // require('./User')
 
 		return {
 

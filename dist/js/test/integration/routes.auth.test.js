@@ -9,8 +9,8 @@ var knex_1 = __importDefault(require("../../db/knex"));
 var index_1 = __importDefault(require("../../index"));
 process.env.MODE_ENV = 'test';
 chai_1.default.use(chai_http_1.default);
-var should = chai_1.default.should;
-var apiPrefix = '/api/v1';
+var should = chai_1.default.should();
+var API_PREFIX = '/api/v1';
 describe('routes : auth', function () {
     beforeEach(function () {
         return knex_1.default.migrate.rollback()
@@ -19,16 +19,16 @@ describe('routes : auth', function () {
     afterEach(function () {
         return knex_1.default.migrate.rollback();
     });
-    describe("POST " + apiPrefix + "/auth/register", function () {
+    describe("POST " + API_PREFIX + "/auth/register", function () {
         it('should register a new user', function (done) {
             chai_1.default.request(index_1.default)
-                .post(apiPrefix + "/auth/register")
+                .post(API_PREFIX + "/auth/register")
                 .send({
-                username: 'micheal',
+                username: 'michael',
                 password: 'burnham',
             })
                 .end(function (err, res) {
-                should().not.exist(err);
+                should.not.exist(err);
                 res.redirects.length.should.eql(0);
                 res.status.should.eql(200);
                 res.type.should.eql('application/json');

@@ -1,16 +1,16 @@
 import chai from 'chai'
-import chaitHttp from 'chai-http'
+import chaiHttp from 'chai-http'
 
 import knex from '../../db/knex'
 import server from '../../index'
 
 process.env.MODE_ENV = 'test'
 
-chai.use(chaitHttp)
+chai.use(chaiHttp)
 
-const { should } = chai
+const should = chai.should()
 
-const apiPrefix = '/api/v1'
+const API_PREFIX = '/api/v1'
 
 describe('routes : auth', () => {
 
@@ -23,16 +23,16 @@ describe('routes : auth', () => {
 		return knex.migrate.rollback()
 	})
 
-	describe(`POST ${apiPrefix}/auth/register`, () =>{
+	describe(`POST ${API_PREFIX}/auth/register`, () => {
 		it('should register a new user', done => {
 			chai.request(server)
-				.post(`${apiPrefix}/auth/register`)
+				.post(`${API_PREFIX}/auth/register`)
 				.send({
-					username: 'micheal',
+					username: 'michael',
 					password: 'burnham',
 				})
 				.end((err, res) => {
-					should().not.exist(err)
+					should.not.exist(err)
 					res.redirects.length.should.eql(0)
 					res.status.should.eql(200)
 					res.type.should.eql('application/json')

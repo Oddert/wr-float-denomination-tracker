@@ -758,7 +758,7 @@ export const deleteCount = async (req: Request, res: Response) => {
 				// @ts-ignore
 				deleted: true,
 				deletedOn: Date.now(),
-				deletedBy: 0
+				deletedById: 0
 			})
 		if (!count) {
 			return respondErr(res, 500, 'There was an issue deleting the count.', null, { count })

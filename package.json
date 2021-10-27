@@ -6,7 +6,8 @@
   "scripts": {
     "prestart": "npm run build",
     "start": "cd dist/js && node index.js",
-    "test": "npm run build && mocha dist/js/test/integration/routes.auth.test.js",
+    "test": "npm run build && mocha dist/js/test/integration/routes.auth.test.js --exit",
+    "test:watch": "npm run build && mocha -w dist/js/test/integration/routes.auth.test.js",
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
     "ts_watch": "tsc -w",
