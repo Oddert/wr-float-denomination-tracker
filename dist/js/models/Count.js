@@ -14,9 +14,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Model = require('objection').Model;
-var knex = require('../db/knex');
-Model.knex(knex);
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var objection_1 = require("objection");
+var knex_1 = __importDefault(require("../db/knex"));
+objection_1.Model.knex(knex_1.default);
 var Count = /** @class */ (function (_super) {
     __extends(Count, _super);
     function Count() {
@@ -68,7 +72,7 @@ var Count = /** @class */ (function (_super) {
             var User = __dirname + '/User.js'; //require('./User')
             return {
                 float: {
-                    relation: Model.BelongsToOneRelation,
+                    relation: objection_1.Model.BelongsToOneRelation,
                     modelClass: Float,
                     join: {
                         from: 'counts.floatId',
@@ -76,7 +80,7 @@ var Count = /** @class */ (function (_super) {
                     }
                 },
                 repository: {
-                    relation: Model.BelongsToOneRelation,
+                    relation: objection_1.Model.BelongsToOneRelation,
                     modelClass: Repository,
                     join: {
                         from: 'counts.repositoryId',
@@ -84,7 +88,7 @@ var Count = /** @class */ (function (_super) {
                     }
                 },
                 deletedBy: {
-                    relation: Model.BelongsToOneRelation,
+                    relation: objection_1.Model.BelongsToOneRelation,
                     modelClass: Partner,
                     join: {
                         from: 'counts.deletedById',
@@ -92,7 +96,7 @@ var Count = /** @class */ (function (_super) {
                     }
                 },
                 counter: {
-                    relation: Model.BelongsToOneRelation,
+                    relation: objection_1.Model.BelongsToOneRelation,
                     modelClass: Partner,
                     join: {
                         from: 'counts.counterId',
@@ -100,7 +104,7 @@ var Count = /** @class */ (function (_super) {
                     }
                 },
                 supervisor: {
-                    relation: Model.BelongsToOneRelation,
+                    relation: objection_1.Model.BelongsToOneRelation,
                     modelClass: Partner,
                     join: {
                         from: 'counts.supervisorId',
@@ -108,7 +112,7 @@ var Count = /** @class */ (function (_super) {
                     }
                 },
                 authenticator: {
-                    relation: Model.BelongsToOneRelation,
+                    relation: objection_1.Model.BelongsToOneRelation,
                     modelClass: User,
                     join: {
                         from: 'counts.authenticatorId',
@@ -121,6 +125,6 @@ var Count = /** @class */ (function (_super) {
         configurable: true
     });
     return Count;
-}(Model));
-module.exports = Count;
+}(objection_1.Model));
+exports.default = Count;
 //# sourceMappingURL=Count.js.map

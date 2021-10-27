@@ -18,7 +18,6 @@ passport.use(new LocalStrategy(options, (username: string, password: string, don
 		.first()
 		.then((user: User) => {
 			if (!user) return done(null, false)
-			// @ts-ignore
 			if (comparePwd(password, user.password)) {
 				return done(null, user)
 			} else {

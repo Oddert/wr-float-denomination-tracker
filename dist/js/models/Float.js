@@ -14,10 +14,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var Model = require('objection').Model;
-var knex = require('../db/knex');
-Model.knex(knex);
+var objection_1 = require("objection");
+var knex_1 = __importDefault(require("../db/knex"));
+objection_1.Model.knex(knex_1.default);
 var Float = /** @class */ (function (_super) {
     __extends(Float, _super);
     function Float() {
@@ -90,7 +93,7 @@ var Float = /** @class */ (function (_super) {
             var Count = __dirname + './Count'; //require('./Count') 
             return {
                 count: {
-                    relation: Model.HasOneRelation,
+                    relation: objection_1.Model.HasOneRelation,
                     modelClass: Count,
                     join: {
                         from: 'counts.floatId',
@@ -103,6 +106,6 @@ var Float = /** @class */ (function (_super) {
         configurable: true
     });
     return Float;
-}(Model));
+}(objection_1.Model));
 exports.default = Float;
 //# sourceMappingURL=Float.js.map

@@ -14,9 +14,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Model = require('objection').Model;
-var knex = require('../db/knex');
-Model.knex(knex);
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var objection_1 = require("objection");
+var knex_1 = __importDefault(require("../db/knex"));
+objection_1.Model.knex(knex_1.default);
 var Repository = /** @class */ (function (_super) {
     __extends(Repository, _super);
     function Repository() {
@@ -60,7 +64,7 @@ var Repository = /** @class */ (function (_super) {
             var Partner = __dirname + './Partner'; //require('./Partner')
             return {
                 counts: {
-                    relation: Model.HasManyRelation,
+                    relation: objection_1.Model.HasManyRelation,
                     modelClass: Count,
                     join: {
                         from: 'counts.repositoryId',
@@ -68,7 +72,7 @@ var Repository = /** @class */ (function (_super) {
                     }
                 },
                 activatedBy: {
-                    relation: Model.BelongsToOneRelation,
+                    relation: objection_1.Model.BelongsToOneRelation,
                     modelClass: Partner,
                     join: {
                         from: 'repositories.activatedById',
@@ -76,7 +80,7 @@ var Repository = /** @class */ (function (_super) {
                     }
                 },
                 deactivatedBy: {
-                    relation: Model.BelongsToOneRelation,
+                    relation: objection_1.Model.BelongsToOneRelation,
                     modelClass: Partner,
                     join: {
                         from: 'repositories.deactivatedById',
@@ -89,6 +93,6 @@ var Repository = /** @class */ (function (_super) {
         configurable: true
     });
     return Repository;
-}(Model));
-module.exports = Repository;
+}(objection_1.Model));
+exports.default = Repository;
 //# sourceMappingURL=Repository.js.map

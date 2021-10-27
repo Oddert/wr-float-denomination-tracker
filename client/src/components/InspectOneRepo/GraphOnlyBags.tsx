@@ -43,7 +43,7 @@ import {
 	// BagTypes,
 	ContextCrosshair,
 	InspectRepoInitialStateT, 
-	bagTypes as bts
+	// bagTypes as bts
 } from './types'
 
 interface Props {

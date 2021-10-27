@@ -14,9 +14,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Model = require('objection').Model;
-var knex = require('../db/knex');
-Model.knex(knex);
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var objection_1 = require("objection");
+var knex_1 = __importDefault(require("../db/knex"));
+objection_1.Model.knex(knex_1.default);
 var Privilege = /** @class */ (function (_super) {
     __extends(Privilege, _super);
     function Privilege() {
@@ -100,7 +104,7 @@ var Privilege = /** @class */ (function (_super) {
                 // 	}
                 // },
                 owner: {
-                    relation: Model.HasOneRelation,
+                    relation: objection_1.Model.HasOneRelation,
                     modelClass: User,
                     join: {
                         from: 'users.privilegeId',
@@ -113,6 +117,6 @@ var Privilege = /** @class */ (function (_super) {
         configurable: true
     });
     return Privilege;
-}(Model));
-module.exports = Privilege;
+}(objection_1.Model));
+exports.default = Privilege;
 //# sourceMappingURL=Privilege.js.map

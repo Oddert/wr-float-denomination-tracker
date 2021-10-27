@@ -37,7 +37,6 @@ passport_1.default.use(new LocalStrategy(options, function (username, password, 
         .then(function (user) {
         if (!user)
             return done(null, false);
-        // @ts-ignore
         if ((0, authMethods_1.comparePwd)(password, user.password)) {
             return done(null, user);
         }

@@ -14,22 +14,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Objection = require('objection');
-var Model = require('objection').Model;
-var knex = require('../db/knex');
-Model.knex(knex);
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var objection_1 = __importDefault(require("objection"));
+var objection_2 = require("objection");
+var knex_1 = __importDefault(require("../db/knex"));
+objection_2.Model.knex(knex_1.default);
 var User = /** @class */ (function (_super) {
     __extends(User, _super);
     function User() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(User, "tableName", {
-        // privilegeId: number
-        // username: string
-        // password: string
-        // readableName: string
-        // createdOn: number
-        // updatedOn: number
         get: function () {
             return 'users';
         },
@@ -63,7 +61,7 @@ var User = /** @class */ (function (_super) {
             var Count = __dirname + './Count'; //require('./Count')
             return {
                 privileges: {
-                    relation: Model.BelongsToOneRelation,
+                    relation: objection_2.Model.BelongsToOneRelation,
                     modelClass: Privilege,
                     join: {
                         from: 'users.privilegeId',
@@ -71,7 +69,7 @@ var User = /** @class */ (function (_super) {
                     }
                 },
                 counts: {
-                    relation: Model.HasManyRelation,
+                    relation: objection_2.Model.HasManyRelation,
                     modelClass: Count,
                     join: {
                         from: 'users.id',
@@ -84,6 +82,6 @@ var User = /** @class */ (function (_super) {
         configurable: true
     });
     return User;
-}(Objection.Model));
-module.exports = User;
+}(objection_1.default.Model));
+exports.default = User;
 //# sourceMappingURL=User.js.map

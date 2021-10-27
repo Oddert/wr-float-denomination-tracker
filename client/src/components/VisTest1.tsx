@@ -448,6 +448,9 @@ const VisTest1: React.FC = () => {
 				<MarkSeries 
 					className='bagged-pence-ten'
 					// @ts-ignore
+					// TODO: ts stops complaining if this value is put in an array
+					// data appears to expect any[][]
+					// investigate plz
 					data={parsedCount.bagPence10}
 					onValueMouseOver={handleMarkMouseOver}
 					color={COLOURS.teal}

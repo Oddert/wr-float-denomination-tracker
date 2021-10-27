@@ -11,7 +11,6 @@ async function createUser (req: Request) {
 
 	const user = await User.query()
 	.insert({
-		// @ts-ignore
 		username,
 		password: hash
 	})

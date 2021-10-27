@@ -52,7 +52,6 @@ function createUser(req) {
                     username = req.body.username;
                     return [4 /*yield*/, User_1.default.query()
                             .insert({
-                            // @ts-ignore
                             username: username,
                             password: hash
                         })];

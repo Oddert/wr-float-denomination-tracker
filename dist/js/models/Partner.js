@@ -14,9 +14,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Model = require('objection').Model;
-var knex = require('../db/knex');
-Model.knex(knex);
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var objection_1 = require("objection");
+var knex_1 = __importDefault(require("../db/knex"));
+objection_1.Model.knex(knex_1.default);
 var Partner = /** @class */ (function (_super) {
     __extends(Partner, _super);
     function Partner() {
@@ -58,7 +62,7 @@ var Partner = /** @class */ (function (_super) {
             var Count = __dirname + './Count'; //require('./Count')
             return {
                 repositoriesActivated: {
-                    relation: Model.HasManyRelation,
+                    relation: objection_1.Model.HasManyRelation,
                     modelClass: Repository,
                     join: {
                         from: 'partners.id',
@@ -66,7 +70,7 @@ var Partner = /** @class */ (function (_super) {
                     }
                 },
                 repositoriesDeactivated: {
-                    relation: Model.HasManyRelation,
+                    relation: objection_1.Model.HasManyRelation,
                     modelClass: Repository,
                     join: {
                         from: 'partners.id',
@@ -74,7 +78,7 @@ var Partner = /** @class */ (function (_super) {
                     }
                 },
                 countsDeleted: {
-                    relation: Model.HasManyRelation,
+                    relation: objection_1.Model.HasManyRelation,
                     modelClass: Count,
                     join: {
                         from: 'partners.id',
@@ -82,7 +86,7 @@ var Partner = /** @class */ (function (_super) {
                     }
                 },
                 countsPerformed: {
-                    relation: Model.HasManyRelation,
+                    relation: objection_1.Model.HasManyRelation,
                     modelClass: Count,
                     join: {
                         from: 'partners.id',
@@ -90,7 +94,7 @@ var Partner = /** @class */ (function (_super) {
                     }
                 },
                 countsChecked: {
-                    relation: Model.HasManyRelation,
+                    relation: objection_1.Model.HasManyRelation,
                     modelClass: Count,
                     join: {
                         from: 'partners.id',
@@ -103,6 +107,6 @@ var Partner = /** @class */ (function (_super) {
         configurable: true
     });
     return Partner;
-}(Model));
-module.exports = Partner;
+}(objection_1.Model));
+exports.default = Partner;
 //# sourceMappingURL=Partner.js.map
