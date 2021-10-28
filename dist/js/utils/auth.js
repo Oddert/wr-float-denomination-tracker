@@ -40,17 +40,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUser = void 0;
-var bcrypt_1 = __importDefault(require("bcrypt"));
+var hashPwd_1 = __importDefault(require("../common/hashPwd"));
 var User_1 = __importDefault(require("../models/User"));
 function createUser(req, res) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function () {
-        var salt, hash, username, readableName, user;
+        var hash, username, readableName, user;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    salt = bcrypt_1.default.genSaltSync(12, "b");
-                    hash = bcrypt_1.default.hashSync(req.body.password, salt);
+                    hash = (0, hashPwd_1.default)(req.body.password);
                     username = (_a = req.body) === null || _a === void 0 ? void 0 : _a.username;
                     readableName = ((_b = req.body) === null || _b === void 0 ? void 0 : _b.readableName) || username;
                     if (!username)

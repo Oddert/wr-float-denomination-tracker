@@ -69,12 +69,18 @@ export interface StateType {
 }
 
 
-export const respondWell =
-	(res: Response, status: number | null, errorMessage: string | null, responseMessage: string | null, other: any): Response => {
+export const respondWell = (
+	res: Response,
+	status: number | null,
+	errorMessage: string | null,
+	responseMessage: string | null,
+	other: any,
+): Response => {
 		console.log('Respond Well: ', {
 			status: status || 200,
 			errorMessage,
 			responseMessage: responseMessage || 'Request processed successfully.',
+			...other,
 		})
 		return res
 		.status(status || 200)
@@ -86,8 +92,13 @@ export const respondWell =
 		})
 }
 
-export const respondBadRequest =
-	(res: Response, status: number | null, errorMessage: string | null, responseMessage: string | null, other: any): Response => {
+export const respondBadRequest = (
+	res: Response,
+	status: number | null,
+	errorMessage: string | null,
+	responseMessage: string | null,
+	other: any
+): Response => {
 	console.log('Bad Request: ', {
 		status: status || 400,
 		errorMessage: errorMessage || 'There was an error in your request, no content was found.',
@@ -104,8 +115,13 @@ export const respondBadRequest =
 		})
 }
 
-export const respondErr =
-	(res: Response, status: number | null, errorMessage: string | null, responseMessage: string | null, other: any): Response => {
+export const respondErr = (
+	res: Response,
+	status: number | null,
+	errorMessage: string | null,
+	responseMessage: string | null,
+	other: any
+): Response => {
 	console.log('Server Error', {
 		status: status || 500,
 		errorMessage: errorMessage || 'There was a error processing your reponse.',

@@ -14,7 +14,8 @@ var API_PREFIX = '/api/v1';
 describe('routes : auth', function () {
     beforeEach(function () {
         return knex_1.default.migrate.rollback()
-            .then(function () { return knex_1.default.migrate.latest(); });
+            .then(function () { return knex_1.default.migrate.latest(); })
+            .then(function () { return knex_1.default.seed.run(); });
     });
     afterEach(function () {
         return knex_1.default.migrate.rollback();
@@ -26,6 +27,24 @@ describe('routes : auth', function () {
                 .send({
                 username: 'michael',
                 password: 'burnham',
+            })
+                .end(function (err, res) {
+                should.not.exist(err);
+                res.redirects.length.should.eql(0);
+                res.status.should.eql(200);
+                res.type.should.eql('application/json');
+                res.body.status.should.eql(200);
+                done();
+            });
+        });
+    });
+    describe("POST " + API_PREFIX + "/auth/login", function () {
+        it('should login a user', function (done) {
+            chai_1.default.request(index_1.default)
+                .post(API_PREFIX + "/auth/login")
+                .send({
+                username: 'cash_partner',
+                password: 'Password1',
             })
                 .end(function (err, res) {
                 should.not.exist(err);

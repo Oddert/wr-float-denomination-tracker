@@ -1,6 +1,10 @@
-import { Router, Request, Response } from 'express'
+import { Router } from 'express'
 
-import { getAuth, registerUser } from '../controlers/authRoutes'
+import {
+	getAuth,
+	registerUser,
+	loginUser,
+} from '../controlers/authRoutes'
 
 const router: Router = Router()
 
@@ -11,5 +15,9 @@ router
 router
 	.route('/register')
 	.post(registerUser)
+
+router
+	.route('/login')
+	.post(loginUser)
 
 export default router

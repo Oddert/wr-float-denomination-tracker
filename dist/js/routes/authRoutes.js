@@ -9,5 +9,8 @@ router
 router
     .route('/register')
     .post(authRoutes_1.registerUser);
+router
+    .route('/login')
+    .post(authRoutes_1.loginUser);
 exports.default = router;
 //# sourceMappingURL=authRoutes.js.map

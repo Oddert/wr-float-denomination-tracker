@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = exports.getAuth = void 0;
+exports.loginUser = exports.registerUser = exports.getAuth = void 0;
 var auth_1 = __importDefault(require("../config/auth"));
 var auth_2 = require("../utils/auth");
 var utils_1 = require("./utils");
@@ -69,9 +69,9 @@ var registerUser = function (req, res, next) { return __awaiter(void 0, void 0, 
                 else {
                     auth_1.default.authenticate('local', function (err, user, info) {
                         if (user)
-                            return (0, utils_1.respondWell)(res, 200, null, 'User created successfully', null);
+                            return (0, utils_1.respondWell)(res, 200, null, 'User created successfully', { user: user, info: info });
                         else
-                            return (0, utils_1.respondErr)(res, null, err, 'Something went wrong, try again later.', null);
+                            return (0, utils_1.respondErr)(res, null, err, 'Something went wrong, try again later.', { info: info });
                     })(req, res, next);
                 }
                 return [3 /*break*/, 3];
@@ -83,4 +83,28 @@ var registerUser = function (req, res, next) { return __awaiter(void 0, void 0, 
     });
 }); };
 exports.registerUser = registerUser;
+var loginUser = function (req, res, next) {
+    auth_1.default.authenticate('local', function (err, user, info) {
+        if (err) {
+            return (0, utils_1.respondErr)(res, 500, err, 'There was something wrong with your request, please check and try again.', null);
+        }
+        else if (!user) {
+            return (0, utils_1.respondBadRequest)(res, 404, err, info, null);
+        }
+        else if (user) {
+            req.logIn(user, function (error) {
+                if (error) {
+                    return (0, utils_1.respondErr)(res, 500, error, 'There was something wrong with your request, please check and try again.', null);
+                }
+                else {
+                    return (0, utils_1.respondWell)(res, 200, null, 'Success, user logged in.', null);
+                }
+            });
+        }
+        else {
+            return (0, utils_1.respondErr)(res, 500, info, 'Something went wrong', null);
+        }
+    })(req, res, next);
+};
+exports.loginUser = loginUser;
 //# sourceMappingURL=authRoutes.js.map

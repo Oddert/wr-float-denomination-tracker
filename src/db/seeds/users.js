@@ -7,7 +7,7 @@ exports.seed = function(knex) {
       // Inserts seed entries
       return knex('users').insert([
 				{ privilegeId: 1, username: 'wr619', password: '', readableName: 'Generic Unsupervised', createdOn: 1617995021013, updatedOn: 1617995021013, },
-				{ privilegeId: 2, username: 'cash_partner', password: hashPwd('mypetGRas0n'), readableName: 'Generic Unsupervised', createdOn: 1617995021013, updatedOn: 1617995021013, }, // pwd 9GTpY3
+				{ privilegeId: 2, username: 'cash_partner', password: hashPwd('Password1'), readableName: 'Generic Unsupervised', createdOn: 1617995021013, updatedOn: 1617995021013, }, // pwd 9GTpY3
 				{ privilegeId: 3, username: 'manager', password: hashPwd('ItIsAWidelyAknowlagedFactMostPeopleCannotBeTrustedToChooseSecurePasswords'), readableName: 'Generic Unsupervised', createdOn: 1617995021013, updatedOn: 1617995021013, }, // pwd hfT9Vu9UTv79w1z3s3vo3
       ])
     })

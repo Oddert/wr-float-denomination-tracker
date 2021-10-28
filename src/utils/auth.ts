@@ -1,13 +1,11 @@
 
-import bcrypt from 'bcrypt'
 import { Request, Response } from 'express'
+import hashPwd from '../common/hashPwd'
 import { respondBadRequest } from '../controlers/utils'
 import User from '../models/User'
 
 export async function createUser (req: Request, res: Response) {
-	const salt = bcrypt.genSaltSync(12, "b")
-
-	const hash = bcrypt.hashSync(req.body.password, salt)
+	const hash = hashPwd(req.body.password)
 
 	const username: string = req.body?.username
 	const readableName: string = req.body?.readableName || username

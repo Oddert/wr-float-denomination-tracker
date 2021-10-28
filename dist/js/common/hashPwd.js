@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var bcrypt_1 = __importDefault(require("bcrypt"));
 function hashPwd(password) {
-    var salt = bcrypt_1.default.genSaltSync();
+    var salt = bcrypt_1.default.genSaltSync(12, "b");
     var hash = bcrypt_1.default.hashSync(password, salt);
     return hash;
 }
