@@ -153,6 +153,13 @@ export interface CountType {
 	deletedOn?: number
 }
 
+/**
+ * Parses a query or body parameter intended to be used as a number to a number or a given default
+ * 
+ * @param {any} param The query parameter you want to sanitise
+ * @param {number} fallback A value to use if the parameter is undefined or an unexpected type
+ * @returns {nummber} The query parameter converted to a number or the fallback if NaN
+ */
 export function sanitiseNumberQuery (param: any, fallback: number): number {
 	const paramCoerced = Number(param)
 	if (typeof paramCoerced !== 'number' || isNaN(paramCoerced)) return fallback

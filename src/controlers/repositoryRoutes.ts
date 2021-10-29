@@ -18,8 +18,9 @@ export const getRepositories = async (req: Request, res: Response) => {
 
 		const repositories = await Repository.query()
 			// .withGraphJoined('float')
-			// .limit(limit)
-			// .offset(offset)
+			.limit(limit)
+			.offset(offset)
+		console.log(repositories)
 
 		return respondWell(res, 200, null, 'List of all repositories.', { repositories })
 
@@ -92,6 +93,7 @@ export const getRepository = async (req: Request, res: Response) => {
 
 				const repositories = await Repository.query()
 					.whereIn('repositories.id', multiRepository)
+
 				return respondWell(res, 200, null, 'Details for provided id.', { repositories })
 
 			} else if (/,/gi.test(multiRepository) || /[0-9]/gi.test(multiRepository)) {

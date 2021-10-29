@@ -114,7 +114,7 @@ export const getCounts = async (req: Request, res: Response) => {
 		const page: number = Number(req.query.page)
 		const deleted: string = String(req.query.deleted)
 		let repo: string | number = String(req.query.repository)
-		const includeFloat: any = req.query.float
+		const includeFloat: boolean = Boolean(req.query.float)
 
 		let applyDeleteFilter = deleteFilterActive
 		let applyRepoFilter: any = noFilter
@@ -157,10 +157,12 @@ export const getCounts = async (req: Request, res: Response) => {
 
 			const counts = await q()
 
-			return respondWell(res, null, null, 'List of all counts.', { counts: counts.map((e: any) => ({
-				...e,
-				readableTimestamp: new Date(e.timestamp)
-			})) })
+			return respondWell(res, null, null, 'List of all counts.', { 
+				counts: counts.map((count: any) => ({
+					...count,
+					readableTimestamp: new Date(count.timestamp)
+				})) 
+			})
 
 		} else {
 			const fromdate: number = sanitiseNumberQuery(req.query.fromdate, 0)
