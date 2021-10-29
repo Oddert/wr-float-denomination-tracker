@@ -4,6 +4,7 @@ import {
 	getAuth,
 	registerUser,
 	loginUser,
+	logoutUser,
 } from '../controlers/authRoutes'
 
 const router: Router = Router()
@@ -19,5 +20,9 @@ router
 router
 	.route('/login')
 	.post(loginUser)
+
+router
+	.route('/logout')
+	.get(logoutUser)
 
 export default router

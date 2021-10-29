@@ -7,6 +7,7 @@
     "prestart": "npm run build",
     "start": "cd dist/js && node index.js",
     "test": "npm run build && mocha dist/js/test/integration/routes.auth.test.js --exit",
+    "test:forceunlock": "npm run build && npm run migrate:unlock && mocha dist/js/test/integration/routes.auth.test.js --exit",
     "test:watch": "npm run build && mocha -w dist/js/test/integration/routes.auth.test.js",
     "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
@@ -17,10 +18,11 @@
     "server_dev": "concurrently \"npm run ts_watch\" \"npm run server_auto_restart\"",
     "development": "concurrently \"npm run ts_watch\" \"npm run client_dev\"",
     "dev": "concurrently \"npm run ts_watch\" \"npm run server_auto_restart\" \"npm run client_dev\"",
-		"migrate:latest": "cd dist/js && knex migrate:latest",
-		"migrate:rollback": "cd dist/js && knex migrate:rollback",
-		"seed": "cd dist/js && knex seed:run",
-		"build_db": "touch dist/js/db/wr-float-denomination-tracker.db3 && npm run migrate:latest && npm run seed"
+    "migrate:latest": "cd dist/js && knex migrate:latest",
+    "migrate:rollback": "cd dist/js && knex migrate:rollback",
+    "migrate:unlock": "cd dist/js && knex migrate:unlock",
+    "seed": "cd dist/js && knex seed:run",
+    "build_db": "touch dist/js/db/wr-float-denomination-tracker.db3 && npm run migrate:latest && npm run seed"
   },
   "author": "Robyn Felicity Heather Veitch <robynfhveitch@gmail.com> (https://robynveitch.com/)",
   "license": "ISC",
@@ -59,6 +61,7 @@
     "@types/passport-local": "^1.0.34",
     "concurrently": "^6.3.0",
     "cors": "^2.8.5",
+    "passport-stub": "^1.1.1",
     "tslint": "^6.1.3",
     "typescript": "^4.4.4"
   }

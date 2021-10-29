@@ -66,3 +66,12 @@ export const loginUser = (
 		}
 	})(req, res, next)
 }
+
+export const logoutUser = (
+	req: Request,
+	res: Response,
+) => {
+	console.log({ logout: req.logout })
+	req.logout()
+	return respondWell(res, 200, null, 'User successfully logged out.', null)
+}

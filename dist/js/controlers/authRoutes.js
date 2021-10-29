@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginUser = exports.registerUser = exports.getAuth = void 0;
+exports.logoutUser = exports.loginUser = exports.registerUser = exports.getAuth = void 0;
 var auth_1 = __importDefault(require("../config/auth"));
 var auth_2 = require("../utils/auth");
 var utils_1 = require("./utils");
@@ -107,4 +107,10 @@ var loginUser = function (req, res, next) {
     })(req, res, next);
 };
 exports.loginUser = loginUser;
+var logoutUser = function (req, res) {
+    console.log({ logout: req.logout });
+    req.logout();
+    return (0, utils_1.respondWell)(res, 200, null, 'User successfully logged out.', null);
+};
+exports.logoutUser = logoutUser;
 //# sourceMappingURL=authRoutes.js.map

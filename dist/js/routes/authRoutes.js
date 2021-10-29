@@ -12,5 +12,8 @@ router
 router
     .route('/login')
     .post(authRoutes_1.loginUser);
+router
+    .route('/logout')
+    .get(authRoutes_1.logoutUser);
 exports.default = router;
 //# sourceMappingURL=authRoutes.js.map
