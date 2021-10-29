@@ -1,5 +1,6 @@
 import chai from 'chai'
 import chaiHttp from 'chai-http'
+import path from 'path'
 
 import knex from '../../db/knex'
 import server from '../../index'
@@ -12,17 +13,25 @@ const should = chai.should()
 
 const API_PREFIX = '/api/v1'
 
+const migrateOpts = {
+	directory: path.join(__dirname, '../../db/migrations')
+}
+
+const seedOpts = {
+	directory: path.join(__dirname, '../../db/seeds')
+}
+
 describe('routes : auth', () => {
 
-	// beforeEach(() => {
-	// 	return knex.migrate.rollback()
-	// 		.then(() => knex.migrate.latest())
-	// 		.then(() => knex.seed.run())
-	// })
+	beforeEach(() => {
+		return knex.migrate.rollback()
+			.then(() => knex.migrate.latest(migrateOpts))
+			.then(() => knex.seed.run(seedOpts))
+	})
 
-	// afterEach(() => {
-	// 	return knex.migrate.rollback()
-	// })
+	afterEach(() => {
+		return knex.migrate.rollback(migrateOpts)
+	})
 
 	describe(`POST ${API_PREFIX}/auth/register`, () => {
 		it('should register a new user', done => {
@@ -61,5 +70,11 @@ describe('routes : auth', () => {
 				})
 		})
 	})
+
+	// describe(`GET ${API_PREFIX}/auth/logout`, () => {
+	// 	it('should logout a user', done => {
+
+	// 	})
+	// })
 
 })
