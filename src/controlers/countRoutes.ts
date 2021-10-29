@@ -13,11 +13,13 @@ import {
 	// CountType,
 	respondBadRequest,
 	// validateCount,
-	PartnerServerType,
 	sanitiseNumberQuery,
 	validateFloat,
 } from './utils'
 
+import {
+	PartnerServerType,
+} from './types'
 
 // Higher-order mixins to query builders
 

@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from 'express'
-import bcrypt from 'bcrypt'
 
-import User from '../models/User'
 
 import passport from '../config/auth'
 import { createUser } from '../utils/auth'
 
-import { respondBadRequest, respondErr, respondWell } from './utils'
+import { 
+	respondBadRequest, 
+	respondErr, 
+	respondWell 
+} from './utils'
 
 // GET /
 export const getAuth = async (req: Request, res: Response) => {
