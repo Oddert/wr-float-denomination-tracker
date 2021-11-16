@@ -7,6 +7,7 @@ import {
   updateCount,
   deleteCount,
 	countTotals,
+	verifyCount,
 } from '../controlers/countRoutes'
 
 const router: Router = Router()
@@ -16,8 +17,13 @@ router
   .get(getCounts)
   .post(addCount)
 
-router.route('/total')
+router
+	.route('/total')
 	.get(countTotals)
+
+router
+	.route('/verify')
+	.post(verifyCount)
 
 router
   .route('/:id')

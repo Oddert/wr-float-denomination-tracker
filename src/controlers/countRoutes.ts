@@ -15,6 +15,7 @@ import {
 	// validateCount,
 	sanitiseNumberQuery,
 	validateFloat,
+	validateCount,
 } from './utils'
 
 import {
@@ -159,11 +160,11 @@ export const getCounts = async (req: Request, res: Response) => {
 
 			const counts = await q()
 
-			return respondWell(res, null, null, 'List of all counts.', { 
+			return respondWell(res, null, null, 'List of all counts.', {
 				counts: counts.map((count: any) => ({
 					...count,
 					readableTimestamp: new Date(count.timestamp)
-				})) 
+				}))
 			})
 
 		} else {
@@ -782,6 +783,17 @@ export const countTotals = async (req: Request, res: Response) => {
 			.count()
 
 		return respondWell(res, 200, 'Number of total counts in the database.', null, { total: total[0] })
+	} catch (error) {
+		return respondErr(res, 500, 'There was an issue processing your request.', null, { error })
+	}
+}
+
+
+export const verifyCount = async (req: Request, res: Response) => {
+	try {
+		const validation = validateCount(req.body.count)
+		console.log({ validation })
+		return respondWell(res, 200, null, 'Count valiation complete.', { validation })
 	} catch (error) {
 		return respondErr(res, 500, 'There was an issue processing your request.', null, { error })
 	}

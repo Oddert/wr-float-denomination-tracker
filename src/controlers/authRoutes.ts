@@ -4,10 +4,10 @@ import { Request, Response, NextFunction } from 'express'
 import passport from '../config/auth'
 import { createUser } from '../utils/auth'
 
-import { 
-	respondBadRequest, 
-	respondErr, 
-	respondWell 
+import {
+	respondBadRequest,
+	respondErr,
+	respondWell
 } from './utils'
 
 // GET /

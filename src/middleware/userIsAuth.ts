@@ -1,12 +1,12 @@
 
-import { 
-	Request, 
-	Response, 
-	NextFunction 
+import {
+	Request,
+	Response,
+	NextFunction
 } from 'express'
 import passport from '../config/auth'
 
-import { 
+import {
 	respondErr,
 	respondWell,
 } from '../controlers/utils'

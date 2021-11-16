@@ -2,9 +2,22 @@
 import { Response } from 'express'
 
 import {
+	BagTypes,
+	LooseTypes,
 	CountClientStateType,
+	ValidateFloatReponseType,
 } from './types'
 
+/**
+ * Standardised response wrapper for generating uniform reposnse ojects for a successfull request (200 range)
+ *
+ * @param {Response} res Express response object to be resolved
+ * @param {number | null} status Override the default 200 http status code
+ * @param {string | null} errorMessage A description of an error
+ * @param {string | null} responseMessage A success message or additional info
+ * @param {...any} other Any other payload to send
+ * @returns {Response}
+ */
 export const respondWell = (
 	res: Response,
 	status: number | null,
@@ -28,7 +41,17 @@ export const respondWell = (
 		})
 }
 
-export const respondBadRequest = (
+/**
+ * Standardised response wrapper for generating uniform reposnse ojects for an input or formating error (400  range)
+ *
+ * @param {Response} res Express response object to be resolved
+ * @param {number | null} status Override the default 400 http status code
+ * @param {string | null} errorMessage A description of an error
+ * @param {string | null} responseMessage A success message or additional info
+ * @param {...any} other Any other payload to send
+ * @returns {Response}
+ */
+ export const respondBadRequest = (
 	res: Response,
 	status: number | null,
 	errorMessage: string | null,
@@ -51,6 +74,16 @@ export const respondBadRequest = (
 		})
 }
 
+/**
+ * Standardised response wrapper for generating uniform reposnse ojects for a server issue (500  range)
+ *
+ * @param {Response} res Express response object to be resolved
+ * @param {number | null} status Override the default 500 http status code
+ * @param {string | null} errorMessage A description of an error
+ * @param {string | null} responseMessage A success message or additional info
+ * @param {...any} other Any other payload to send
+ * @returns {Response}
+ */
 export const respondErr = (
 	res: Response,
 	status: number | null,
@@ -77,7 +110,7 @@ export const respondErr = (
 
 /**
  * Parses a query or body parameter intended to be used as a number to a number or a given default
- * 
+ *
  * @param {any} param The query parameter you want to sanitise
  * @param {number} fallback A value to use if the parameter is undefined or an unexpected type
  * @returns {nummber} The query parameter converted to a number or the fallback if NaN
@@ -95,6 +128,8 @@ export const validateCount = (count: any) => {
 	console.log(count)
 
 	if (count === undefined) failMissingData('Count is not defined.')
+	if (count === null) failMissingData('Count is null.')
+	if (count === '') failMissingData('Recieved an empty string.')
 
 	const sampleState: CountClientStateType = {
 		repository: 0,
@@ -385,22 +420,35 @@ export const validateCount = (count: any) => {
 	}
 }
 
-
-export const validateFloat = (float: any) => {
+/**
+ * Tests a given value against required properties of a valid float
+ * Will check the structure, required values and value types
+ * response.verified signals the float is to be rejected with an error reponse
+ *
+ * @param float object assumed to be a Float
+ * @returns {ValidateFloatReponseType} Represents the result of the validation
+ */
+export const validateFloat = (float: any): ValidateFloatReponseType => {
 	console.log('### Begin float ###')
 	console.log(float)
 
+	/**
+	 * Generic reponse creator for missing required data (partial or total)
+	 *
+	 * @param message Description of the data missing
+	 * @returns {ValidateFloatReponseType}
+	 */
 	function failMissingData (message: string) {
 		return {
 			code: 'invalid',
 			message,
-			verified,
+			verified: false,
 		}
 	}
 
 	if (float === undefined) failMissingData('float is not defined.')
 
-	let response: any
+	let response: ValidateFloatReponseType | undefined
 	const verified: boolean = true
 	let baggedCheckPass: boolean = false
 	let looseCheckPass: boolean = false
@@ -451,33 +499,62 @@ export const validateFloat = (float: any) => {
 	// 	} else return failMissingData('No counter (author) found on the count object.')
 	// }
 
-	function baggedCompleteCheck () {
-		const baggedKeys = ['bagPence1', 'bagPence2', 'bagPence5', 'bagPence10', 'bagPence20', 'bagPence50', 'bagPound1', 'bagPound2', 'bagNote5', 'bagTotal']
-		let error: string | boolean = false
-		const result = baggedKeys.reduce((acc, each) => {
+	/**
+	 * tests the float object to validate that:
+	 * -all bagtype keys are present
+	 * -all bagtype keys have a value which is number
+	 *
+	 * Overrites the global baggedCheckPass value
+	 */
+	function baggedCompleteCheck (): void {
+		const baggedKeys: BagTypes[] = ['bagPence1', 'bagPence2', 'bagPence5', 'bagPence10', 'bagPence20', 'bagPence50', 'bagPound1', 'bagPound2', 'bagNote5', 'bagTotal']
+		let error: boolean = false
+		let errBagType: string | undefined
+
+		const result: boolean = baggedKeys.reduce((acc: boolean, each: BagTypes) => {
 			// if (error) return acc
-			if (!float.hasOwnProperty(each)) error = each
-			if (typeof float[each] === 'number') return acc
+			if (!float.hasOwnProperty(each)) {
+				errBagType = each
+				error = true
+				return false
+			}
 			if (float[each] === null) return false
-			error = each
-			console.log({ error })
+			if (typeof float[each] === 'number') return acc
+
+			error = true
+			errBagType = each
+			console.log({ error, errBagType })
 			return false
 		}, true)
+
 		// if (error) return failMissingData(`[Bagged Coin Check]: invalid value for property "${error}". Expected null or number but recieved "${count.data.bagged[error]}"`)
 		baggedCheckPass = result
 		console.log({ baggedCheckPass })
 	}
 
-	function looseCompleteCheck () {
-		const looseKeys = ['loosePence1', 'loosePence2', 'loosePence5', 'loosePence10', 'loosePence20', 'loosePence50', 'loosePound1', 'loosePound2', 'looseOther', 'looseTotal']
-		let error: string | boolean = false
+	/**
+	 * tests the float object to validate that:
+	 * -all loose coin keys are present
+	 * -all looe coin keys have a value which is number
+	 *
+	 * Overrites the global looseCheckPass value
+	 */
+	function looseCompleteCheck (): void {
+		const looseKeys: LooseTypes[] = ['loosePence1', 'loosePence2', 'loosePence5', 'loosePence10', 'loosePence20', 'loosePence50', 'loosePound1', 'loosePound2', 'looseOther', 'looseTotal']
+		let error: boolean = false
+		let errorMsg: string
 		const result = looseKeys.reduce((acc, each) => {
 			// if (error) return acc
-			if (!float.hasOwnProperty(each)) error = each
-			if (typeof float[each] === 'number') return acc
+			if (!float.hasOwnProperty(each)) {
+				error = true
+				errorMsg = each
+				return false
+			}
 			if (float[each] === null) return false
-			error = each
-			console.log({ error })
+			if (typeof float[each] === 'number') return acc
+			errorMsg = each
+			error = true
+			console.log({ error, errorMsg })
 			return false
 		}, true)
 		// if (error) return failMissingData(`[Loose Coin Check]: invalid value for property "${error}". Expected null or number but recieved "${count.data.loose[error]}"`)
@@ -485,16 +562,29 @@ export const validateFloat = (float: any) => {
 		console.log({ looseCheckPass })
 	}
 
-	function notesCompleteCheck () {
+	/**
+	 * tests the float object to validate that:
+	 * -all coin keys are present
+	 * -all coin keys have a value which is number
+	 *
+	 * Overrites the global notesCheckPass value
+	 */
+	function notesCompleteCheck (): void {
 		const notesKeys = ['note1', 'note5', 'note10', 'note20', 'note50', 'noteTotal']
-		let error: string | boolean = false
+		let error: boolean = false
+		let errorMsg: string
 		const result = notesKeys.reduce((acc, each) => {
 			// if (error) return acc
-			if (!float.hasOwnProperty(each)) error = each
-			if (typeof float[each] === 'number') return acc
+			if (!float.hasOwnProperty(each)) {
+				error = true
+				errorMsg = each
+				return false
+			}
 			if (float[each] === null) return false
-			error = each
-			console.log({ error })
+			if (typeof float[each] === 'number') return acc
+			errorMsg = each
+			error = true
+			console.log({ error, errorMsg })
 			return false
 		}, true)
 		// if (error) {

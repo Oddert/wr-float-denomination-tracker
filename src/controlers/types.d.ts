@@ -78,3 +78,12 @@ export interface CountClientStateType {
 	supervisorId: string
 	comment?: string
 }
+
+export interface ValidateFloatReponseType {
+	code: 'invalid' | 'partial' | 'complete' | 'incomplete'
+	message: string
+	verified: boolean
+}
+
+export type BagTypes = 'bagTotal' | 'bagNote5' | 'bagPound2' | 'bagPound1' | 'bagPence50' | 'bagPence20' | 'bagPence10' | 'bagPence5' | 'bagPence2' | 'bagPence1'
+export type LooseTypes = 'loosePence1' | 'loosePence2' | 'loosePence5' | 'loosePence10' | 'loosePence20' | 'loosePence50' | 'loosePound1' | 'loosePound2' | 'looseOther' | 'looseTotal'
