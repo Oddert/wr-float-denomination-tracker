@@ -3,7 +3,7 @@ import React, {
 	useRef,
 } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useHistory, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 import { countsDataWriteAll, uiFlashWriteOne } from '../../../actions'
 
@@ -41,10 +41,10 @@ const DeleteCount: React.FC = () => {
 	
 	const partners = useSelector((s: typeof initialState) => s.auth.partnerList)
 	const dispatch = useDispatch()
-	const params: { id: string } = useParams()
+	const params: { id: string | undefined } = useParams()
 
 	const safetyRef = useRef()
-	const history = useHistory()
+	const navigate = useNavigate()
 
 	const handleChange = (e: any) => {
 		setPartner(e.target.value)
@@ -71,7 +71,7 @@ const DeleteCount: React.FC = () => {
 					if (res.status === 200) {
 						dispatch(countsDataWriteAll())
 						dispatch(uiFlashWriteOne('Count Deleted', '', 'info', 5000))
-						history.push('/counts')
+						navigate('/counts')
 					} else {
 						setModalError(res.responseMessage || res.errorMessage)
 						console.error(res.responseMessage || res.errorMessage)

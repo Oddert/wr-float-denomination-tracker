@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router'
+import { useNavigate } from 'react-router'
 
 import { 
 	Button,
@@ -20,18 +20,18 @@ const Close: React.FC<Props> = ({
 }) => {
 	const { state } = useContext(CountContext)
 	const dispatch = useDispatch()
-	const history = useHistory()
+	const navigate = useNavigate()
 
 	const handleClick = () => {
 		if (edit) {
 			console.log('Send ajax to PUT, show flash')
 			saveExisting(state, dispatch, () => {
-				history.goBack()
+				navigate(-1)
 			})
 		} else {
 			console.log('Perform Validation, Show confirmation, send ajax to POST, show flash')
 			saveNew(state, dispatch, (res: any) => {
-				return history.goBack()
+				return navigate(-1)
 			})
 		}
 	}

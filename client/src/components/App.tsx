@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { HashRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { HashRouter, Route, Routes, Navigate } from 'react-router-dom'
 
 import { authUsersWriteAll, repositoriesWriteAll, authPartnersWriteAll } from '../actions'
 
@@ -35,48 +35,73 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <HashRouter>
-        <Switch>
-          <Route path='/login'>
-            <Login />
-          </Route>
-          <Route path='/home'>
-            <PageWrapper>
-						</PageWrapper>
-          </Route>
-          <Route path='/counts'>
-            <PageWrapper title='All Counts'>
-							<Counts />
-						</PageWrapper>
-          </Route>
-          <Route path='/count/new'>
-            <PageWrapper title='Add Count'>
-							<Count />
-						</PageWrapper>
-          </Route>
-          <Route path='/count/:id'>
-            <PageWrapper title='Edit Count'>
-							<Count edit={true} />
-						</PageWrapper>
-          </Route>
-          <Route path='/repositories'>
-            <PageWrapper title='All Repositories'>
-							<Dashboard />
-						</PageWrapper>
-          </Route>
-          <Route path='/repo/:id'>
-            <PageWrapper title='All Repositories'>
-							<InspectOneRepo />
-						</PageWrapper>
-          </Route>
-          <Route path='/vistest1'>
-            <PageWrapper title='Visualisation Test 1'>
-							<VisTest1 />
-						</PageWrapper>
-          </Route>
-          <Route path='/'>
-            <Redirect to='/repositories' />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route 
+						path='/login' 
+						element={<Login />} 
+					/>
+          <Route 
+						path='/home' 
+						element={
+							<>
+								<PageWrapper>
+								</PageWrapper>
+							</>
+						}
+					/>            
+          <Route 
+						path='/counts' 
+						element={
+							<PageWrapper title='All Counts'>
+								<Counts />
+							</PageWrapper>
+						} 
+					/>
+          <Route 
+						path='/count/new' 
+						element={
+							<PageWrapper title='Add Count'>
+								<Count />
+							</PageWrapper>
+						}
+					/>
+          <Route 
+						path='/count/:id'
+						element={
+							<PageWrapper title='Edit Count'>
+								<Count edit={true} />
+							</PageWrapper>
+						}
+					/>
+          <Route 
+						path='/repositories'
+						element={
+							<PageWrapper title='All Repositories'>
+								<Dashboard />
+							</PageWrapper>
+						}
+					/>
+          <Route 
+						path='/repo/:id'
+						element={
+							<PageWrapper title='All Repositories'>
+								<InspectOneRepo />
+							</PageWrapper>
+						}
+					/>
+          <Route 
+						path='/vistest1'
+						element={
+							<PageWrapper title='Visualisation Test 1'>
+								<VisTest1 />
+							</PageWrapper>
+						}
+					/>
+          <Route 
+						path='/' 
+						element={<Navigate to='/repositories' />}
+					/>
+        </Routes>
       </HashRouter>
     </div>
   )

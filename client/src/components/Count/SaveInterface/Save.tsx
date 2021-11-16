@@ -8,7 +8,7 @@ import {
 import CountContext from '../utils/CountContext'
 
 import { saveExisting, saveNew } from './utils'
-import { useHistory } from 'react-router'
+import { useNavigate } from 'react-router'
 
 interface Props {
 	edit?: boolean
@@ -17,7 +17,7 @@ interface Props {
 const Save: React.FC<Props> = ({
 	edit
 }) => {
-	const history = useHistory()
+	const navigate = useNavigate()
 	const { state } = useContext(CountContext)
 	const dispatch = useDispatch()
 
@@ -35,7 +35,7 @@ const Save: React.FC<Props> = ({
 			saveNew(state, dispatch, (res: any) => {
 				const editUrl = `/count/${res.count.id}`
 				console.log('redirecting to: ', editUrl)
-				return history.push(editUrl)
+				return navigate(editUrl)
 			})
 
 		}
