@@ -1,3 +1,5 @@
+/** @jsxRuntime classic */
+/** @jsx jsx */
 import React, { SetStateAction, useContext, useState, Dispatch, useEffect } from 'react'
 import {
 	useMediaQuery,
@@ -9,6 +11,7 @@ import {
 } from '@chakra-ui/react'
 import CountContext from '../utils/CountContext'
 import { CountActions } from '../utils/API'
+import { css, jsx } from '@emotion/react'
 
 interface Props {
 	label: string
@@ -31,23 +34,22 @@ const Denomination: React.FC<Props> = ({
 	// label = `loose ${label}`
 	
 	useEffect(() => {
-		// console.log(inVal)
+		console.log(inVal)
 		if (typeof inVal === 'number') setValue((inVal / 100).toFixed(2))
 		else setValue(undefined)
 	}, [inVal])
 
 	function handleChange (v: any): void {
-		console.log(typeof v, v)
+		// console.log(typeof v, v)
 		setValue(v)
 	}
 
 	const handleFocusLeave = (e: any) => {
-		const v = e.target.value
 		// console.log('focusLeve', new Date().toLocaleTimeString())
+		const v = e.target.value
 		
 		const valueAsNumber = Math.floor(Number(v) * 100)
 		// console.log({ valueAsNumber, inVal })
-		if (valueAsNumber === inVal) return
 		const val = (v === '' || v === null || v === undefined) ? null : valueAsNumber
 
 		const minimumValueTest = valueAsNumber % 1
@@ -80,25 +82,10 @@ const Denomination: React.FC<Props> = ({
 			type: CountActions.UPDATE_LOOSE,
 			payload,
 		})
-		// if (isNaN(val)) {
-		// 	return
-		// } else if (!error) {
-		// 	const fixedVal = val.toFixed(2)
-		// 	setValue(fixedVal)
-		// 	// console.log(typeof fixedVal, fixedVal)
-		// 	// const payload = {
-		// 	// 	[denomination]: fixedVal
-		// 	// }
-		// 	// dispatch({
-		// 	// 	type: CountActions.UPDATE_LOOSE,
-		// 	// 	payload,
-		// 	// })
-		// }
 	}
 	
 	const sideColumns = '3fr'
 	const inputColumn = smallScreen ? '6fr' : '4fr'
-	// if (label === "loose 50p") console.log(label, value)
 
 	return (
 		<GridItem
@@ -134,6 +121,31 @@ const Denomination: React.FC<Props> = ({
 						className='tab_jump'
 					/>
 				</NumberInput>
+				{/* <input 
+					type='number' 
+					value={value} 
+					onChange={() => {}} 
+					css={css({
+						color: '#a0aec0',
+						backgroundColor: '#F8F8F8',
+						borderBottom: '2px solid',
+						borderBottomColor: '#c4c4c4',
+						padding: '0 16px 0 32px',
+						fontSize: '1rem',
+						paddingInlineStart: '16px',
+						paddingInlineEnd: '32px',
+						lineHeight: '24px',
+						outlineOffset: '2px',
+						outlineWidth: '2px',
+						height: '40px',
+						fontWeight: '400',
+						transitionProperty: 'background-color, border-color, color, fill, stroke, opacity, box-shadow, transform',
+						transitionDuration: '0.2s',
+						_hover: {
+							borderColor: '#cbd5e0',
+						}
+					})}
+				/> */}
 			</Grid>
 		</GridItem>
 	)

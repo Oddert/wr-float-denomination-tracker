@@ -79,6 +79,10 @@ const Count: React.FC<Props> = ({ edit }) => {
 							}
 						})
 					})
+					.catch(error => {
+						console.error(error)
+						// TODO: introduce some sort of error boundary
+					})
 				return ready()
 			}
 		}
