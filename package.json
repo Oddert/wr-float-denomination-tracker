@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
+    "install:production": "npm i --production",
+    "install:all": "npm run install:server && npm run install:client",
+    "install:server": "npm i",
+    "install:client": "cd client && npm i",
     "prestart": "npm run build",
     "start": "cd dist/js && node index.js",
     "development": "npm run dev",
