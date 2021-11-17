@@ -51,10 +51,10 @@ var getFloats = function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 return [4 /*yield*/, Float_1.default.query().limit(50)];
             case 1:
                 floats = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'List of all Floats.', { floats: floats })];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'List of all Floats.', { floats: floats })];
             case 2:
                 error_1 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'Something went wrong.', null, { error: error_1 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'Something went wrong.', null, { error: error_1 })];
             case 3: return [2 /*return*/];
         }
     });

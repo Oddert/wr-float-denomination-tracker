@@ -42,70 +42,68 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.getUser = exports.addUser = exports.getUsers = void 0;
 var utils_1 = require("./utils");
 var User_1 = __importDefault(require("../models/User"));
-var createId = function () {
-    var one = function () {
-        var lower = function () { return String.fromCharCode(Math.floor((Math.random() * 26) + 97)); };
-        var upper = function () { return String.fromCharCode(Math.floor((Math.random() * 26) + 65)); };
-        var num = function () { return String.fromCharCode(Math.floor((Math.random() * 10) + 48)); };
-        var options = [lower, upper, num];
-        return options[Math.floor(Math.random() * 3)]();
-    };
-    var str = '';
-    for (var i = 0; i < 21; i++) {
-        str += one();
-    }
-    return str;
-};
-var users = [
-    {
-        id: createId(),
-        shortUid: '1023',
-        firstName: 'Robyn',
-        middleNames: 'F H',
-        lastName: 'Veitch',
-        access: 10,
-        created: 1616684709029,
-        updated: 1616684932308,
-    },
-    {
-        id: createId(),
-        shortUid: '1064',
-        firstName: 'Jhony',
-        middleNames: null,
-        lastName: 'No Privelege',
-        access: 1,
-        created: 1616684709029,
-        updated: 1616684932308,
-    },
-    {
-        id: createId(),
-        shortUid: '1067',
-        firstName: 'Manager',
-        middleNames: null,
-        lastName: null,
-        access: 2,
-        created: 1616684709029,
-        updated: 1616684932308,
-    },
-];
+// const createId = () => {
+// 	const one = () => {
+// 		const lower = () => String.fromCharCode(Math.floor((Math.random() * 26) + 97))
+// 		const upper = () => String.fromCharCode(Math.floor((Math.random() * 26) + 65))
+// 		const num = () => String.fromCharCode(Math.floor((Math.random() * 10) + 48))
+// 		const options = [lower, upper, num]
+// 		return options[Math.floor(Math.random() * 3)]()
+// 	}
+// 	let str = ''
+// 	for (let i=0; i<21; i++) {str += one()}
+// 	return str
+// }
+// const users = [
+// 	{
+// 		id: createId(),
+// 		shortUid: '1023',
+// 		firstName: 'Robyn',
+// 		middleNames: 'F H',
+// 		lastName: 'Veitch',
+// 		access: 10,
+// 		created: 1616684709029,
+// 		updated: 1616684932308,
+// 	},
+// 	{
+// 		id: createId(),
+// 		shortUid: '1064',
+// 		firstName: 'Jhony',
+// 		middleNames: null,
+// 		lastName: 'No Privelege',
+// 		access: 1,
+// 		created: 1616684709029,
+// 		updated: 1616684932308,
+// 	},
+// 	{
+// 		id: createId(),
+// 		shortUid: '1067',
+// 		firstName: 'Manager',
+// 		middleNames: null,
+// 		lastName: null,
+// 		access: 2,
+// 		created: 1616684709029,
+// 		updated: 1616684932308,
+// 	},
+// ]
 var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var limit, offset, users_1, error_1;
+    var limit, offset, users, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                limit = (0, utils_1.sanitiseNumberQuery)(req.query.limit, 500);
-                offset = (0, utils_1.sanitiseNumberQuery)(req.query.offset, 0);
+                limit = utils_1.sanitiseNumberQuery(req.query.limit, 500);
+                offset = utils_1.sanitiseNumberQuery(req.query.offset, 0);
                 return [4 /*yield*/, User_1.default.query()
                         .limit(limit)
                         .offset(offset)];
             case 1:
-                users_1 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'List of all users.', { users: users_1 })];
+                users = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'List of all users.', { users: users })];
             case 2:
                 error_1 = _a.sent();
                 console.log(error_1);
-                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error_1 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_1 })];
             case 3: return [2 /*return*/];
         }
     });
@@ -116,7 +114,7 @@ var addUser = function (req, res) {
 };
 exports.addUser = addUser;
 var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, multiUser, users_2, splitMultiUser, users_3, user, error_2;
+    var id, multiUser, users, splitMultiUser, users, user, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -124,36 +122,36 @@ var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 id = req.params.id;
                 multiUser = req.query.user;
                 if (!id)
-                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)];
                 if (!(id === 'details' && multiUser)) return [3 /*break*/, 6];
                 if (!multiUser || typeof multiUser === undefined) {
-                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?user=2,3,4"', null, null)];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?user=2,3,4"', null, null)];
                 }
                 if (!Array.isArray(multiUser)) return [3 /*break*/, 2];
                 return [4 /*yield*/, User_1.default.query()
                         .whereIn('users.id', multiUser)];
             case 1:
-                users_2 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Details for provided id.', { users: users_2 })];
+                users = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { users: users })];
             case 2:
                 if (!(/,/gi.test(multiUser) || /[0-9]/gi.test(multiUser))) return [3 /*break*/, 4];
                 splitMultiUser = multiUser.split(',');
                 return [4 /*yield*/, User_1.default.query()
                         .whereIn('users.id', splitMultiUser)];
             case 3:
-                users_3 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Details for provided id.', { users: users_3 })];
-            case 4: return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?user=2,3,4"', null, null)];
+                users = _a.sent();
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { users: users })];
+            case 4: return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?user=2,3,4"', null, null)];
             case 5: return [3 /*break*/, 8];
             case 6: return [4 /*yield*/, User_1.default.query()
                     .where('users.id', Number(id))];
             case 7:
                 user = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Details for provided id.', { user: user })];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { user: user })];
             case 8: return [3 /*break*/, 10];
             case 9:
                 error_2 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error_2 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_2 })];
             case 10: return [2 /*return*/];
         }
     });

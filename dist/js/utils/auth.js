@@ -49,7 +49,7 @@ function createUser(req, res) {
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
-                    hash = (0, hashPwd_1.default)(req.body.password);
+                    hash = hashPwd_1.default(req.body.password);
                     username = (_a = req.body) === null || _a === void 0 ? void 0 : _a.username;
                     readableName = ((_b = req.body) === null || _b === void 0 ? void 0 : _b.readableName) || username;
                     if (!username)

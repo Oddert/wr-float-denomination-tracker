@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var floatRoutes_1 = require("../controlers/floatRoutes");
-var router = (0, express_1.Router)();
+var router = express_1.Router();
 router
     .route('/')
     .get(floatRoutes_1.getFloats)

@@ -48,10 +48,10 @@ var getPartners = function (req, res) { return __awaiter(void 0, void 0, void 0,
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                fromdate = (0, utils_1.sanitiseNumberQuery)(req.query.fromdate, 0);
-                todate = (0, utils_1.sanitiseNumberQuery)(req.query.todate, Date.now());
-                limit = (0, utils_1.sanitiseNumberQuery)(req.query.limit, 500);
-                offset = (0, utils_1.sanitiseNumberQuery)(req.query.offset, 0);
+                fromdate = utils_1.sanitiseNumberQuery(req.query.fromdate, 0);
+                todate = utils_1.sanitiseNumberQuery(req.query.todate, Date.now());
+                limit = utils_1.sanitiseNumberQuery(req.query.limit, 500);
+                offset = utils_1.sanitiseNumberQuery(req.query.offset, 0);
                 return [4 /*yield*/, Partner_1.default.query()
                         // .withGraphJoined('float')
                         .where('createdOn', '>=', fromdate)
@@ -60,10 +60,10 @@ var getPartners = function (req, res) { return __awaiter(void 0, void 0, void 0,
                         .offset(offset)];
             case 1:
                 partners = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'List of all partners.', { partners: partners })];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'List of all partners.', { partners: partners })];
             case 2:
                 error_1 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error_1 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_1 })];
             case 3: return [2 /*return*/];
         }
     });
@@ -92,10 +92,10 @@ var addPartner = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, Partner_1.default.query().insert(createPartner)];
             case 1:
                 partner = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Partner created successfully.', { partner: partner })];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Partner created successfully.', { partner: partner })];
             case 2:
                 error_2 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error_2 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_2 })];
             case 3: return [2 /*return*/];
         }
     });
@@ -111,10 +111,10 @@ var getPartner = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 multiPartner = req.query.partner;
                 console.log({ id: id, multiPartner: multiPartner });
                 if (!id)
-                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)];
                 if (!(id === 'details' && multiPartner)) return [3 /*break*/, 6];
                 if (!multiPartner || typeof multiPartner === undefined) {
-                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
                 }
                 if (!Array.isArray(multiPartner)) return [3 /*break*/, 2];
                 return [4 /*yield*/, Partner_1.default.query()
@@ -122,7 +122,7 @@ var getPartner = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                         .whereIn('partners.id', multiPartner)];
             case 1:
                 partner = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Details for provided id including float amount.', { partner: partner })];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id including float amount.', { partner: partner })];
             case 2:
                 if (!(/,/gi.test(multiPartner) || /[0-9]/gi.test(multiPartner))) return [3 /*break*/, 4];
                 splitMultiPartner = multiPartner.split(',');
@@ -131,19 +131,19 @@ var getPartner = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                         .whereIn('partners.id', splitMultiPartner)];
             case 3:
                 partner = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Details for provided id including float amount.', { partner: partner })];
-            case 4: return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id including float amount.', { partner: partner })];
+            case 4: return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
             case 5: return [3 /*break*/, 8];
             case 6: return [4 /*yield*/, Partner_1.default.query()
                     // .withGraphJoined('float')
                     .where('partners.id', Number(id))];
             case 7:
                 partner = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Details for provided id including float amount.', { partner: partner })];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id including float amount.', { partner: partner })];
             case 8: return [3 /*break*/, 10];
             case 9:
                 error_3 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error_3 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_3 })];
             case 10: return [2 /*return*/];
         }
     });
@@ -159,7 +159,7 @@ var updatePartner = function (req, res) { return __awaiter(void 0, void 0, void 
             case 1:
                 oldPartner = _a.sent();
                 if (!oldPartner)
-                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, null, 'No Partner was found for the ID provided.', null, { id: req.params.id })];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, null, 'No Partner was found for the ID provided.', null, { id: req.params.id })];
                 b = req.body;
                 updateDetails = {
                     preferredName: b.preferredName || oldPartner.preferredName || null,
@@ -175,10 +175,10 @@ var updatePartner = function (req, res) { return __awaiter(void 0, void 0, void 
                         .patchAndFetchById(req.body.id, updateDetails)];
             case 2:
                 partner = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Partner updated successfully.', { partner: partner })];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Partner updated successfully.', { partner: partner })];
             case 3:
                 error_4 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error_4 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_4 })];
             case 4: return [2 /*return*/];
         }
     });
@@ -194,12 +194,12 @@ var deletePartner = function (req, res) {
             updated: Date.now()
         });
         if (!partner) {
-            return (0, utils_1.respondErr)(res, 500, 'There was an issue deleting the partner.', null, { partner: partner });
+            return utils_1.respondErr(res, 500, 'There was an issue deleting the partner.', null, { partner: partner });
         }
-        return (0, utils_1.respondWell)(res, 200, null, 'Partner deleted successfully.', { partner: partner });
+        return utils_1.respondWell(res, 200, null, 'Partner deleted successfully.', { partner: partner });
     }
     catch (error) {
-        return (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error });
+        return utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error });
     }
 };
 exports.deletePartner = deletePartner;

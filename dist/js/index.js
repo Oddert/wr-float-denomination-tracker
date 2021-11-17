@@ -44,26 +44,26 @@ var repositoryRoutes_1 = __importDefault(require("./routes/repositoryRoutes"));
 var userRoutes_1 = __importDefault(require("./routes/userRoutes"));
 // import 'dotenv/config'
 var env = dotenv.config();
-var app = (0, express_1.default)();
+var app = express_1.default();
 var PORT = process.env.PORT || 5000;
-var knexConfig = (0, knex_1.default)(knexfile_1.default.development);
+var knexConfig = knex_1.default(knexfile_1.default.development);
 objection_1.Model.knex(knexConfig);
 app.use(express_1.default.static(path_1.default.join(__dirname, '../build')));
-app.use((0, express_1.json)());
-app.use((0, cookie_parser_1.default)());
-app.use((0, express_1.urlencoded)({ extended: true }));
-app.use((0, cors_1.default)());
+app.use(express_1.json());
+app.use(cookie_parser_1.default());
+app.use(express_1.urlencoded({ extended: true }));
+app.use(cors_1.default());
 if (process.env.MODE === "development") {
-    app.use((0, morgan_1.default)('dev'));
+    app.use(morgan_1.default('dev'));
 }
-app.use((0, express_session_1.default)({
+app.use(express_session_1.default({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
 }));
 app.use(auth_1.default.initialize());
 app.use(auth_1.default.session());
-app.use((0, express_flash_1.default)());
+app.use(express_flash_1.default());
 console.log("ENV file has been loaded: " + (process.env.ENV_CONFIRM_LOADED || false));
 app.get('/test', function (req, res) {
     var input = req.query.t;

@@ -29,7 +29,7 @@ var passport_2 = __importDefault(require("./passport"));
 var authMethods_1 = require("./authMethods");
 var LocalStrategy = passportLocal.Strategy;
 var options = {};
-(0, passport_2.default)();
+passport_2.default();
 passport_1.default.use(new LocalStrategy(options, function (username, password, done) {
     User_1.default.query()
         .where({ username: username })
@@ -37,7 +37,7 @@ passport_1.default.use(new LocalStrategy(options, function (username, password, 
         .then(function (user) {
         if (!user)
             return done(null, false);
-        if ((0, authMethods_1.comparePwd)(password, user.password)) {
+        if (authMethods_1.comparePwd(password, user.password)) {
             return done(null, user);
         }
         else {

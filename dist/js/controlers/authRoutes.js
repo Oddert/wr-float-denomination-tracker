@@ -60,24 +60,24 @@ var registerUser = function (req, res, next) { return __awaiter(void 0, void 0, 
         switch (_b.label) {
             case 0:
                 _b.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, (0, auth_2.createUser)(req, res)];
+                return [4 /*yield*/, auth_2.createUser(req, res)];
             case 1:
                 createdUser = _b.sent();
                 if (!createdUser) {
-                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, null, "Cannot read username of " + ((_a = req.body) === null || _a === void 0 ? void 0 : _a.username) + ", please ensure you supplied a valid username and password", null, null)];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, null, "Cannot read username of " + ((_a = req.body) === null || _a === void 0 ? void 0 : _a.username) + ", please ensure you supplied a valid username and password", null, null)];
                 }
                 else {
                     auth_1.default.authenticate('local', function (err, user, info) {
                         if (user)
-                            return (0, utils_1.respondWell)(res, 200, null, 'User created successfully', { user: user, info: info });
+                            return utils_1.respondWell(res, 200, null, 'User created successfully', { user: user, info: info });
                         else
-                            return (0, utils_1.respondErr)(res, null, err, 'Something went wrong, try again later.', { info: info });
+                            return utils_1.respondErr(res, null, err, 'Something went wrong, try again later.', { info: info });
                     })(req, res, next);
                 }
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _b.sent();
-                return [2 /*return*/, (0, utils_1.respondErr)(res, null, 'Something went wrong, try again later.', null, null)];
+                return [2 /*return*/, utils_1.respondErr(res, null, 'Something went wrong, try again later.', null, null)];
             case 3: return [2 /*return*/];
         }
     });
@@ -86,23 +86,23 @@ exports.registerUser = registerUser;
 var loginUser = function (req, res, next) {
     auth_1.default.authenticate('local', function (err, user, info) {
         if (err) {
-            return (0, utils_1.respondErr)(res, 500, err, 'There was something wrong with your request, please check and try again.', null);
+            return utils_1.respondErr(res, 500, err, 'There was something wrong with your request, please check and try again.', null);
         }
         else if (!user) {
-            return (0, utils_1.respondBadRequest)(res, 404, err, info, null);
+            return utils_1.respondBadRequest(res, 404, err, info, null);
         }
         else if (user) {
             req.logIn(user, function (error) {
                 if (error) {
-                    return (0, utils_1.respondErr)(res, 500, error, 'There was something wrong with your request, please check and try again.', null);
+                    return utils_1.respondErr(res, 500, error, 'There was something wrong with your request, please check and try again.', null);
                 }
                 else {
-                    return (0, utils_1.respondWell)(res, 200, null, 'Success, user logged in.', null);
+                    return utils_1.respondWell(res, 200, null, 'Success, user logged in.', null);
                 }
             });
         }
         else {
-            return (0, utils_1.respondErr)(res, 500, info, 'Something went wrong', null);
+            return utils_1.respondErr(res, 500, info, 'Something went wrong', null);
         }
     })(req, res, next);
 };
@@ -110,7 +110,7 @@ exports.loginUser = loginUser;
 var logoutUser = function (req, res) {
     console.log({ logout: req.logout });
     req.logout();
-    return (0, utils_1.respondWell)(res, 200, null, 'User successfully logged out.', null);
+    return utils_1.respondWell(res, 200, null, 'User successfully logged out.', null);
 };
 exports.logoutUser = logoutUser;
 //# sourceMappingURL=authRoutes.js.map

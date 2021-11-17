@@ -48,22 +48,19 @@ var getRepositories = function (req, res) { return __awaiter(void 0, void 0, voi
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                limit = (0, utils_1.sanitiseNumberQuery)(req.query.limit, 500);
-                offset = (0, utils_1.sanitiseNumberQuery)(req.query.offset, 0);
+                limit = utils_1.sanitiseNumberQuery(req.query.limit, 500);
+                offset = utils_1.sanitiseNumberQuery(req.query.offset, 0);
                 return [4 /*yield*/, Repository_1.default.query()
-                    // .withGraphJoined('float')
-                    // .limit(limit)
-                    // .offset(offset)
-                ];
+                        // .withGraphJoined('float')
+                        .limit(limit)
+                        .offset(offset)];
             case 1:
                 repositories = _a.sent();
-                // .withGraphJoined('float')
-                // .limit(limit)
-                // .offset(offset)
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'List of all repositories.', { repositories: repositories })];
+                console.log(repositories);
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'List of all repositories.', { repositories: repositories })];
             case 2:
                 error_1 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error_1 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_1 })];
             case 3: return [2 /*return*/];
         }
     });
@@ -77,7 +74,7 @@ var addRepository = function (req, res) { return __awaiter(void 0, void 0, void 
                 _a.trys.push([0, 2, , 3]);
                 b = req.body;
                 if (!b.name || !/[a-zA-Z]/gi.test(b.name)) {
-                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, null, 'You must provide a name for the new repository.', null, { body: req.body })];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, null, 'You must provide a name for the new repository.', null, { body: req.body })];
                 }
                 now = Date.now();
                 createRepo = {
@@ -94,10 +91,10 @@ var addRepository = function (req, res) { return __awaiter(void 0, void 0, void 
                 return [4 /*yield*/, Repository_1.default.query().insert(createRepo)];
             case 1:
                 repository = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Repositroy added succesfully', { repository: repository })];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Repositroy added succesfully', { repository: repository })];
             case 2:
                 error_2 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error_2 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_2 })];
             case 3: return [2 /*return*/];
         }
     });
@@ -112,17 +109,17 @@ var getRepository = function (req, res) { return __awaiter(void 0, void 0, void 
                 id = req.params.id;
                 multiRepository = req.query.repository || req.query.repo;
                 if (!id)
-                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Not id provided or invalid id. Unable to process request.', null, null)];
                 if (!(id === 'details' && multiRepository)) return [3 /*break*/, 6];
                 if (!multiRepository || typeof multiRepository === undefined) {
-                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
                 }
                 if (!Array.isArray(multiRepository)) return [3 /*break*/, 2];
                 return [4 /*yield*/, Repository_1.default.query()
                         .whereIn('repositories.id', multiRepository)];
             case 1:
                 repositories = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Details for provided id.', { repositories: repositories })];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { repositories: repositories })];
             case 2:
                 if (!(/,/gi.test(multiRepository) || /[0-9]/gi.test(multiRepository))) return [3 /*break*/, 4];
                 splitMultiRepository = multiRepository.split(',');
@@ -130,18 +127,18 @@ var getRepository = function (req, res) { return __awaiter(void 0, void 0, void 
                         .whereIn('repositories.id', splitMultiRepository)];
             case 3:
                 repositories = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Details for provided id.', { repositories: repositories })];
-            case 4: return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { repositories: repositories })];
+            case 4: return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'Please provide a valid id or list of ids as a url query, for example "?partner=2,3,4"', null, null)];
             case 5: return [3 /*break*/, 8];
             case 6: return [4 /*yield*/, Repository_1.default.query()
                     .where('repositories.id', Number(id))];
             case 7:
                 repository = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Details for provided id.', { repository: repository })];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Details for provided id.', { repository: repository })];
             case 8: return [3 /*break*/, 10];
             case 9:
                 error_3 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error_3 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_3 })];
             case 10: return [2 /*return*/];
         }
     });
@@ -157,11 +154,11 @@ var updateRepository = function (req, res) { return __awaiter(void 0, void 0, vo
             case 1:
                 oldRepo = _a.sent();
                 if (!oldRepo) {
-                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, 400, 'No repository was found for the given ID.', null, { id: req.params.id })];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, 400, 'No repository was found for the given ID.', null, { id: req.params.id })];
                 }
                 b = req.body;
                 if (!b.name || !/[a-zA-Z]/gi.test(b.name)) {
-                    return [2 /*return*/, (0, utils_1.respondBadRequest)(res, null, 'You must provide a name for the new repository.', null, { body: req.body })];
+                    return [2 /*return*/, utils_1.respondBadRequest(res, null, 'You must provide a name for the new repository.', null, { body: req.body })];
                 }
                 now = Date.now();
                 createRepo = {
@@ -182,10 +179,10 @@ var updateRepository = function (req, res) { return __awaiter(void 0, void 0, vo
                 return [4 /*yield*/, Repository_1.default.query().patchAndFetchById(req.params.id, createRepo)];
             case 2:
                 repository = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Repositroy modified succesfully', { repository: repository })];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Repositroy modified succesfully', { repository: repository })];
             case 3:
                 error_4 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error_4 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_4 })];
             case 4: return [2 /*return*/];
         }
     });
@@ -207,12 +204,12 @@ var deleteRepository = function (req, res) { return __awaiter(void 0, void 0, vo
             case 1:
                 repository = _a.sent();
                 if (!repository) {
-                    return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue deleting the repository.', null, { repository: repository })];
+                    return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue deleting the repository.', null, { repository: repository })];
                 }
-                return [2 /*return*/, (0, utils_1.respondWell)(res, 200, null, 'Repository deleted successfully.', { repository: repository })];
+                return [2 /*return*/, utils_1.respondWell(res, 200, null, 'Repository deleted successfully.', { repository: repository })];
             case 2:
                 error_5 = _a.sent();
-                return [2 /*return*/, (0, utils_1.respondErr)(res, 500, 'There was an issue processing your request.', null, { error: error_5 })];
+                return [2 /*return*/, utils_1.respondErr(res, 500, 'There was an issue processing your request.', null, { error: error_5 })];
             case 3: return [2 /*return*/];
         }
     });

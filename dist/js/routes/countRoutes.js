@@ -2,13 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var countRoutes_1 = require("../controlers/countRoutes");
-var router = (0, express_1.Router)();
+var router = express_1.Router();
 router
     .route('/')
     .get(countRoutes_1.getCounts)
     .post(countRoutes_1.addCount);
-router.route('/total')
+router
+    .route('/total')
     .get(countRoutes_1.countTotals);
+router
+    .route('/verify')
+    .post(countRoutes_1.verifyCount);
 router
     .route('/:id')
     .get(countRoutes_1.getCount)
