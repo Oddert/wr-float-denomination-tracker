@@ -9,7 +9,9 @@ import initialState from '../../constants/initialState'
 
 import { 
 	Repository, 
-	ListCount as ListCountT 
+	ListCount as ListCountT, 
+	ReduxStateType,
+	ServerCountType
 } from '../../global'
 
 import {
@@ -45,7 +47,7 @@ const Counts: React.FC = () => {
 	const [selectedRepo, setSelectedRepo] = useState('all')
 	const [page, setPage] = useState(0)
 
-	const countState = useSelector((state: any) => state.counts)
+	const countState = useSelector((state: ReduxStateType) => state.counts)
 	const { data: counts, updated, pageLength } = countState
 
 	useEffect(() => {
@@ -61,7 +63,7 @@ const Counts: React.FC = () => {
 	// eslint-disable-next-line react-hooks/exhaustive-deps		
 	}, [dispatch, page])
 
-	function changeSeletedRepo (value: any) {
+	function changeSeletedRepo (value: string) {
 		setSelectedRepo(value)
 		setPage(0)
 		dispatch(countsDataWriteMultiple(page, pageLength))
@@ -74,7 +76,7 @@ const Counts: React.FC = () => {
 			>
 				<Skeleton height='40px' width='50%' my='10px' />
 				{
-					Array.from({ length: 3 }).map((e: any, i) => 
+					Array.from({ length: 3 }).map((e: unknown, i) => 
 						<Skeleton height='30px' my='4px' key={i} />
 					)
 				}
@@ -93,10 +95,11 @@ const Counts: React.FC = () => {
 			>
 				{
 					counts
-						.filter((each: any) => 
-							each.repositoryId === Number(selectedRepo) || selectedRepo === 'all')
+						.filter((each: ServerCountType) => 
+							each.repositoryId === Number(selectedRepo) || selectedRepo === 'all'
+						)
 						.slice(page * pageLength, (page + 1) * pageLength)
-						.map((each: ListCountT, idx: number) => 
+						.map((each, idx: number) => 
 							<ListCount 
 								key={idx}
 								listCount={each} 

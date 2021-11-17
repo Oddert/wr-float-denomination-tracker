@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Dispatch, useState } from 'react'
 
 import {
 	Box,
@@ -14,7 +14,7 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { uiFlashRemoveOne } from '../../actions'
 
-const SingleFlash: React.FC<any> = ({
+const SingleFlash: React.FC<Flash> = ({
 	title,
 	description,
 	catt,
@@ -23,7 +23,7 @@ const SingleFlash: React.FC<any> = ({
 }) => {
 	const dispatch = useDispatch()
 
-	const [timer, setTimer]: [any, any] = useState(null)
+	const [timer, setTimer]: [number | undefined, Dispatch<any>] = useState(undefined)
 	const [translate, setTranslate] = useState('translate(-100%, -50%)')
 
 	useEffect(() => {
@@ -35,7 +35,8 @@ const SingleFlash: React.FC<any> = ({
 	}, [])
 
 	function suspendTimer () {
-		setTimer(clearTimeout(timer))
+		clearTimeout(timer)
+		setTimer(undefined)
 	}
 
 	function removeFlash () {

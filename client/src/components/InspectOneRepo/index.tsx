@@ -1,6 +1,6 @@
 /** @ jsxRuntime classic */
 /** @ jsx jsx */
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useReducer, Dispatch } from 'react'
 // import { css, jsx } from '@emotion/react'
 
 import { 
@@ -17,6 +17,8 @@ import {
 	ParsedCountBagsT,
 	SingleParsedCountBagT,
 	BagTypes,
+	InspectRepoInitialStateT,
+	InspectRepoAction,
 } from './types'
 
 import TopControlGroup from './TopControlGroup'
@@ -34,7 +36,7 @@ interface ServerCountTypeWithAdjustment extends ServerCountType {
 }
 
 const InspectOneRepo: React.FC = () => {
-	const [contextState, contextDispatch] = useReducer(InspectRepoReducer, inspectRepoInitialState)
+	const [contextState, contextDispatch]: [InspectRepoInitialStateT, Dispatch<InspectRepoAction>] = useReducer(InspectRepoReducer, inspectRepoInitialState)
 
 	// TODO: change name of adjustYAxisRenderPosition. use* syntax is React special syntax
 	const { 
@@ -151,7 +153,7 @@ const InspectOneRepo: React.FC = () => {
 				}
 			})
 
-			function emptyStack (oneRecord: any) {
+			function emptyStack (oneRecord: RecordType) {
 				// The stack size will be    0 < stack.length <= bagTypes.length 
 				const len: number = stack.length
 				const middle: number = Math.ceil(len / 2)

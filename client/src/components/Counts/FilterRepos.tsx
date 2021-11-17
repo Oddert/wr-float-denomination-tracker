@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 
 import Select from '../base/Select'
 import { Repository } from '../../global'
 
 interface Props {
 	selectedRepo: string
-	changeSeletedRepo: any
+	changeSeletedRepo: (value: string) => void
 	repositories: Repository[]
 }
 
@@ -18,7 +18,7 @@ const FilterRepos: React.FC<Props> = ({
 		<Select
 			w='50%'
 			value={selectedRepo}
-			onChange={(e: any) => changeSeletedRepo(e.target.value)}
+			onChange={(e: ChangeEvent<HTMLSelectElement>) => changeSeletedRepo(e.target.value)}
 		>
 			<option value='all'>All Repositories</option>
 			{

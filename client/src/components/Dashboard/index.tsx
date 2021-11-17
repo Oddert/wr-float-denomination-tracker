@@ -10,12 +10,13 @@ import {
 import ThumbnailGraph from './ThumbnailGraph'
 import { useSelector } from 'react-redux'
 import initialState from '../../constants/initialState'
+import { Repository } from '../../global'
 // import { css, jsx } from '@emotion/react'
 
 const Dashboard: React.FC = () => {
 
 	const repositoryList = useSelector((state: typeof initialState) => state.repositories.repositoryList)
-		.filter((repo: any) => !repo.deleted && !repo.deactivated)
+		.filter((repo: Repository) => !repo.deleted && repo.activated)
 
 	const sizes = [
 		{
@@ -31,7 +32,7 @@ const Dashboard: React.FC = () => {
 			gridAutoRows='auto'
 		>
 			{
-				repositoryList.map((each: any) => 
+				repositoryList.map((each: Repository) => 
 					<GridItem
 						p='40px 20px'
 						key={each.id}

@@ -39,11 +39,14 @@ const Next: React.FC<Props> = ({
 
 	return (
 		<Button
+			variant='outline'
+			bgColor='#fff'
 			size='lg'
 			py='12px'
 			onClick={handleClick}
+			title='save the count and begin a new count'
 		>
-			Save &#38; Next <ChevronRightIcon />
+			Save &#38; Create New Count <ChevronRightIcon />
 		</Button>
 	)
 }

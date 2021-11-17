@@ -30,8 +30,8 @@ const NoteInput: React.FC<Props> = ({
 	const { state, dispatch } = useContext(CountContext)
 	const value = state.data.notes[denomination]
 
-	const handleNumberChange = (v: any): void => {
-		const val = Number(v) * step
+	const handleNumberChange = (v: string): void => {
+		const val = Math.round(Number(v) * step)
 		const nanCheck = isNaN(val)
 		const zeroCheck = val < 0
 		const stepCheck = (val > 0 && val % step)
@@ -57,9 +57,9 @@ const NoteInput: React.FC<Props> = ({
 		})
 	}
 
-	const handleValueChange = (v: any): void => {
+	const handleValueChange = (v: string): void => {
 		const poundValue = Number(v)
-		const penceValue = poundValue * 100
+		const penceValue = Math.round(poundValue * 100)
 		const stepAsPound = (step / 100)
 		const val = poundValue / stepAsPound
 

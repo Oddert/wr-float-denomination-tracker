@@ -6,8 +6,6 @@ import {
 	Button,
 } from '@chakra-ui/react'
 
-// import { FlashCatts } from '../../../global'
-// import { uiFlashWriteOne } from '../../../actions'
 import { saveExisting, saveNew } from './utils'
 import CountContext from '../utils/CountContext'
 
@@ -38,11 +36,10 @@ const Close: React.FC<Props> = ({
 
 	return (
 		<Button
-			variant='outline'
-			bgColor='#fff'
 			size='lg'
 			mx='3em'
 			onClick={handleClick}
+			title='save count and return to the previous page'
 		>
 			Save and Close
 		</Button>

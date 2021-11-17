@@ -1,11 +1,21 @@
 import React, { Dispatch, useReducer, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+
 import {
 	Flex,
 	Text,
 	Skeleton,
 } from '@chakra-ui/react'
-import { useParams } from 'react-router-dom'
+
+import {
+	StateType,
+	ActionType,
+} from './utils/types'
+
+import CountContext from './utils/CountContext'
+import { CountActions, formatReadableName } from './utils/API'
+import { ReduxStateType } from '../../global'
 
 import BaggedCoin from './BaggedCoin/'
 import Counter from './Counter/'
@@ -16,18 +26,7 @@ import Time from './Time'
 import Options from './Options/'
 import Total from './Total/'
 
-import CountContext from './utils/CountContext'
 
-import { 
-	CountActions, 
-	// validateCount,
-	formatReadableName,
-} from './utils/API'
-
-import {
-	StateType,
-	ActionType,
-} from './utils/types'
 
 import countReducer from './utils/reducer'
 import initialState from './utils/initialState'
@@ -39,8 +38,8 @@ interface Props {
 
 const Count: React.FC<Props> = ({ edit }) => {
 
-	const params: any = useParams()
-	const repos = useSelector((s: any) => s.repositories.repositoryList)
+	const params = useParams()
+	const repos = useSelector((s: ReduxStateType) => s.repositories.repositoryList)
 	const [state, dispatch]: [StateType, Dispatch<ActionType>] = useReducer(countReducer, initialState)
 	const [createdOn, setCreatedOn] = useState(null)
 
@@ -199,6 +198,7 @@ const Count: React.FC<Props> = ({ edit }) => {
 			</Text>
 			<Flex
 				flexDirection='column'
+				margin='0 0 50vh 0'
 			>
 				{
 					edit ? <Options /> : ''

@@ -1,4 +1,12 @@
-import React, { SetStateAction, useContext, useState } from 'react'
+import React, { 
+	useContext, 
+	useState, 
+	useEffect, 
+	SetStateAction, 
+	Dispatch, 
+	ChangeEvent,
+	KeyboardEvent,
+} from 'react'
 import {
 	useMediaQuery,
 	FormLabel,
@@ -9,9 +17,7 @@ import {
 	Grid,
 } from '@chakra-ui/react'
 import CountContext from '../utils/CountContext'
-import { CountActions, sanitiseNumberInputVal } from '../utils/API'
-import { useEffect } from 'react'
-import { Dispatch } from 'react'
+import { CountActions, sanitiseNumberInputVal  } from '../utils/API'
 
 interface Props {
 	label: string
@@ -40,7 +46,7 @@ const Denomination: React.FC<Props> = ({
 }) => {
 	const { state, dispatch } = useContext(CountContext)
 	const inVal = state.data.bagged[denomination]
-	const [error, setError]: [null | string, any] = useState(null)
+	const [error, setError]: [null | string, Dispatch<SetStateAction<any>>] = useState(null)
 	const [value, setValue]: [null | undefined | string | number, Dispatch<SetStateAction<any>>] = useState(null)
 
 	const smallScreen = useMediaQuery('(max-width: 760px)')
@@ -51,9 +57,10 @@ const Denomination: React.FC<Props> = ({
 		setValue(inVal)
 	}, [inVal])
 
-	function handleChange (v: any): void {
+	function handleChange (e: ChangeEvent<HTMLInputElement>): void {
 		// console.log(v)
-		const valueAsumber = Number(v) * step
+		const v = e.target.value
+		const valueAsumber = Math.round(Number(v) * step)
 		const val = (v === '' || v === undefined || v === null) ? null : valueAsumber
 		// setValue(val)
 
@@ -71,7 +78,7 @@ const Denomination: React.FC<Props> = ({
 		})
 	}
 
-	function handleKeyDown (e: any) {
+	function handleKeyDown (e: KeyboardEvent<object>) {
 		const { keyCode } = e
 		if (keyCode < 38 || keyCode > 40) return
 		// console.log(keyCode)
@@ -144,7 +151,7 @@ const Denomination: React.FC<Props> = ({
 					<NumberInputField 
 						value={sanitiseNumberInputVal(typeof value === 'number' ? value/step : value, step)}
 						onKeyDown={handleKeyDown}
-						onChange={(e: any) => handleChange(e.target.value)}
+						onChange={handleChange}
 						bgColor='#f8f8f8'
 						borderColor='rgba(0,0,0,0)'
 						borderRadius='none'
@@ -158,6 +165,7 @@ const Denomination: React.FC<Props> = ({
 				<Text
 					p='0'
 					color='theme_light.text.invisable'
+					title={`Value of ${label} bags.`}
 				>
 					{
 						convertToDisplay(typeof value === 'number' ? value : 0)

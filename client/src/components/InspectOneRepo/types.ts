@@ -6,6 +6,7 @@ import {
 import {
 	MarkSeriesPoint,
 } from 'react-vis'
+import { Dispatch } from 'react'
 
 export interface SingleParsedCountBagT { 
 	label: string, 
@@ -40,7 +41,7 @@ export interface ParsedCountBagsT {
 
 export interface InspectRepoAction {
 	type: InspectRepoActionTypes
-	payload: any
+	payload?: any
 }
 
 export enum InspectRepoActionTypes {
@@ -83,4 +84,9 @@ export interface InspectRepoInitialStateT {
 	crosshairX?: number
 	focusedSeries: BagTypes[]
 	hoverSeries?: BagTypes
+}
+
+export interface InpectRepoContextT {
+	contextState: InspectRepoInitialStateT
+	contextDispatch: Dispatch<InspectRepoAction>
 }

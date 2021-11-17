@@ -3,6 +3,7 @@ import React, {
 	Dispatch,
 	SetStateAction,
 	useContext,
+	useEffect,
 } from 'react'
 import { 
 	NumberInput, 
@@ -11,7 +12,6 @@ import {
 
 import CountContext from '../utils/CountContext'
 import { CountActions } from '../utils/API'
-import { useEffect } from 'react'
 
 interface Props {
 	denomination: string
@@ -34,7 +34,7 @@ const NoteNumberInput: React.FC<Props> = ({
 		else setValue(inVal / step)
 	}, [inVal, step])
 
-	const handleNumberChange = (v: any): void => {
+	const handleNumberChange = (v: string): void => {
 		const noteNumber = Number(v)
 
 		if (v === '' || v === undefined || v === null) setValue('')
@@ -72,7 +72,7 @@ const NoteNumberInput: React.FC<Props> = ({
 			value={value === null ? undefined : value}
 		>
 			<NumberInputField 
-				onChange={(e: any) => handleNumberChange(e.target.value)}
+				onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleNumberChange(e.target.value)}
 				value={value === null ? undefined : value}
 				bgColor='#f8f8f8'
 				borderColor='rgba(0,0,0,0)'

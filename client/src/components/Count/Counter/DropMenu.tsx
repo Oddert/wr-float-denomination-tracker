@@ -2,21 +2,23 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 import {
+	MdSubdirectoryArrowLeft
+} from 'react-icons/md'
+
+import {
 	Flex,
 	UnorderedList,
 	ListItem,
 	Button,
 } from '@chakra-ui/react'
 
-import {
-	MdSubdirectoryArrowLeft
-} from 'react-icons/md'
+import { Partner, ReduxStateType } from '../../../global'
 
 interface Props {
-	formatReadableName: (each: any) => string
-	handleDropDownSelect: (each: any) => void 
+	formatReadableName: (partner: Partner) => string
+	handleDropDownSelect: (partner: Partner) => void
 	showMenu: boolean
-	filteredList: {}[]
+	filteredList: Partner[]
 }
 
 const DropMenu: React.FC<Props> = ({
@@ -25,7 +27,7 @@ const DropMenu: React.FC<Props> = ({
 	showMenu,
 	filteredList
 }) => {
-	const { userListUpdated } = useSelector((s: any) => s.auth)
+	const { userListUpdated } = useSelector((s: ReduxStateType) => s.auth)
 	return (
 		<Flex
 			flexDirection='column'
@@ -46,13 +48,13 @@ const DropMenu: React.FC<Props> = ({
 					>
 						{
 							filteredList
-							.map((each: any, idx: number) => 
+							.map((partner: Partner, idx: number) => 
 								<ListItem
 									listStyleType='none'
-									key={each.id}
+									key={partner.id}
 								>
 									<Button 
-										key={each.id}
+										key={partner.id}
 										p='4px'
 										variant='ui'
 										mx='0px'
@@ -62,13 +64,13 @@ const DropMenu: React.FC<Props> = ({
 										justifyContent='flex-start'
 										bgColor={idx === 0 ? '#cde6fe' : '#fff'}
 										border='none'
-										onClick={() => handleDropDownSelect(each)}
+										onClick={() => handleDropDownSelect(partner)}
 										display='flex'
 										justifyItems='space-between'
 									>
 										<span>
 											{
-												formatReadableName(each)
+												formatReadableName(partner)
 											}
 										</span>
 										<span>

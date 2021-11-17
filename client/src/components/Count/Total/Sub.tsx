@@ -5,9 +5,9 @@ import {
 } from '@chakra-ui/react'
 
 interface Props {
-	bagged: any
-	loose: any
-	notes: any
+	bagged: number
+	loose: number
+	notes: number
 }
 
 const Sub: React.FC<Props> = ({
@@ -24,9 +24,9 @@ const Sub: React.FC<Props> = ({
 		>
 			{
 				[bagged, loose, notes]
-					.filter((each: any) => each !== undefined)
-					.map((each: any) => each/100)
-					.map((each: any) => each.toFixed(2))
+					.filter((each: number) => each !== undefined)
+					.map((each: number) => each/100)
+					.map((each: number) => each.toFixed(2))
 					.join(' + ')
 			}
 		</Text>

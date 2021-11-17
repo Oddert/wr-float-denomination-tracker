@@ -1,6 +1,7 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
 import React, { 
+	Dispatch,
 	useEffect, 
 	useState,
 } from 'react'
@@ -19,6 +20,7 @@ import {
 
 import {
 	ReduxStateType,
+	Repository,
 	ServerCountType,
 } from '../../global'
 import { 
@@ -30,7 +32,7 @@ import {
 interface Props {
 	width: number
 	height: number
-	repository: any
+	repository: Repository
 }
 
 interface DataPoint {
@@ -73,10 +75,10 @@ const ThumbnailGraph: React.FC<Props> = ({
 	height,
 	repository,
 }) => {
-	const [counts, setCounts]: [ServerCountType[], any] = useState([])
-	const [parsedData, setParsedData]: [LinearDataState, any] = useState(linearDataInitialState)
-	const [focused, setFocused]: [MarkSeriesPoint | null, any] = useState(null)
-	const [yAxisRange, setYAxisRange]: [number[], any] = useState(Array.from({ length: 10 }, (x, i) => i))
+	const [counts, setCounts]: [ServerCountType[], Dispatch<any>] = useState([])
+	const [parsedData, setParsedData]: [LinearDataState, Dispatch<any>] = useState(linearDataInitialState)
+	const [focused, setFocused]: [MarkSeriesPoint | null, Dispatch<any>] = useState(null)
+	const [yAxisRange, setYAxisRange]: [number[], Dispatch<any>] = useState(Array.from({ length: 10 }, (x, i) => i))
 	const COLOURS = useSelector((state: ReduxStateType) => state.ui.colours)
 
 	const colourMap = {
@@ -165,7 +167,13 @@ const ThumbnailGraph: React.FC<Props> = ({
 			return { ...each, float }
 		})
 
-		const addOnePoint = (label: string, y: number, x: number, timestamp: number | string | undefined, id: number): DataPoint => ({
+		const addOnePoint = (
+			label: string, 
+			y: number, 
+			x: number, 
+			timestamp: number | string | undefined, 
+			id: number
+		): DataPoint => ({
 			label,
 			y, 
 			// @ts-ignore
@@ -175,7 +183,7 @@ const ThumbnailGraph: React.FC<Props> = ({
 		})
 
 		const parsedC: LinearDataState = adjustedC.reduce((acc: LinearDataState, each: any, idx: number) => {
-			const newAcc: any = { ...acc }
+			const newAcc: LinearDataState = { ...acc }
 			newAcc.bagNote5.push(addOnePoint(new Date(each.timestamp).toLocaleString('en-GB'), (each.float?.bagNote5 || 0) / (100 * 5), idx, each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined, each.id))
 			newAcc.bagPound2.push(addOnePoint(new Date(each.timestamp).toLocaleString('en-GB'), (each.float?.bagPound2 || 0) / (100 * 20), idx, each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined, each.id))
 			newAcc.bagPound1.push(addOnePoint(new Date(each.timestamp).toLocaleString('en-GB'), (each.float?.bagPound1 || 0) / (100 * 20), idx, each.timestamp ? new Date(each.timestamp).toLocaleString('en-GB') : undefined, each.id))

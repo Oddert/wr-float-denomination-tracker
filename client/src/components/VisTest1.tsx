@@ -1,6 +1,11 @@
 /** @ jsxRuntime classic */
 /** @ jsx jsx */
-import React, { useEffect, useState } from 'react'
+import React, { 
+	useEffect, 
+	useState,
+	Dispatch,
+	SetStateAction, 
+} from 'react'
 import { useSelector } from 'react-redux'
 // import { css, jsx } from '@emotion/react'
 
@@ -21,6 +26,7 @@ import {
 	ServerCountType, 
 	// ServerFloatType,
 	BagTypeReadableLabels,
+	ServerFloatType,
 } from '../global'
 
 import initialState from '../constants/initialState'
@@ -69,11 +75,11 @@ const VisTest1: React.FC = () => {
 	const [startTime, setStartTime] = useState(new Date(baseDate.getTime() - 1000 * 60 * 60 * 24 * 7 * 5))
 	const [endTime, setEndTime] = useState(baseDate)
 	const [useAdjustments, setUseAdjustments] = useState(true)
-	const [data, setData]: [ServerCountType[], any] = useState([])
+	const [data, setData]: [ServerCountType[], Dispatch<SetStateAction<any>>] = useState([])
 	const [adjustmentStepSize, setAdjustmentStepSize] = useState(.2)
-	const [inspecting, setInspecting]: [any, any] = useState(null)
+	const [inspecting, setInspecting]: [any, Dispatch<SetStateAction<any>>] = useState(null)
 	const COLOURS = useSelector((state: ReduxStateType) => state.ui.colours)
-	const [parsedCount, setParsedCount]: [ParsedCountT, any] = useState({
+	const [parsedCount, setParsedCount]: [ParsedCountT, Dispatch<SetStateAction<any>>] = useState({
 		bagNote5: [],
 		bagPound2: [],
 		bagPound1: [],
@@ -103,7 +109,7 @@ const VisTest1: React.FC = () => {
 	}, [repo, endTime, startTime])
 
 	useEffect(() => {
-		const adjustedC = data.map((each: any) => {
+		const adjustedC = data.map((each: ServerCountType) => {
 			type BagTypes = 'bagNote5' | 'bagPound2' | 'bagPound1' | 'bagPence50' | 'bagPence20' | 'bagPence10' | 'bagPence5' | 'bagPence2' | 'bagPence1'
 			const bags: BagTypes[] = ['bagNote5', 'bagPound2', 'bagPound1', 'bagPence50', 'bagPence20', 'bagPence10', 'bagPence5', 'bagPence2', 'bagPence1']
 			const adjustments: any = {
@@ -117,10 +123,10 @@ const VisTest1: React.FC = () => {
 				bagPence2: (100 * 1),
 				bagPence1: (100 * 1),
 			}
-			const float = { ...each.float }
+			const float: ServerFloatType = { ...each.float }
 			const record = bags.map((bag: BagTypes) => ({
 				label: bag,
-				value: each.float[bag]
+				value: each.float && each.float[bag] || 0
 			}))
 			.sort((a, b) => a.value - b.value)
 			// console.log(record)
@@ -157,8 +163,8 @@ const VisTest1: React.FC = () => {
 				// const temp: any = []
 				for (let i = 1 - middle, j = 0; i <= len - middle; i++, j++) {
 					// temp.push(i)
-					const label = stack[j].label
-					const value = stack[j].value
+					const label: BagTypes = stack[j].label
+					const value: number = stack[j].value
 					const multiplier: number = useAdjustments 
 						? i * 	adjustmentStepSize * adjustments[label] 
 						: i

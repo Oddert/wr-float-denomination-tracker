@@ -1,18 +1,26 @@
-import React, { useState, useContext } from 'react'
+import React, { 
+	useState, 
+	useContext, 
+	useEffect,
+	KeyboardEvent,
+} from 'react'
+import { useSelector } from 'react-redux'
+
 import {
 	InputGroup,
 	FormLabel,
 	Box,
 } from '@chakra-ui/react'
 
+import { Partner, ReduxStateType } from '../../../global'
+
+import CountContext from '../utils/CountContext'
+import { CountActions, formatReadableName } from '../utils/API'
+
 import Input from '../../base/Input'
 
 import DropMenu from './DropMenu'
 
-import CountContext from '../utils/CountContext'
-import { CountActions, formatReadableName } from '../utils/API'
-import { useSelector } from 'react-redux'
-import { useEffect } from 'react'
 
 interface Props {
 	label: string
@@ -26,7 +34,7 @@ const Counter: React.FC<Props> = ({
 	stateAssignment,
 }) => {
 	const { state, dispatch } = useContext(CountContext)
-	const partnerList = useSelector((s: any) => s.auth.partnerList)
+	const partnerList = useSelector((s: ReduxStateType) => s.auth.partnerList)
 	const [showMenu, setShowMenu] = useState(false)
 	const [filteredList, setFilteredList] = useState(partnerList)
 
@@ -47,19 +55,19 @@ const Counter: React.FC<Props> = ({
 		}, 500)
 	}
 
-	const handleDropDownSelect = (each: any) => {
-		console.log('Clicked ', each.shortUid)
+	const handleDropDownSelect = (partner: Partner) => {
+		console.log('Clicked ', partner.tillNumber)
 		dispatch({
 			type: dispatchType, 
 			payload: {
-				[stateAssignment]: formatReadableName(each),
-				[`${stateAssignment}Id`]: each.id
+				[stateAssignment]: formatReadableName(partner),
+				[`${stateAssignment}Id`]: partner.id
 			},
 		})
 		setShowMenu(false)
 	}
 
-	const handleKeyDown = (e: any) => {
+	const handleKeyDown = (e: KeyboardEvent<object>) => {
 		if (!(e.keyCode === 13)) return
 		if (filteredList.length < 1) return
 		const selected = filteredList[0]
@@ -75,10 +83,10 @@ const Counter: React.FC<Props> = ({
 
 	useEffect(() => {
 		const createdList = partnerList
-			.filter((each: any) => {
+			.filter((each: Partner) => {
 				if (!/\w+/.test(state[stateAssignment])) return true
 				const names = [each.firstName, each.middleNames, each.lastName]
-				const combinedAttrs = `${each.id}${each.shortUid}${names.join('')}`
+				const combinedAttrs = `${each.id}${each.tillNumber}${names.join('')}`
 				const rawInputReg = new RegExp(state[stateAssignment], 'gi')
 				let res = false 
 				if (rawInputReg.test(combinedAttrs)) res = true

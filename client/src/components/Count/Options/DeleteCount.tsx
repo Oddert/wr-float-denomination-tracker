@@ -1,6 +1,10 @@
 import React, { 
 	useState, 
 	useRef,
+	Dispatch,
+	SetStateAction,
+	ChangeEvent,
+	MouseEvent
 } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router'
@@ -33,11 +37,11 @@ import initialState from '../../../constants/initialState'
 import { Partner } from '../../../global'
 
 const DeleteCount: React.FC = () => {
-	const [open, setOpen] = useState(false)
-	const [partner, setPartner] = useState(undefined)
-	const [busy, setBusy] = useState(false)
-	const [modalError, setModalError]: [null | string, any] = useState(null)
-	const [selectError, setSelectError]: [null | string, any] = useState(null)
+	const [open, setOpen]: [boolean, Dispatch<SetStateAction<any>>] = useState(false)
+	const [partner, setPartner]: [Partner | undefined, Dispatch<SetStateAction<any>>] = useState(undefined)
+	const [busy, setBusy]: [boolean, Dispatch<SetStateAction<any>>] = useState(false)
+	const [modalError, setModalError]: [null | string, Dispatch<SetStateAction<any>>] = useState(null)
+	const [selectError, setSelectError]: [null | string, Dispatch<SetStateAction<any>>] = useState(null)
 	
 	const partners = useSelector((s: typeof initialState) => s.auth.partnerList)
 	const dispatch = useDispatch()
@@ -46,17 +50,17 @@ const DeleteCount: React.FC = () => {
 	const safetyRef = useRef()
 	const navigate = useNavigate()
 
-	const handleChange = (e: any) => {
+	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		setPartner(e.target.value)
 		setSelectError(null)
 	}
 
-	const handleClick = (e: any) => {
+	const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault()
 		setOpen(!open)
 	}
 
-	const handleSubmit = (e: any) => {
+	const handleSubmit = () => {
 		if (partner && partner !== '' && partner !== undefined && partner !== 'undefined') {
 			setBusy(true)
 			const EXT = `/api/v1/count/${params.id}`

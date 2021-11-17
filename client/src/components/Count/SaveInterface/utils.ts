@@ -1,3 +1,4 @@
+import { Dispatch } from 'redux'
 import { uiFlashWriteOne } from '../../../actions'
 import { FlashCatts } from '../../../global'
 
@@ -44,7 +45,7 @@ interface ServerFloatType {
 }
 
 
-export function saveExisting (state: StateType, dispatch: any, callback?: (arg0: any) => any) {
+export function saveExisting (state: StateType, dispatch: Dispatch, callback?: (res: any) => any) {
 	const count: ServerCountType = {
 		repositoryId: state.repositoryId,
 		timestamp: state.timestamp,
@@ -120,7 +121,7 @@ export function saveExisting (state: StateType, dispatch: any, callback?: (arg0:
 		})
 }
 
-export function saveNew (state: StateType, dispatch: any, callback: (res: any) => any) {
+export function saveNew (state: StateType, dispatch: Dispatch, callback: (res: any) => any) {
 	const count: ServerCountType = {
 		repositoryId: state.repositoryId,
 		timestamp: state.timestamp,

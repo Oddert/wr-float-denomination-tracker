@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { ChangeEvent, useContext } from 'react'
 import { useSelector } from 'react-redux'
 
 import Select from '../base/Select'
@@ -6,6 +6,7 @@ import Select from '../base/Select'
 import initialState from '../../constants/initialState'
 import { InspectRepoContext } from './Utils'
 import { repoSet } from './InspectRepoActions'
+import { Repository } from '../../global'
 
 interface Props {
 }
@@ -16,14 +17,16 @@ const RepoSelect: React.FC<Props> = () => {
 
 	const { repo } = contextState
 
+	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => contextDispatch(repoSet(Number(e.target.value)))
+
 	return (
 		<Select
-			onChange={(e: any) => contextDispatch(repoSet(e.target.value))}
+			onChange={handleChange}
 			value={repo}
 			w='250px'
 		>
 			{
-				repoList.map((each: any) => 
+				repoList.map((each: Repository) => 
 					<option
 						key={each.id}
 						value={each.id}

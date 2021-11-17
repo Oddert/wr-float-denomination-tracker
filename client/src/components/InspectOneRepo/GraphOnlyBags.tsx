@@ -1,6 +1,6 @@
 /** @jsxRuntime classic */
 /** @jsx jsx */
-import React, { useContext } from 'react'
+import React, { Dispatch, useContext } from 'react'
 import { useSelector } from 'react-redux'
 import { css, jsx } from '@emotion/react'
 
@@ -43,6 +43,7 @@ import {
 	// BagTypes,
 	ContextCrosshair,
 	InspectRepoInitialStateT, 
+	InspectRepoAction,
 	// bagTypes as bts
 } from './types'
 
@@ -69,7 +70,7 @@ const months_full = ['January', 'February', 'March', 'April', 'May', 'June', 'Ju
 
 const GraphOnlyBags: React.FC<Props> = () => {
 	const COLOURS = useSelector((state: ReduxStateType) => state.ui.colours)
-	const { contextState, contextDispatch }: { contextState: InspectRepoInitialStateT, contextDispatch: any } = useContext(InspectRepoContext)
+	const { contextState, contextDispatch }: { contextState: InspectRepoInitialStateT, contextDispatch: Dispatch<InspectRepoAction> } = useContext(InspectRepoContext)
 
 	const {
 		inspecting,

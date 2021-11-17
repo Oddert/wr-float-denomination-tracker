@@ -22,9 +22,9 @@ const PaginateNumberInput: React.FC<Props> = ({
 	setPage,
 }) => {
 
-	const increment = (e: any) => setPage(page + 1)
+	const increment = () => setPage(page + 1)
 
-	const decrement = (e: any) => {
+	const decrement = () => {
 		if (page === 0) return
 		setPage(page - 1)
 	}
@@ -45,7 +45,8 @@ const PaginateNumberInput: React.FC<Props> = ({
 			</Button>
 			<Input 
 				value={page}
-				onChange={(e: any) => console.log(e)}
+				// TODO: Reimplament
+				// onChange={(e: any) => console.log(e)}
 				w='100px'
 				textAlign='center'
 			/>

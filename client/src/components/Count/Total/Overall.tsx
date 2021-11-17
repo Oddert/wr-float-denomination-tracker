@@ -5,7 +5,7 @@ import {
 } from '@chakra-ui/react'
 
 interface Props {
-	total: any
+	total: number
 }
 
 const Overall: React.FC<Props> = ({

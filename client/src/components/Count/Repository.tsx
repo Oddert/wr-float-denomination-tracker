@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { useSelector } from 'react-redux'
 import {
 	Box,
 } from '@chakra-ui/react'
@@ -10,11 +11,14 @@ import initialReduxState from '../../constants/initialState'
 
 import CountContext from './utils/CountContext'
 import { CountActions } from './utils/API'
-import { useSelector } from 'react-redux'
 
 const Repository = () => {
 	const { state, dispatch } = useContext(CountContext)
 	const repositories: RepositoryT[] = useSelector((s: typeof initialReduxState) => s.repositories.repositoryList)
+
+	const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => 
+		dispatch({ type: CountActions.UPDATE_REPO, payload: e.target.value})
+
 	return (
 		<Box
 			p='10px 0 20px'
@@ -22,7 +26,7 @@ const Repository = () => {
 			<Select
 				w='50%'
 				value={state.repositoryId || undefined}
-				onChange={(e: any) => dispatch({ type: CountActions.UPDATE_REPO, payload: e.target.value})}
+				onChange={handleChange}
 			>
 				{
 					repositories.map((each: RepositoryT) =>

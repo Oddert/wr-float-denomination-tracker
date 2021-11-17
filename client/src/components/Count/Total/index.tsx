@@ -9,16 +9,18 @@ import {
 	GridItem, 
 } from '@chakra-ui/react'
 
+import { StateType } from '../utils/types'
+
 import Overall from './Overall'
 import Sub from './Sub'
 import CountContext from '../utils/CountContext'
 
 const Total: React.FC = () => {
-	const { state } = useContext(CountContext)
+	const { state }: { state: StateType } = useContext(CountContext)
 	
-	const bagged = state.data.bagged.total
-	const loose = state.data.loose.total
-	const notes = state.data.notes.total
+	const bagged: number = state.data.bagged.total || 0
+	const loose: number = state.data.loose.total || 0
+	const notes: number = state.data.notes.total || 0
 	// const total = state.data.total
 
 	return (

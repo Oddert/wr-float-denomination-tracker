@@ -3,6 +3,7 @@ import React, {
 	Dispatch,
 	SetStateAction,
 	useContext,
+	useEffect,
 } from 'react'
 import { 
 	NumberInput, 
@@ -10,8 +11,8 @@ import {
 } from '@chakra-ui/number-input'
 
 import CountContext from '../utils/CountContext'
-import { CountActions, sanitiseNumberInputVal } from '../utils/API'
-import { useEffect } from 'react'
+import { sanitiseNumberInputVal } from '../utils/API'
+import { CountActions } from '../utils/API'
 
 interface Props {
 	denomination: string
@@ -35,7 +36,7 @@ const NoteNumberInput: React.FC<Props> = ({
 		else setValue('')
 	}, [inVal, step])
 
-	const handleValueChange = (v: any): void => {
+	const handleValueChange = (v: string): void => {
 		// console.log(v)
 		const poundValue = Number(v)
 		const penceValue = poundValue * 100
@@ -80,7 +81,7 @@ const NoteNumberInput: React.FC<Props> = ({
 			value={sanitiseNumberInputVal(value, step)}
 		>
 			<NumberInputField 
-				onChange={(e: any) => handleValueChange(e.target.value)}
+				onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleValueChange(e.target.value)}
 				value={sanitiseNumberInputVal(value, step)}
 				bgColor='#f8f8f8'
 				borderColor='rgba(0,0,0,0)'

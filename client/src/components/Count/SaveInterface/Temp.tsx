@@ -40,8 +40,12 @@ const Temp: React.FC = () => {
 			</PopoverTrigger>
 			<PopoverContent>
 				<PopoverCloseButton />
-				<PopoverHeader>({response.verified ? 'Verified' : 'Un-verified'}) {response.code}</PopoverHeader>
-				<PopoverBody>{response.message}</PopoverBody>
+				<PopoverHeader>
+					({response.verified ? 'Verified' : 'Un-verified'}) {response.code}
+				</PopoverHeader>
+				<PopoverBody>
+					{response.message}
+				</PopoverBody>
 			</PopoverContent>
 		</Popover>
 	)

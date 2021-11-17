@@ -28,7 +28,7 @@ const TopControlGroup: React.FC<Props> = () => {
 	const { 
 		startTime, 
 		endTime, 
-		useAdjustments,
+		// useAdjustments,
 		adjustmentStepSize,
 	} = contextState
 
@@ -41,7 +41,7 @@ const TopControlGroup: React.FC<Props> = () => {
 			<DateInput 
 				flex='1' 
 				selected={startTime}
-				onChange={(d: any) => contextDispatch(startDateSet(d))}
+				onChange={(d: Date) => contextDispatch(startDateSet(d))}
 				name='Date Start'
 				locale='gb'
 				timeFormat='HH:mm'
@@ -51,26 +51,27 @@ const TopControlGroup: React.FC<Props> = () => {
 			<DateInput 
 				flex='1' 
 				selected={endTime}
-				onChange={(d: any) => contextDispatch(endDateSet(d))}
+				onChange={(d: Date) => contextDispatch(endDateSet(d))}
 				name='Date Start'
 				locale='gb'
 				timeFormat='HH:mm'
 				timeCaption='time input'
 				dateFormat='dd/MM/yyyy'
 			/>
-			<Button
+			{/* TODO: investigate why useAdjustments has been removed (remember that the name was to change) */}
+			{/* <Button
 				onClick={() => contextDispatch(adjustmentUseSet(!useAdjustments))}
 				variant='ui'
 			>
 				Adjustments: {useAdjustments ? 'ON' : 'OFF'}
-			</Button>
+			</Button> */}
 			<Slider
 				min={0.05}
 				max={.8}
 				step={0.01}
 				value={adjustmentStepSize}
-				onChange={(v: any) => contextDispatch(adjustmentStepSizeSet(v))}
-				// onChangeEnd={(v: any) => setAdjustmentStepSize(v)}
+				onChange={(v: number) => contextDispatch(adjustmentStepSizeSet(v))}
+				// onChangeEnd={(v: number) => setAdjustmentStepSize(v)}
 				width={'200px'}
 			>
 				<SliderTrack>

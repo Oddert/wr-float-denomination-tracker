@@ -56,7 +56,7 @@ export interface StateType {
 
 export interface ActionType {
 	type: CountActions
-	payload: any
+	payload?: any
 }
 
 export interface Validation {

@@ -5,10 +5,14 @@ import {
 	Flex,
 } from '@chakra-ui/react'
 
+import {
+	ReduxStateType,
+} from '../../global'
+
 import SingleFlash from './SingleFlash'
 
 const Flash: React.FC = () => {
-	const { flash } = useSelector((s: any) => s.ui)
+	const { flash } = useSelector((s: ReduxStateType) => s.ui)
 	return (
 		<Flex
 			position='fixed'
@@ -18,7 +22,7 @@ const Flash: React.FC = () => {
 			direction='column'
 		>
 			{
-				flash.map((each: any, idx: any) => (
+				flash.map((each: Flash, idx: number) => (
 					<SingleFlash 
 						key={idx}
 						{...each}

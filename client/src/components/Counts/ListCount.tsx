@@ -8,11 +8,12 @@ import {
 } from '@chakra-ui/react'
 import { 
 	ListCount as ListCountT, 
-	Repository 
+	Repository, 
+	ServerCountType,
 } from '../../global'
 
 interface Props {
-	listCount: ListCountT
+	listCount: any//ServerCountType
 	repositories: Repository[]
 }
 

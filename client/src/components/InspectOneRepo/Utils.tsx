@@ -2,9 +2,8 @@ import { createContext } from 'react'
 
 import {
 	InspectRepoInitialStateT,
+	InpectRepoContextT,
 } from './types'
-
-export const InspectRepoContext = createContext<any>({})
 
 export const ABS_START_DATE = '2021-03-30'
 
@@ -41,3 +40,7 @@ export const inspectRepoInitialState: InspectRepoInitialStateT = {
 	hoverSeries: undefined,
 }
 
+export const InspectRepoContext = createContext<InpectRepoContextT>({
+	contextState: inspectRepoInitialState,
+	contextDispatch: () => {},
+})

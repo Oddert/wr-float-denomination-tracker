@@ -7,14 +7,7 @@ import {
 // import { NavLink } from 'react-router-dom'
 import NavLink from './NavLink'
 
-interface Props {
-  colStart?: any
-  colEnd?: any
-  rowStart?: any
-  rowEnd?: any
-}
-
-const Nav: React.FC<Props> = () => {
+const Nav: React.FC = () => {
   return (
     <Flex
 			direction='column'

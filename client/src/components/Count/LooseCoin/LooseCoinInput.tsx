@@ -1,6 +1,14 @@
-/** @jsxRuntime classic */
-/** @jsx jsx */
-import React, { SetStateAction, useContext, useState, Dispatch, useEffect } from 'react'
+/** @ jsxRuntime classic */
+/** @ jsx jsx */
+import React, { 
+	SetStateAction, 
+	useContext, 
+	useState, 
+	Dispatch, 
+	useEffect, 
+	ChangeEvent,
+	FocusEvent,
+} from 'react'
 import {
 	useMediaQuery,
 	FormLabel,
@@ -9,9 +17,10 @@ import {
 	NumberInputField,
 	Grid,
 } from '@chakra-ui/react'
+
 import CountContext from '../utils/CountContext'
 import { CountActions } from '../utils/API'
-import { css, jsx } from '@emotion/react'
+// import { css, jsx } from '@emotion/react'
 
 interface Props {
 	label: string
@@ -27,28 +36,29 @@ const Denomination: React.FC<Props> = ({
 }) => {
 	const { state, dispatch } = useContext(CountContext)
 	const inVal = state.data.loose[denomination]
-	const [error, setError]: [null | string, any] = useState(null)
+	const [error, setError]: [null | string, Dispatch<SetStateAction<any>>] = useState(null)
 	const [value, setValue]: [string | number | undefined, Dispatch<SetStateAction<any>>] = useState(undefined)
 
 	const smallScreen = useMediaQuery('(max-width: 760px)')
 	// label = `loose ${label}`
 	
 	useEffect(() => {
-		console.log(inVal)
+		// console.log(inVal)
 		if (typeof inVal === 'number') setValue((inVal / 100).toFixed(2))
 		else setValue(undefined)
 	}, [inVal])
 
-	function handleChange (v: any): void {
+	function handleChange (e: ChangeEvent<HTMLInputElement>): void {
 		// console.log(typeof v, v)
-		setValue(v)
+		setValue(e.target.value)
 	}
 
-	const handleFocusLeave = (e: any) => {
+	const handleFocusLeave = (e: FocusEvent<HTMLInputElement>): void => {
 		// console.log('focusLeve', new Date().toLocaleTimeString())
 		const v = e.target.value
+		// console.log({ v, vn: Number(v), v100: Number(v) * 100 })
 		
-		const valueAsNumber = Math.floor(Number(v) * 100)
+		const valueAsNumber = Math.round(Number(v) * 100)
 		// console.log({ valueAsNumber, inVal })
 		const val = (v === '' || v === null || v === undefined) ? null : valueAsNumber
 
@@ -109,7 +119,7 @@ const Denomination: React.FC<Props> = ({
 					onBlur={handleFocusLeave}
 				>
 					<NumberInputField 
-						onChange={(e: any) => handleChange(e.target.value)}
+						onChange={handleChange}
 						value={value === null ? undefined : value}
 						bgColor='#f8f8f8'
 						borderColor='rgba(0,0,0,0)'

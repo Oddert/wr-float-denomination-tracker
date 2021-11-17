@@ -47,6 +47,7 @@ const Save: React.FC<Props> = ({
 			size='lg'
 			py='16px'
 			onClick={handleClick}
+			title='save the count and keep editing'
 		>
 			Save
 		</Button>

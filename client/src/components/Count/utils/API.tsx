@@ -1,4 +1,5 @@
 
+import { Partner } from '../../../global'
 import {
 	StateType,
 	Validation,
@@ -30,21 +31,21 @@ export const sanitiseNumberInputVal = (
 
 // }
 
-export const formatReadableName = (user: any): string => {
-	if (user === undefined || user === null || !user) return ''
+export const formatReadableName = (partner: Partner): string => {
+	if (partner === undefined || partner === null || !partner) return ''
 	let out = ''
-	let useFullName = user.shortUid === null
-	console.log(user)
+	let useFullName = partner.tillNumber === null
+	console.log(partner)
 	if (useFullName) {
-		out += `${user.firstName} ${user.lastName}`
+		out += `${partner.firstName} ${partner.lastName}`
 	} else {
-		out += `${user.tillNumber} `
-		if (user.firstName && user.firstName !== '') {
-			if (user.lastName && user.lastName !== '') {	
-				out += user.firstName.substring(0,1).toUpperCase()
-				out += user.lastName.substring(0,1).toUpperCase()
+		out += `${partner.tillNumber} `
+		if (partner.firstName && partner.firstName !== '') {
+			if (partner.lastName && partner.lastName !== '') {	
+				out += partner.firstName.substring(0,1).toUpperCase()
+				out += partner.lastName.substring(0,1).toUpperCase()
 			} else {
-				out += user.firstName
+				out += partner.firstName
 			}
 		}
 	}
